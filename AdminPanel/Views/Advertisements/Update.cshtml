@@ -1,0 +1,44 @@
+﻿@model Advertisement
+@{
+    ViewData["Title"] = "Update";
+}
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Update Advertisement</h4>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <form class="forms-sample" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label asp-for="Title">Title</label>
+                    <input asp-for="Title" class="form-control" placeholder="Title">
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="AdvertisementDetail.Description">Description</label>
+                    <textarea asp-for="AdvertisementDetail.Description" class="form-control" rows="4" placeholder="Description"></textarea>
+                    <span asp-validation-for="AdvertisementDetail.Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Photo">Image</label>
+                    <input asp-for="Photo" class="form-control" accept="image/*" type="file">
+                    <span asp-validation-for="Photo" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-warning mr-2">Update</button>
+                <a asp-action="Index" class="btn btn-light">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#AdvertisementDetail_Description'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+}
