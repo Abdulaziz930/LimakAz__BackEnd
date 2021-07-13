@@ -22,6 +22,8 @@ namespace DataAccess.AutoMapper
             CreateMap<Language, LanguageDto>().ReverseMap();
 
             CreateMap<Authentication, AuthenticationDto>().ReverseMap();
+
+            CreateMap<Section, SectionDto>().ReverseMap();
         }
     }
 }

@@ -11,6 +11,8 @@ namespace Entities.Models
 
         public string ButtonName { get; set; }
 
+        public string ButtonUrl { get; set; }
+
         public int LanguageId { get; set; }
 
         public Language Language { get; set; }
