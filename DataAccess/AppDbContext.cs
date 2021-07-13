@@ -15,5 +15,15 @@ namespace DataAccess
         public DbSet<Advertisement> Advertisements { get; set; }
 
         public DbSet<AdvertisementDetail> AdvertisementDetails { get; set; }
+
+        public DbSet<Language> Languages { get; set; }
+
+        public DbSet<Section> Sections { get; set; }
+
+        public DbSet<AuxiliarySection> AuxiliarySections { get; set; }
+
+        public DbSet<Authentication> Authentications { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
     }
 }

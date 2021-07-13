@@ -4,14 +4,16 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LimakAz.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210712210903_AddLanguageSectionsAndAuxiliarySectionsTables")]
+    partial class AddLanguageSectionsAndAuxiliarySectionsTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,26 +75,6 @@ namespace LimakAz.Migrations
                     b.ToTable("AdvertisementDetails");
                 });
 
-            modelBuilder.Entity("Entities.Models.Authentication", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
-
-                    b.ToTable("Authentications");
-                });
-
             modelBuilder.Entity("Entities.Models.AuxiliarySection", b =>
                 {
                     b.Property<int>("Id")
@@ -104,9 +86,6 @@ namespace LimakAz.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Url")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -132,26 +111,6 @@ namespace LimakAz.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Languages");
-                });
-
-            modelBuilder.Entity("Entities.Models.Order", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ButtonName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
-
-                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Entities.Models.Section", b =>
@@ -185,32 +144,10 @@ namespace LimakAz.Migrations
                     b.Navigation("Advertisement");
                 });
 
-            modelBuilder.Entity("Entities.Models.Authentication", b =>
-                {
-                    b.HasOne("Entities.Models.Language", "Language")
-                        .WithMany("Authentications")
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Language");
-                });
-
             modelBuilder.Entity("Entities.Models.AuxiliarySection", b =>
                 {
                     b.HasOne("Entities.Models.Language", "Language")
                         .WithMany("AuxiliarySections")
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Language");
-                });
-
-            modelBuilder.Entity("Entities.Models.Order", b =>
-                {
-                    b.HasOne("Entities.Models.Language", "Language")
-                        .WithMany("Orders")
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -236,11 +173,7 @@ namespace LimakAz.Migrations
 
             modelBuilder.Entity("Entities.Models.Language", b =>
                 {
-                    b.Navigation("Authentications");
-
                     b.Navigation("AuxiliarySections");
-
-                    b.Navigation("Orders");
 
                     b.Navigation("Sections");
                 });

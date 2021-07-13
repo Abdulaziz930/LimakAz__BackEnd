@@ -28,6 +28,7 @@ namespace LimakAz
         }
 
         public IConfiguration Configuration { get; }
+        //readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -41,6 +42,18 @@ namespace LimakAz
                     builder.MigrationsAssembly(nameof(LimakAz));
                 });
             });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "AllowOrigin",
+                    builder =>
+                    {
+                        builder.WithOrigins("https://localhost:44393", "http://localhost:3000")
+                                            .AllowAnyHeader()
+                                            .AllowAnyMethod();
+                    });
+            });
+
 
             services.AddScoped(typeof(IRepository<>), typeof(EfCoreRepository<>));
 
@@ -68,6 +81,8 @@ namespace LimakAz
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors("AllowOrigin");
 
             app.UseEndpoints(endpoints =>
             {

@@ -16,6 +16,10 @@ namespace DataAccess.AutoMapper
             CreateMap<Advertisement, AdvertisementDetailDto>()
                 .ForMember(x => x.Description, y => y.MapFrom(x => x.AdvertisementDetail.Description))
                 .ForMember(x => x.AdvertisementId, y => y.MapFrom(x => x.AdvertisementDetail.AdvertisementId)).ReverseMap();
+
+            CreateMap<AuxiliarySection, AuxiliarySectionDto>().ReverseMap();
+
+            CreateMap<Language, LanguageDto>().ReverseMap();
         }
     }
 }
