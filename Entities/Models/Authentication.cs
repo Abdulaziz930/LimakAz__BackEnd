@@ -11,6 +11,8 @@ namespace Entities.Models
 
         public string Name { get; set; }
 
+        public string Url { get; set; }
+
         public int LanguageId { get; set; }
 
         public Language Language { get; set; }
