@@ -24,6 +24,8 @@ namespace DataAccess.AutoMapper
             CreateMap<Authentication, AuthenticationDto>().ReverseMap();
 
             CreateMap<Section, SectionDto>().ReverseMap();
+
+            CreateMap<Order, OrderDto>().ReverseMap();
         }
     }
 }

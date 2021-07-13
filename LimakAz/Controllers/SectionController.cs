@@ -34,7 +34,7 @@ namespace LimakAz.Controllers
 
             var includedProperties = new List<string>
             {
-                nameof(AuxiliarySection.Language)
+                nameof(Section.Language)
             };
 
             var sections = await _repository.GetAllAsync(x => x.Language.Code == languageCode, includedProperties);

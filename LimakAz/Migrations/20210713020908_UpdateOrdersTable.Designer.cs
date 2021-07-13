@@ -4,14 +4,16 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LimakAz.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210713020908_UpdateOrdersTable")]
+    partial class UpdateOrdersTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,8 +157,7 @@ namespace LimakAz.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LanguageId")
-                        .IsUnique();
+                    b.HasIndex("LanguageId");
 
                     b.ToTable("Orders");
                 });
@@ -220,8 +221,8 @@ namespace LimakAz.Migrations
             modelBuilder.Entity("Entities.Models.Order", b =>
                 {
                     b.HasOne("Entities.Models.Language", "Language")
-                        .WithOne("Orders")
-                        .HasForeignKey("Entities.Models.Order", "LanguageId")
+                        .WithMany("Orders")
+                        .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

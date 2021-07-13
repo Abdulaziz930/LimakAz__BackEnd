@@ -14,12 +14,12 @@ namespace LimakAz.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthenticationController : ControllerBase
+    public class OrderController : ControllerBase
     {
-        private readonly IRepository<Authentication> _repository;
+        private readonly IRepository<Order> _repository;
         private readonly IMapper _mapper;
 
-        public AuthenticationController(IRepository<Authentication> repository, IMapper mapper)
+        public OrderController(IRepository<Order> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
@@ -34,16 +34,16 @@ namespace LimakAz.Controllers
 
             var includedProperties = new List<string>
             {
-                nameof(Authentication.Language)
+                nameof(Order.Language)
             };
 
-            var authentications = await _repository.GetAllAsync(x => x.Language.Code == languageCode, includedProperties);
-            if (authentications == null)
+            var orders = await _repository.GetAsync(x => x.Language.Code == languageCode, includedProperties);
+            if (orders == null)
                 return NotFound();
 
-            var authenticationsDto = _mapper.Map<List<AuthenticationDto>>(authentications);
+            var ordersDto = _mapper.Map<OrderDto>(orders);
 
-            return Ok(authenticationsDto);
+            return Ok(ordersDto);
         }
     }
 }
