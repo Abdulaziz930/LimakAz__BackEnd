@@ -54,7 +54,6 @@ namespace LimakAz
                     });
             });
 
-
             services.AddScoped(typeof(IRepository<>), typeof(EfCoreRepository<>));
 
             services.AddAutoMapper(typeof(AutoMapperProfile));

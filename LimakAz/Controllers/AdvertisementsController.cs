@@ -3,6 +3,7 @@ using DataAccess;
 using DataAccess.Interfaces;
 using Entities.Dto;
 using Entities.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,16 +27,21 @@ namespace LimakAz.Controllers
             _mapper = mapper;
         }
 
+        [EnableCors("AllowOrigin")]
         [HttpGet("count/{count}")]
         public async Task<IActionResult> Get([FromRoute] int count = 10)
         {
-            var advertisements = await _repository.GetAll(x => x.IsDeleted == false,null).Take(count).ToListAsync();
+            var advertisements = await _repository.GetAll(x => x.IsDeleted == false, null)
+                .OrderByDescending(x => x.LastModificationDate).Take(count).ToListAsync();
+
+            //var advertisements = await _repository.GetAllAsync(x => x.IsDeleted == false, null);
 
             var advertisementDto = _mapper.Map<List<AdvertisementDto>>(advertisements);
 
             return Ok(advertisementDto);
         }
 
+        [EnableCors("AllowOrigin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] int? id)
         {

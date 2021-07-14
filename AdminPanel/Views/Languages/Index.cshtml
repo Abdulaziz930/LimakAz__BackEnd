@@ -1,7 +1,7 @@
 ﻿
 @{
-    ViewData["Title"] = "Advertisements";
-    List<Advertisement> advertisements = Model;
+    ViewData["Title"] = "Languages";
+    List<Language> languages = Model;
 }
 
 <div class="row">
@@ -14,22 +14,16 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Image</th>
+                                <th>Code</th>
                                 <th>Name</th>
-                                <th>Creation Date</th>
-                                <th>Last Modification Date</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in advertisements)
+                            @foreach (var item in languages)
                             {
                                 <tr>
-                                    <td>
-                                        <img src="~/img/@item.Image" class="img-fluid" />
-                                    </td>
-                                    <td>@item.Title</td>
-                                    <td>@item.CreationDate.ToString("dd/MM/yyyy HH:mm:ss")</td>
-                                    <td>@item.LastModificationDate.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                                    <td>@item.Code</td>
+                                    <td>@item.Name</td>
                                     <td>
                                         <a asp-action="Detail" asp-route-id="@item.Id" class="btn btn-success">Detail</a>
                                         <a asp-action="Update" asp-route-id="@item.Id" class="btn btn-warning">Update</a>
