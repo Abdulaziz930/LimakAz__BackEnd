@@ -37,7 +37,7 @@ namespace LimakAz.Controllers
                 nameof(Authentication.Language)
             };
 
-            var authentications = await _repository.GetAllAsync(x => x.Language.Code == languageCode, includedProperties);
+            var authentications = await _repository.GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
             if (authentications == null)
                 return NotFound();
 
