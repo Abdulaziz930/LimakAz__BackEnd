@@ -29,7 +29,7 @@ namespace LimakAz.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var language = await _repository.GetAllAsync();
+            var language = await _repository.GetAllAsync(x => x.IsDeleted == false,null);
 
             var languageDto = _mapper.Map<List<LanguageDto>>(language);
 
