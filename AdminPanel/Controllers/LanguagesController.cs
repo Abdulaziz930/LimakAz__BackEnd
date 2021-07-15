@@ -49,7 +49,7 @@ namespace AdminPanel.Controllers
                 return View(language);
             }
 
-            var isExist = await _repository.GetAllAsync(x => x.Name == language.Name || x.Code == language.Code && x.IsDeleted == false);
+            var isExist = await _repository.GetAllAsync(x => (x.Name == language.Name || x.Code == language.Code) && x.IsDeleted == false);
             if (isExist)
             {
                 ModelState.AddModelError("", "There is a language with this name or code");
