@@ -37,7 +37,7 @@ namespace LimakAz.Controllers
                 nameof(AuxiliarySection.Language)
             };
 
-            var auxiliarySections = await _repository.GetAllAsync(x => x.Language.Code == languageCode, includedProperties);
+            var auxiliarySections = await _repository.GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
             if (auxiliarySections == null)
                 return NotFound();
 
