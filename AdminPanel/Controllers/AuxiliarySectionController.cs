@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace AdminPanel.Controllers
 {
-    public class SectionController : Controller
+    public class AuxiliarySectionController : Controller
     {
-        private readonly IRepository<Section> _repository;
+        private readonly IRepository<AuxiliarySection> _repository;
         private readonly IRepository<Language> _languageRepository;
 
-        public SectionController(IRepository<Section> repository, IRepository<Language> languageRepository)
+        public AuxiliarySectionController(IRepository<AuxiliarySection> repository, IRepository<Language> languageRepository)
         {
             _repository = repository;
             _languageRepository = languageRepository;
@@ -41,7 +41,7 @@ namespace AdminPanel.Controllers
 
         public async Task<IActionResult> Create()
         {
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false,null);
+            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
             ViewBag.Languages = languages;
 
             return View();
@@ -49,7 +49,7 @@ namespace AdminPanel.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Section section,int? languageId)
+        public async Task<IActionResult> Create(AuxiliarySection section, int? languageId)
         {
             var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
             ViewBag.Languages = languages;
@@ -62,7 +62,7 @@ namespace AdminPanel.Controllers
             var isExist = await _repository.GetAllAsync(x => x.Name == section.Name && x.IsDeleted == false && x.LanguageId == languageId);
             if (isExist)
             {
-                ModelState.AddModelError("", "There is a Section with this name");
+                ModelState.AddModelError("", "There is a Auxiliary Section with this name");
                 return View();
             }
 
@@ -103,7 +103,7 @@ namespace AdminPanel.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(int? id,Section section,int? languageId)
+        public async Task<IActionResult> Update(int? id, AuxiliarySection section, int? languageId)
         {
             if (id == null)
                 return BadRequest();
@@ -119,7 +119,7 @@ namespace AdminPanel.Controllers
             var isExist = await _repository.GetAllAsync(x => x.Name == section.Name && x.IsDeleted == false && x.LanguageId == languageId && x.Id != id);
             if (isExist)
             {
-                ModelState.AddModelError("", "There is a Section with this name");
+                ModelState.AddModelError("", "There is a Auxiliary Section with this name");
                 return View();
             }
 
