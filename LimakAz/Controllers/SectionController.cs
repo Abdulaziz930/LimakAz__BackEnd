@@ -40,7 +40,7 @@ namespace LimakAz.Controllers
             var sections = await _repository.GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
             if (sections == null)
                 return NotFound();
-            
+
             var sectionsDto = _mapper.Map<List<SectionDto>>(sections);
 
             return Ok(sectionsDto);
