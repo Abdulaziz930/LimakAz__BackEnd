@@ -18,7 +18,7 @@ namespace Entities.Dto
 
         public List<CityDto> CitiesDto { get; set; }
 
-        public List<CalculatorDto> CalculatorsDto { get; set; }
+        public CalculatorDto CalculatorDto { get; set; }
 
         public List<UnitsOfLengthDto> UnitsOfLengthsDto { get; set; }
 

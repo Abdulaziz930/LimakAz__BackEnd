@@ -27,7 +27,7 @@ namespace Entities.Models
 
         public Order Orders { get; set; }
 
-        public ICollection<Calculator> Calculators { get; set; }
+        public Calculator Calculator { get; set; }
 
         public ICollection<Country> Countries { get; set; }
 
