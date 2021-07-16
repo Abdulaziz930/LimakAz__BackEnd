@@ -4,14 +4,16 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LimakAz.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210716115802_UpdateCalculatorAndCalculatorInputsTablesVol2")]
+    partial class UpdateCalculatorAndCalculatorInputsTablesVol2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -249,8 +251,7 @@ namespace LimakAz.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LanguageId")
-                        .IsUnique();
+                    b.HasIndex("LanguageId");
 
                     b.ToTable("HeightInputs");
                 });
@@ -297,8 +298,7 @@ namespace LimakAz.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LanguageId")
-                        .IsUnique();
+                    b.HasIndex("LanguageId");
 
                     b.ToTable("LengthInputs");
                 });
@@ -447,8 +447,7 @@ namespace LimakAz.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LanguageId")
-                        .IsUnique();
+                    b.HasIndex("LanguageId");
 
                     b.ToTable("WeightInputs");
                 });
@@ -471,8 +470,7 @@ namespace LimakAz.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LanguageId")
-                        .IsUnique();
+                    b.HasIndex("LanguageId");
 
                     b.ToTable("WidthInputs");
                 });
@@ -557,8 +555,8 @@ namespace LimakAz.Migrations
             modelBuilder.Entity("Entities.Models.HeightInput", b =>
                 {
                     b.HasOne("Entities.Models.Language", "Language")
-                        .WithOne("HeightInput")
-                        .HasForeignKey("Entities.Models.HeightInput", "LanguageId")
+                        .WithMany("HeightInputs")
+                        .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -568,8 +566,8 @@ namespace LimakAz.Migrations
             modelBuilder.Entity("Entities.Models.LengthInput", b =>
                 {
                     b.HasOne("Entities.Models.Language", "Language")
-                        .WithOne("LengthInput")
-                        .HasForeignKey("Entities.Models.LengthInput", "LanguageId")
+                        .WithMany("LengthInputs")
+                        .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -634,8 +632,8 @@ namespace LimakAz.Migrations
             modelBuilder.Entity("Entities.Models.WeightInput", b =>
                 {
                     b.HasOne("Entities.Models.Language", "Language")
-                        .WithOne("WeightInput")
-                        .HasForeignKey("Entities.Models.WeightInput", "LanguageId")
+                        .WithMany("WeightInputs")
+                        .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -645,8 +643,8 @@ namespace LimakAz.Migrations
             modelBuilder.Entity("Entities.Models.WidthInput", b =>
                 {
                     b.HasOne("Entities.Models.Language", "Language")
-                        .WithOne("WidthInput")
-                        .HasForeignKey("Entities.Models.WidthInput", "LanguageId")
+                        .WithMany("WidthInputs")
+                        .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -672,9 +670,9 @@ namespace LimakAz.Migrations
 
                     b.Navigation("Countries");
 
-                    b.Navigation("HeightInput");
+                    b.Navigation("HeightInputs");
 
-                    b.Navigation("LengthInput");
+                    b.Navigation("LengthInputs");
 
                     b.Navigation("Orders");
 
@@ -684,11 +682,11 @@ namespace LimakAz.Migrations
 
                     b.Navigation("UnitsOfLengths");
 
-                    b.Navigation("WeightInput");
+                    b.Navigation("WeightInputs");
 
                     b.Navigation("Weights");
 
-                    b.Navigation("WidthInput");
+                    b.Navigation("WidthInputs");
                 });
 #pragma warning restore 612, 618
         }

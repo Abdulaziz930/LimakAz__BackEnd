@@ -26,5 +26,27 @@ namespace Entities.Models
         public ICollection<Authentication> Authentications { get; set; }
 
         public Order Orders { get; set; }
+
+        public ICollection<Calculator> Calculators { get; set; }
+
+        public ICollection<Country> Countries { get; set; }
+
+        public ICollection<City> Cities { get; set; }
+
+        public ICollection<Weight> Weights { get; set; }
+
+        public WeightInput WeightInput { get; set; }
+
+        public ICollection<UnitsOfLength> UnitsOfLengths { get; set; }
+
+        public WidthInput WidthInput { get; set; }
+
+        public HeightInput HeightInput { get; set; }
+
+        public LengthInput LengthInput { get; set; }
+
+        public BoxCountInput BoxCountInput { get; set; }
+
+        public ICollection<ProductType> ProductTypes { get; set; }
     }
 }

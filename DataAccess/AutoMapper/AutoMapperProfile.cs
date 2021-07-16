@@ -26,6 +26,28 @@ namespace DataAccess.AutoMapper
             CreateMap<Section, SectionDto>().ReverseMap();
 
             CreateMap<Order, OrderDto>().ReverseMap();
+
+            CreateMap<Calculator, CalculatorDto>().ReverseMap();
+
+            CreateMap<Country, CountryDto>().ReverseMap();
+
+            CreateMap<City, CityDto>().ReverseMap();
+
+            CreateMap<UnitsOfLength, UnitsOfLengthDto>().ReverseMap();
+
+            CreateMap<ProductType, ProductTypeDto>().ReverseMap();
+
+            CreateMap<BoxCountInput, BoxCountInputDto>().ReverseMap();
+
+            CreateMap<Weight, WeightDto>().ReverseMap();
+
+            CreateMap<WeightInput, WeightInputDto>().ReverseMap();
+
+            CreateMap<LengthInput, LengthInputDto>().ReverseMap();
+
+            CreateMap<WidthInput, WidthInputDto>().ReverseMap();
+
+            CreateMap<HeightInput, HeightInputDto>().ReverseMap();
         }
     }
 }

@@ -13,5 +13,28 @@ namespace Entities.Dto
         public List<AuthenticationDto> AuthenticationsDto { get; set; }
 
         public OrderDto OrderDto { get; set; }
+
+        public List<CountryDto> CountriesDto { get; set; }
+
+        public List<CityDto> CitiesDto { get; set; }
+
+        public List<CalculatorDto> CalculatorsDto { get; set; }
+
+        public List<UnitsOfLengthDto> UnitsOfLengthsDto { get; set; }
+
+        public List<WeightDto> WeightsDto { get; set; }
+
+        public List<ProductTypeDto> ProductTypesDto { get; set; }
+
+        public WeightInputDto WeightInputDto { get; set; }
+
+        public WidthInputDto WidthInputDto { get; set; }
+
+        public LengthInputDto LengthInputDto { get; set; }
+
+        public BoxCountInputDto BoxCountInputDto { get; set; }
+
+        public HeightInputDto HeightInputDto { get; set; }
+
     }
 }
