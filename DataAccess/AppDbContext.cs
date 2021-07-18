@@ -47,5 +47,9 @@ namespace DataAccess
         public DbSet<ProductType> ProductTypes { get; set; }
 
         public DbSet<BoxCountInput> BoxCountInputs { get; set; }
+
+        public DbSet<HowItWork> HowItWorks { get; set; }
+
+        public DbSet<HowItWorkCard> HowItWorkCards { get; set; }
     }
 }

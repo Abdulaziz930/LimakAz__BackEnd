@@ -48,5 +48,9 @@ namespace Entities.Models
         public ICollection<BoxCountInput> BoxCountInputs { get; set; }
 
         public ICollection<ProductType> ProductTypes { get; set; }
+
+        public ICollection<HowItWork> HowItWorks { get; set; }
+
+        public ICollection<HowItWorkCard> HowItWorkCards { get; set; }
     }
 }
