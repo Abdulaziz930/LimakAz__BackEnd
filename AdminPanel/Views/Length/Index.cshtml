@@ -1,15 +1,15 @@
 ﻿
 @{
-    ViewData["Title"] = "Width Input";
-    List<WeightInput> weightInputs = Model;
+    ViewData["Title"] = "Length Input";
+    List<LengthInput> lengthInputs = Model;
 }
 
 <div class="row">
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Weight Input</h4>
-                @if (weightInputs.Count < 3)
+                <h4 class="card-title">Length Input</h4>
+                @if (lengthInputs.Count < 3)
                 {
                     <a asp-action="Create" class="btn btn-primary">Add</a>
                 }
@@ -21,7 +21,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in weightInputs)
+                            @foreach (var item in lengthInputs)
                             {
                                 <tr>
                                     <td>@item.InputName</td>
