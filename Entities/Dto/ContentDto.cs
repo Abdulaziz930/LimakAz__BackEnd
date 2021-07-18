@@ -36,5 +36,9 @@ namespace Entities.Dto
 
         public List<HeightInputDto> HeightInputsDto { get; set; }
 
+        public List<HowItWorkDto> HowItWorksDto { get; set; }
+
+        public List<HowItWorkCardDto> HowItWorkCardsDto { get; set; }
+
     }
 }

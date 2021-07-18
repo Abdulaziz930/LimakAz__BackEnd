@@ -30,6 +30,8 @@ namespace LimakAz.Controllers
         private readonly IRepository<LengthInput> _lengthInputRepository;
         private readonly IRepository<HeightInput> _heightInputRepository;
         private readonly IRepository<BoxCountInput> _boxCountInputRepository;
+        private readonly IRepository<HowItWork> _howItWorkRepository;
+        private readonly IRepository<HowItWorkCard> _howItWorkCardRepository;
         private readonly IMapper _mapper;
 
         public ContentController(IRepository<Section> sectionRepository, IRepository<AuxiliarySection> auxiliarySectionRepository,
@@ -38,7 +40,8 @@ namespace LimakAz.Controllers
             , IRepository<City> cityRepository, IRepository<Weight> weightRepository, IRepository<UnitsOfLength> unitsOfLengthRepository
             , IRepository<ProductType> productTypeRepository, IRepository<WidthInput> widthInputRepository
             , IRepository<WeightInput> weightInputRepository, IRepository<LengthInput> lengthInputRepository
-            , IRepository<HeightInput> heightInputRepository, IRepository<BoxCountInput> boxCountInputRepository, IMapper mapper)
+            , IRepository<HeightInput> heightInputRepository, IRepository<BoxCountInput> boxCountInputRepository 
+            , IRepository<HowItWork> howItWorkRepository, IRepository<HowItWorkCard> howItWorkCardRepository, IMapper mapper)
         {
             _sectionRepository = sectionRepository;
             _auxiliarySectionRepository = auxiliarySectionRepository;
@@ -55,6 +58,8 @@ namespace LimakAz.Controllers
             _lengthInputRepository = lengthInputRepository;
             _heightInputRepository = heightInputRepository;
             _boxCountInputRepository = boxCountInputRepository;
+            _howItWorkRepository = howItWorkRepository;
+            _howItWorkCardRepository = howItWorkCardRepository;
             _mapper = mapper;
         }
 
@@ -143,6 +148,16 @@ namespace LimakAz.Controllers
             if (boxCountInputs == null)
                 return NotFound();
 
+            var howItWork = await _howItWorkRepository
+                .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
+            if (howItWork == null)
+                return NotFound();
+
+            var howItWorkCard = await _howItWorkCardRepository
+                .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
+            if (howItWorkCard == null)
+                return NotFound();
+
             var sectionsDto = _mapper.Map<List<SectionDto>>(sections);
             var auxiliarySectionsDto = _mapper.Map<List<AuxiliarySectionDto>>(auxiliarySections);
             var authenticationsDto = _mapper.Map<List<AuthenticationDto>>(authentications);
@@ -158,6 +173,8 @@ namespace LimakAz.Controllers
             var lengthInputsDto = _mapper.Map<List<LengthInputDto>>(lengthInputs);
             var heightInputsDto = _mapper.Map<List<HeightInputDto>>(heightInputs);
             var boxCountInputsDto = _mapper.Map<List<BoxCountInputDto>>(boxCountInputs);
+            var howItWorksDto = _mapper.Map<List<HowItWorkDto>>(howItWork);
+            var howItWorkCardsDto = _mapper.Map<List<HowItWorkCardDto>>(howItWorkCard);
 
             var contentDto = new ContentDto
             {
@@ -175,7 +192,9 @@ namespace LimakAz.Controllers
                 WeightInputsDto = weightInputsDto,
                 LengthInputsDto = lengthInputsDto,
                 HeightInputsDto = heightInputsDto,
-                BoxCountInputsDto = boxCountInputsDto
+                BoxCountInputsDto = boxCountInputsDto,
+                HowItWorksDto = howItWorksDto,
+                HowItWorkCardsDto = howItWorkCardsDto
             };
 
             return Ok(contentDto);

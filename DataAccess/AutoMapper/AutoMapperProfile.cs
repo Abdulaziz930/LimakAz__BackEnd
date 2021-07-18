@@ -48,6 +48,10 @@ namespace DataAccess.AutoMapper
             CreateMap<WidthInput, WidthInputDto>().ReverseMap();
 
             CreateMap<HeightInput, HeightInputDto>().ReverseMap();
+
+            CreateMap<HowItWork, HowItWorkDto>().ReverseMap();
+
+            CreateMap<HowItWorkCard, HowItWorkCardDto>().ReverseMap();
         }
     }
 }
