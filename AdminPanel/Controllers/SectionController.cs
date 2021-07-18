@@ -132,15 +132,7 @@ namespace AdminPanel.Controllers
             if (languages.All(x => x.Id != languageId.Value))
                 return BadRequest();
 
-            var dbSection = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, null);
-            if (dbSection == null)
-                return NotFound();
-
-            dbSection.LanguageId = languageId.Value;
-            dbSection.Name = section.Name;
-            dbSection.Url = section.Url;
-
-            await _repository.UpdateAsync(dbSection);
+            await _repository.UpdateAsync(section);
 
             return RedirectToAction("Index");
         }

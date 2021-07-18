@@ -88,9 +88,9 @@ namespace LimakAz.Controllers
             if (order == null)
                 return NotFound();
 
-            var calculator = await _calculatorRepository
-                .GetAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
-            if (calculator == null)
+            var calculators = await _calculatorRepository
+                .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
+            if (calculators == null)
                 return NotFound();
 
             var countries = await _countryRepository
@@ -118,46 +118,46 @@ namespace LimakAz.Controllers
             if (productTypes == null)
                 return NotFound();
 
-            var widthInput = await _widthInputRepository
-                .GetAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
-            if (widthInput == null)
+            var widthInputs = await _widthInputRepository
+                .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
+            if (widthInputs == null)
                 return NotFound();
 
-            var weightInput = await _weightInputRepository
-                .GetAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
-            if (weightInput == null)
+            var weightInputs = await _weightInputRepository
+                .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
+            if (weightInputs == null)
                 return NotFound();
 
-            var lengthInput = await _lengthInputRepository
-                .GetAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
-            if (lengthInput == null)
+            var lengthInputs = await _lengthInputRepository
+                .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
+            if (lengthInputs == null)
                 return NotFound();
 
-            var heightInput = await _heightInputRepository
-                .GetAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
-            if (heightInput == null)
+            var heightInputs = await _heightInputRepository
+                .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
+            if (heightInputs == null)
                 return NotFound();
 
-            var boxCountInput = await _boxCountInputRepository
-                .GetAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
-            if (boxCountInput == null)
+            var boxCountInputs = await _boxCountInputRepository
+                .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
+            if (boxCountInputs == null)
                 return NotFound();
 
             var sectionsDto = _mapper.Map<List<SectionDto>>(sections);
             var auxiliarySectionsDto = _mapper.Map<List<AuxiliarySectionDto>>(auxiliarySections);
             var authenticationsDto = _mapper.Map<List<AuthenticationDto>>(authentications);
             var orderDto = _mapper.Map<OrderDto>(order);
-            var calculatorDto = _mapper.Map<CalculatorDto>(calculator);
+            var calculatorsDto = _mapper.Map<List<CalculatorDto>>(calculators);
             var countriesDto = _mapper.Map<List<CountryDto>>(countries);
             var citiesDto = _mapper.Map<List<CityDto>>(cities);
             var weightsDto = _mapper.Map<List<WeightDto>>(weights);
             var unitsOfLengthsDto = _mapper.Map<List<UnitsOfLengthDto>>(unitsOfLengths);
             var productTypesDto = _mapper.Map<List<ProductTypeDto>>(productTypes);
-            var widthInputDto = _mapper.Map<WidthInputDto>(widthInput);
-            var weightInputDto = _mapper.Map<WeightInputDto>(weightInput);
-            var lengthInputDto = _mapper.Map<LengthInputDto>(lengthInput);
-            var heightInputDto = _mapper.Map<HeightInputDto>(heightInput);
-            var boxCountInputDto = _mapper.Map<BoxCountInputDto>(boxCountInput);
+            var widthInputsDto = _mapper.Map<List<WidthInputDto>>(widthInputs);
+            var weightInputsDto = _mapper.Map<List<WeightInputDto>>(weightInputs);
+            var lengthInputsDto = _mapper.Map<List<LengthInputDto>>(lengthInputs);
+            var heightInputsDto = _mapper.Map<List<HeightInputDto>>(heightInputs);
+            var boxCountInputsDto = _mapper.Map<List<BoxCountInputDto>>(boxCountInputs);
 
             var contentDto = new ContentDto
             {
@@ -165,17 +165,17 @@ namespace LimakAz.Controllers
                 AuxiliarySectionsDto = auxiliarySectionsDto,
                 AuthenticationsDto = authenticationsDto,
                 OrderDto = orderDto,
-                CalculatorDto = calculatorDto,
+                CalculatorsDto = calculatorsDto,
                 CountriesDto = countriesDto,
                 CitiesDto = citiesDto,
                 WeightsDto = weightsDto,
                 UnitsOfLengthsDto = unitsOfLengthsDto,
                 ProductTypesDto = productTypesDto,
-                WidthInputDto = widthInputDto,
-                WeightInputDto = weightInputDto,
-                LengthInputDto = lengthInputDto,
-                HeightInputDto = heightInputDto,
-                BoxCountInputDto = boxCountInputDto
+                WidthInputsDto = widthInputsDto,
+                WeightInputsDto = weightInputsDto,
+                LengthInputsDto = lengthInputsDto,
+                HeightInputsDto = heightInputsDto,
+                BoxCountInputsDto = boxCountInputsDto
             };
 
             return Ok(contentDto);

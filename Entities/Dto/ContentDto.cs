@@ -18,7 +18,7 @@ namespace Entities.Dto
 
         public List<CityDto> CitiesDto { get; set; }
 
-        public CalculatorDto CalculatorDto { get; set; }
+        public List<CalculatorDto> CalculatorsDto { get; set; }
 
         public List<UnitsOfLengthDto> UnitsOfLengthsDto { get; set; }
 
@@ -26,15 +26,15 @@ namespace Entities.Dto
 
         public List<ProductTypeDto> ProductTypesDto { get; set; }
 
-        public WeightInputDto WeightInputDto { get; set; }
+        public List<WeightInputDto> WeightInputsDto { get; set; }
 
-        public WidthInputDto WidthInputDto { get; set; }
+        public List<WidthInputDto> WidthInputsDto { get; set; }
 
-        public LengthInputDto LengthInputDto { get; set; }
+        public List<LengthInputDto> LengthInputsDto { get; set; }
 
-        public BoxCountInputDto BoxCountInputDto { get; set; }
+        public List<BoxCountInputDto> BoxCountInputsDto { get; set; }
 
-        public HeightInputDto HeightInputDto { get; set; }
+        public List<HeightInputDto> HeightInputsDto { get; set; }
 
     }
 }

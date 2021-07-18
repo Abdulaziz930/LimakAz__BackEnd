@@ -27,7 +27,7 @@ namespace Entities.Models
 
         public Order Orders { get; set; }
 
-        public Calculator Calculator { get; set; }
+        public ICollection<Calculator> Calculators { get; set; }
 
         public ICollection<Country> Countries { get; set; }
 
@@ -35,17 +35,17 @@ namespace Entities.Models
 
         public ICollection<Weight> Weights { get; set; }
 
-        public WeightInput WeightInput { get; set; }
+        public ICollection<WeightInput> WeightInputs { get; set; }
 
         public ICollection<UnitsOfLength> UnitsOfLengths { get; set; }
 
-        public WidthInput WidthInput { get; set; }
+        public ICollection<WidthInput> WidthInputs { get; set; }
 
-        public HeightInput HeightInput { get; set; }
+        public ICollection<HeightInput> HeightInputs { get; set; }
 
-        public LengthInput LengthInput { get; set; }
+        public ICollection<LengthInput> LengthInputs { get; set; }
 
-        public BoxCountInput BoxCountInput { get; set; }
+        public ICollection<BoxCountInput> BoxCountInputs { get; set; }
 
         public ICollection<ProductType> ProductTypes { get; set; }
     }
