@@ -132,15 +132,7 @@ namespace AdminPanel.Controllers
             if (languages.All(x => x.Id != languageId.Value))
                 return BadRequest();
 
-            var dbOrder = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, null);
-            if (dbOrder == null)
-                return NotFound();
-
-            dbOrder.LanguageId = languageId.Value;
-            dbOrder.ButtonName = order.ButtonName;
-            dbOrder.ButtonUrl = order.ButtonUrl;
-
-            await _repository.UpdateAsync(dbOrder);
+            await _repository.UpdateAsync(order);
 
             return RedirectToAction("Index");
         }
