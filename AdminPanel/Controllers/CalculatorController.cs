@@ -77,6 +77,8 @@ namespace AdminPanel.Controllers
 
         #endregion
 
+        #region Update
+
         public async Task<IActionResult> Update(int? id)
         {
             if (id == null)
@@ -121,5 +123,67 @@ namespace AdminPanel.Controllers
             return RedirectToAction("Index");
         }
 
+        #endregion
+
+        #region Delete
+
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+                return BadRequest();
+
+            var includedProperties = new List<string>
+            {
+                nameof(Language)
+            };
+
+            var calculator = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, includedProperties);
+            if (calculator == null)
+                return NotFound();
+
+            return View(calculator);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("Delete")]
+        public async Task<IActionResult> DeleteSection(int? id)
+        {
+            if (id == null)
+                return BadRequest();
+
+            var calculator = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, null);
+            if (calculator == null)
+                return NotFound();
+
+            calculator.IsDeleted = true;
+
+            await _repository.UpdateAsync(calculator);
+
+            return RedirectToAction("Index");
+        }
+
+        #endregion
+
+        #region Detail
+
+        public async Task<IActionResult> Detail(int? id)
+        {
+            if (id == null)
+                return BadRequest();
+
+            var includedProperties = new List<string>
+            {
+                nameof(Language)
+            };
+
+            var calculator = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, includedProperties);
+            if (calculator == null)
+                return NotFound();
+
+            return View(calculator);
+        }
+
+        #endregion
     }
 }

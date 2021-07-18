@@ -25,7 +25,7 @@ namespace Entities.Models
 
         public ICollection<Authentication> Authentications { get; set; }
 
-        public Order Orders { get; set; }
+        public ICollection<Order> Orders { get; set; }
 
         public ICollection<Calculator> Calculators { get; set; }
 

@@ -12,7 +12,7 @@ namespace Entities.Dto
 
         public List<AuthenticationDto> AuthenticationsDto { get; set; }
 
-        public OrderDto OrderDto { get; set; }
+        public List<OrderDto> OrdersDto { get; set; }
 
         public List<CountryDto> CountriesDto { get; set; }
 

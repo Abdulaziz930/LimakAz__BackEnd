@@ -84,8 +84,8 @@ namespace LimakAz.Controllers
             if (authentications == null)
                 return NotFound();
 
-            var order = await _orderRepository.GetAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
-            if (order == null)
+            var orders = await _orderRepository.GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
+            if (orders == null)
                 return NotFound();
 
             var calculators = await _calculatorRepository
@@ -146,7 +146,7 @@ namespace LimakAz.Controllers
             var sectionsDto = _mapper.Map<List<SectionDto>>(sections);
             var auxiliarySectionsDto = _mapper.Map<List<AuxiliarySectionDto>>(auxiliarySections);
             var authenticationsDto = _mapper.Map<List<AuthenticationDto>>(authentications);
-            var orderDto = _mapper.Map<OrderDto>(order);
+            var ordersDto = _mapper.Map<List<OrderDto>>(orders);
             var calculatorsDto = _mapper.Map<List<CalculatorDto>>(calculators);
             var countriesDto = _mapper.Map<List<CountryDto>>(countries);
             var citiesDto = _mapper.Map<List<CityDto>>(cities);
@@ -164,7 +164,7 @@ namespace LimakAz.Controllers
                 SectionsDto = sectionsDto,
                 AuxiliarySectionsDto = auxiliarySectionsDto,
                 AuthenticationsDto = authenticationsDto,
-                OrderDto = orderDto,
+                OrdersDto = ordersDto,
                 CalculatorsDto = calculatorsDto,
                 CountriesDto = countriesDto,
                 CitiesDto = citiesDto,
