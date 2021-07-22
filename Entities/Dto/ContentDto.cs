@@ -40,5 +40,7 @@ namespace Entities.Dto
 
         public List<HowItWorkCardDto> HowItWorkCardsDto { get; set; }
 
+        public List<CertificateDto> CertificatesDto { get; set; }
+
     }
 }

@@ -32,16 +32,18 @@ namespace LimakAz.Controllers
         private readonly IRepository<BoxCountInput> _boxCountInputRepository;
         private readonly IRepository<HowItWork> _howItWorkRepository;
         private readonly IRepository<HowItWorkCard> _howItWorkCardRepository;
+        private readonly IRepository<Certificate> _certificateRepository;
         private readonly IMapper _mapper;
 
         public ContentController(IRepository<Section> sectionRepository, IRepository<AuxiliarySection> auxiliarySectionRepository,
            IRepository<Authentication> authenticationRepository, IRepository<Order> orderRepository
-            , IRepository<Calculator> calculatorRepository,IRepository<Country> countryRepository
+            , IRepository<Calculator> calculatorRepository, IRepository<Country> countryRepository
             , IRepository<City> cityRepository, IRepository<Weight> weightRepository, IRepository<UnitsOfLength> unitsOfLengthRepository
             , IRepository<ProductType> productTypeRepository, IRepository<WidthInput> widthInputRepository
             , IRepository<WeightInput> weightInputRepository, IRepository<LengthInput> lengthInputRepository
-            , IRepository<HeightInput> heightInputRepository, IRepository<BoxCountInput> boxCountInputRepository 
-            , IRepository<HowItWork> howItWorkRepository, IRepository<HowItWorkCard> howItWorkCardRepository, IMapper mapper)
+            , IRepository<HeightInput> heightInputRepository, IRepository<BoxCountInput> boxCountInputRepository
+            , IRepository<HowItWork> howItWorkRepository, IRepository<HowItWorkCard> howItWorkCardRepository
+            , IRepository<Certificate> certificateRepository, IMapper mapper)
         {
             _sectionRepository = sectionRepository;
             _auxiliarySectionRepository = auxiliarySectionRepository;
@@ -60,6 +62,7 @@ namespace LimakAz.Controllers
             _boxCountInputRepository = boxCountInputRepository;
             _howItWorkRepository = howItWorkRepository;
             _howItWorkCardRepository = howItWorkCardRepository;
+            _certificateRepository = certificateRepository;
             _mapper = mapper;
         }
 
@@ -198,6 +201,27 @@ namespace LimakAz.Controllers
             };
 
             return Ok(contentDto);
+        }
+
+        [HttpGet("getContnentCertificate/{languageCode}")]
+        public async Task<IActionResult> GetCertificateContent([FromRoute] string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+                return BadRequest();
+
+            var includedProperties = new List<string>
+            {
+                nameof(Section.Language)
+            };
+
+            var certificates = await _certificateRepository
+                .GetAllAsync(x => x.IsDeleted == false && x.Language.Code == languageCode, includedProperties);
+            if (certificates == null)
+                return NotFound();
+
+            var certificatesDto = _mapper.Map<List<CertificateDto>>(certificates);
+
+            return Ok(certificatesDto);
         }
     }
 }

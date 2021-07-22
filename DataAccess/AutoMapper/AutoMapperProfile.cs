@@ -52,6 +52,10 @@ namespace DataAccess.AutoMapper
             CreateMap<HowItWork, HowItWorkDto>().ReverseMap();
 
             CreateMap<HowItWorkCard, HowItWorkCardDto>().ReverseMap();
+
+            CreateMap<Certificate, CertificateDto>().ReverseMap();
+
+            CreateMap<CertifcateContent, CertificateContentDto>().ReverseMap();
         }
     }
 }
