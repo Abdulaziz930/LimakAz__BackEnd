@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewData["Title"] = "Detail";
+    CertifcateContent certifcateContent = Model;
+}
+
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">Advertisement Detail</h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <img src="~/img/@certifcateContent.Image" class="img-fluid" />
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <a asp-action="Index" class="btn btn-info text-light my-button">
+                <i class="mdi mdi-keyboard-backspace"></i> <span>Back</span>
+            </a>
+        </div>
+    </div>
+</div>

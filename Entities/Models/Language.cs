@@ -52,5 +52,7 @@ namespace Entities.Models
         public ICollection<HowItWork> HowItWorks { get; set; }
 
         public ICollection<HowItWorkCard> HowItWorkCards { get; set; }
+
+        public ICollection<Certificate> Certificates { get; set; }
     }
 }

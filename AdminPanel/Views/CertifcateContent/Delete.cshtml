@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewData["Title"] = "Delete";
+    CertifcateContent certifcateContent = Model;
+}
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Delete Advertisement</h4>
+            <div class="row">
+                <div class="col-md-12">
+                    <img src="~/img/@certifcateContent.Image" class="img-fluid" />
+                </div>
+            </div>
+            <p class="text-danger mt-3">Do you want to delete?</p>
+            <hr />
+            <form method="post">
+                <a asp-action="Index" class="btn btn-primary">Go Back</a>
+                <button type="submit" class="btn btn-danger ml-2">Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+

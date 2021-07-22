@@ -6,24 +6,17 @@ using System.Text;
 
 namespace Entities.Models
 {
-    public class ProductType : IEntity
+    public class Certificate : IEntity
     {
         public int Id { get; set; }
 
-        [Required, StringLength(80)]
-        public string Name { get; set; }
-
         [Required]
-        public string Value { get; set; }
+        public string Title { get; set; }
 
         public bool IsDeleted { get; set; }
 
         public int LanguageId { get; set; }
 
         public Language Language { get; set; }
-
-        //public ICollection<Tariff> Tariffs { get; set; }
-
-        //public ICollection<CountryProductType> CountryProductTypes { get; set; }
     }
 }

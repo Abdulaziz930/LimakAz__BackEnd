@@ -8,7 +8,6 @@ namespace Entities.Models
 {
     public class Country : IEntity
     {
-        [Required]
         public int Id { get; set; }
 
         [Required, StringLength(100)]
@@ -22,5 +21,9 @@ namespace Entities.Models
         public int LanguageId { get; set; }
 
         public Language Language { get; set; }
+
+        //public Tab Tab { get; set; }
+
+        //public ICollection<CountryProductType> CountryProductTypes { get; set; }
     }
 }

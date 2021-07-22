@@ -51,5 +51,18 @@ namespace DataAccess
         public DbSet<HowItWork> HowItWorks { get; set; }
 
         public DbSet<HowItWorkCard> HowItWorkCards { get; set; }
+
+        //public DbSet<Tab> Tabs { get; set; }
+
+        //public DbSet<Tariff> Tariffs { get; set; }
+
+        //public DbSet<Price> Prices { get; set; }
+
+        //public DbSet<CountryProductType> CountryProductTypes { get; set; }
+
+        public DbSet<Certificate> Certificates { get; set; }
+
+        public DbSet<CertifcateContent> CertifcateContents { get; set; }
+
     }
 }
