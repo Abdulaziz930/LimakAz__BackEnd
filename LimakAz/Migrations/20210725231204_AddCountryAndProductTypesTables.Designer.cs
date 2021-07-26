@@ -4,14 +4,16 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LimakAz.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210725231204_AddCountryAndProductTypesTables")]
+    partial class AddCountryAndProductTypesTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,9 +37,6 @@ namespace LimakAz.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("LastModificationDate")
                         .HasColumnType("datetime2");
 
@@ -47,8 +46,6 @@ namespace LimakAz.Migrations
                         .HasColumnType("nvarchar(60)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
 
                     b.ToTable("Advertisements");
                 });
@@ -70,42 +67,12 @@ namespace LimakAz.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AdvertisementId")
                         .IsUnique();
 
-                    b.HasIndex("LanguageId");
-
                     b.ToTable("AdvertisementDetails");
-                });
-
-            modelBuilder.Entity("Entities.Models.AdvertisimentTitle", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
-
-                    b.ToTable("AdvertisimentTitles");
                 });
 
             modelBuilder.Entity("Entities.Models.Authentication", b =>
@@ -327,28 +294,6 @@ namespace LimakAz.Migrations
                     b.HasIndex("LanguageId");
 
                     b.ToTable("Countries");
-                });
-
-            modelBuilder.Entity("Entities.Models.CountryProductType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CountryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductTypeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CountryId");
-
-                    b.HasIndex("ProductTypeId");
-
-                    b.ToTable("CountryProductTypes");
                 });
 
             modelBuilder.Entity("Entities.Models.HeightInput", b =>
@@ -676,17 +621,6 @@ namespace LimakAz.Migrations
                     b.ToTable("WidthInputs");
                 });
 
-            modelBuilder.Entity("Entities.Models.Advertisement", b =>
-                {
-                    b.HasOne("Entities.Models.Language", "Language")
-                        .WithMany("Advertisements")
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Language");
-                });
-
             modelBuilder.Entity("Entities.Models.AdvertisementDetail", b =>
                 {
                     b.HasOne("Entities.Models.Advertisement", "Advertisement")
@@ -695,26 +629,7 @@ namespace LimakAz.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entities.Models.Language", "Language")
-                        .WithMany("AdvertisementDetails")
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Advertisement");
-
-                    b.Navigation("Language");
-                });
-
-            modelBuilder.Entity("Entities.Models.AdvertisimentTitle", b =>
-                {
-                    b.HasOne("Entities.Models.Language", "Language")
-                        .WithMany("AdvertisimentTitles")
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Language");
                 });
 
             modelBuilder.Entity("Entities.Models.Authentication", b =>
@@ -792,25 +707,6 @@ namespace LimakAz.Migrations
                         .IsRequired();
 
                     b.Navigation("Language");
-                });
-
-            modelBuilder.Entity("Entities.Models.CountryProductType", b =>
-                {
-                    b.HasOne("Entities.Models.Country", "Country")
-                        .WithMany("CountryProductTypes")
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Entities.Models.ProductType", "ProductType")
-                        .WithMany("CountryProductTypes")
-                        .HasForeignKey("ProductTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Country");
-
-                    b.Navigation("ProductType");
                 });
 
             modelBuilder.Entity("Entities.Models.HeightInput", b =>
@@ -939,19 +835,8 @@ namespace LimakAz.Migrations
                     b.Navigation("AdvertisementDetail");
                 });
 
-            modelBuilder.Entity("Entities.Models.Country", b =>
-                {
-                    b.Navigation("CountryProductTypes");
-                });
-
             modelBuilder.Entity("Entities.Models.Language", b =>
                 {
-                    b.Navigation("AdvertisementDetails");
-
-                    b.Navigation("Advertisements");
-
-                    b.Navigation("AdvertisimentTitles");
-
                     b.Navigation("Authentications");
 
                     b.Navigation("AuxiliarySections");
@@ -987,11 +872,6 @@ namespace LimakAz.Migrations
                     b.Navigation("Weights");
 
                     b.Navigation("WidthInputs");
-                });
-
-            modelBuilder.Entity("Entities.Models.ProductType", b =>
-                {
-                    b.Navigation("CountryProductTypes");
                 });
 #pragma warning restore 612, 618
         }

@@ -4,6 +4,7 @@ using Entities.Dto;
 using Entities.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,59 +16,42 @@ namespace LimakAz.Controllers
     [ApiController]
     public class ContentController : ControllerBase
     {
-        private readonly IRepository<Section> _sectionRepository;
-        private readonly IRepository<AuxiliarySection> _auxiliarySectionRepository;
-        private readonly IRepository<Authentication> _authenticationRepository;
-        private readonly IRepository<Order> _orderRepository;
         private readonly IRepository<Calculator> _calculatorRepository;
         private readonly IRepository<Country> _countryRepository;
         private readonly IRepository<City> _cityRepository;
         private readonly IRepository<Weight> _weightRepository;
         private readonly IRepository<UnitsOfLength> _unitsOfLengthRepository;
         private readonly IRepository<ProductType> _productTypeRepository;
-        private readonly IRepository<WidthInput> _widthInputRepository;
-        private readonly IRepository<WeightInput> _weightInputRepository;
-        private readonly IRepository<LengthInput> _lengthInputRepository;
-        private readonly IRepository<HeightInput> _heightInputRepository;
-        private readonly IRepository<BoxCountInput> _boxCountInputRepository;
         private readonly IRepository<HowItWork> _howItWorkRepository;
         private readonly IRepository<HowItWorkCard> _howItWorkCardRepository;
         private readonly IRepository<Certificate> _certificateRepository;
+        private readonly IRepository<AdvertisimentTitle> _advertisimentTitleRepository;
+        private readonly IRepository<Advertisement> _advertisementRepository;
         private readonly IMapper _mapper;
 
-        public ContentController(IRepository<Section> sectionRepository, IRepository<AuxiliarySection> auxiliarySectionRepository,
-           IRepository<Authentication> authenticationRepository, IRepository<Order> orderRepository
-            , IRepository<Calculator> calculatorRepository, IRepository<Country> countryRepository
+        public ContentController(IRepository<Calculator> calculatorRepository, IRepository<Country> countryRepository
             , IRepository<City> cityRepository, IRepository<Weight> weightRepository, IRepository<UnitsOfLength> unitsOfLengthRepository
-            , IRepository<ProductType> productTypeRepository, IRepository<WidthInput> widthInputRepository
-            , IRepository<WeightInput> weightInputRepository, IRepository<LengthInput> lengthInputRepository
-            , IRepository<HeightInput> heightInputRepository, IRepository<BoxCountInput> boxCountInputRepository
+            , IRepository<ProductType> productTypeRepository
             , IRepository<HowItWork> howItWorkRepository, IRepository<HowItWorkCard> howItWorkCardRepository
-            , IRepository<Certificate> certificateRepository, IMapper mapper)
+            , IRepository<Certificate> certificateRepository, IRepository<AdvertisimentTitle> advertisimentTitleRepository
+            , IRepository<Advertisement> advertisementRepository, IMapper mapper)
         {
-            _sectionRepository = sectionRepository;
-            _auxiliarySectionRepository = auxiliarySectionRepository;
-            _authenticationRepository = authenticationRepository;
-            _orderRepository = orderRepository;
             _calculatorRepository = calculatorRepository;
             _countryRepository = countryRepository;
             _cityRepository = cityRepository;
             _weightRepository = weightRepository;
             _unitsOfLengthRepository = unitsOfLengthRepository;
             _productTypeRepository = productTypeRepository;
-            _widthInputRepository = widthInputRepository;
-            _weightInputRepository = weightInputRepository;
-            _lengthInputRepository = lengthInputRepository;
-            _heightInputRepository = heightInputRepository;
-            _boxCountInputRepository = boxCountInputRepository;
             _howItWorkRepository = howItWorkRepository;
             _howItWorkCardRepository = howItWorkCardRepository;
             _certificateRepository = certificateRepository;
+            _advertisimentTitleRepository = advertisimentTitleRepository;
+            _advertisementRepository = advertisementRepository;
             _mapper = mapper;
         }
 
-        [HttpGet("getContentWebSite/{languageCode}")]
-        public async Task<IActionResult> GetContent([FromRoute] string languageCode)
+        [HttpGet("getCalculatorContent/{languageCode}")]
+        public async Task<IActionResult> GetCalculatorContent([FromRoute] string languageCode)
         {
             if (string.IsNullOrEmpty(languageCode))
                 return BadRequest();
@@ -77,133 +61,164 @@ namespace LimakAz.Controllers
                 nameof(Section.Language)
             };
 
-            var sections = await _sectionRepository
-                .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
-            if (sections == null)
+            var calculator = await _calculatorRepository
+                .GetAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
+            if (calculator == null)
                 return NotFound();
 
-            var auxiliarySections = await _auxiliarySectionRepository
-                .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
-            if (auxiliarySections == null)
-                return NotFound();
+            var calculatorDto = _mapper.Map<CalculatorDto>(calculator);
 
-            var authentications = await _authenticationRepository
-                .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
-            if (authentications == null)
-                return NotFound();
+            return Ok(calculatorDto);
+        }
 
-            var orders = await _orderRepository.GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
-            if (orders == null)
-                return NotFound();
+        [HttpGet("getContriesContent/{languageCode}")]
+        public async Task<IActionResult> GetCountriesContnent([FromRoute] string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+                return BadRequest();
 
-            var calculators = await _calculatorRepository
-                .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
-            if (calculators == null)
-                return NotFound();
+            var includedProperties = new List<string>
+            {
+                nameof(Section.Language)
+            };
 
             var countries = await _countryRepository
                 .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
             if (countries == null)
                 return NotFound();
 
+            var countriesDto = _mapper.Map<List<CountryDto>>(countries);
+
+            return Ok(countriesDto);
+        }
+
+        [HttpGet("getCitiesContent/{languageCode}")]
+        public async Task<IActionResult> GetCitiesContnent([FromRoute] string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+                return BadRequest();
+
+            var includedProperties = new List<string>
+            {
+                nameof(Section.Language)
+            };
+
             var cities = await _cityRepository
                 .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
             if (cities == null)
                 return NotFound();
+
+            var citiesDto = _mapper.Map<List<CityDto>>(cities);
+
+            return Ok(citiesDto);
+        }
+
+        [HttpGet("getWeightContent/{languageCode}")]
+        public async Task<IActionResult> GetWeightsContnent([FromRoute] string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+                return BadRequest();
+
+            var includedProperties = new List<string>
+            {
+                nameof(Section.Language)
+            };
 
             var weights = await _weightRepository
                 .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
             if (weights == null)
                 return NotFound();
 
+            var weightsDto = _mapper.Map<List<WeightDto>>(weights);
+
+            return Ok(weightsDto);
+        }
+
+        [HttpGet("getUnitsOfLengthContent/{languageCode}")]
+        public async Task<IActionResult> GetUnitsOfLengthsContnent([FromRoute] string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+                return BadRequest();
+
+            var includedProperties = new List<string>
+            {
+                nameof(Section.Language)
+            };
+
             var unitsOfLengths = await _unitsOfLengthRepository
                 .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
             if (unitsOfLengths == null)
                 return NotFound();
+
+            var unitsOfLengthsDto = _mapper.Map<List<UnitsOfLengthDto>>(unitsOfLengths);
+
+            return Ok(unitsOfLengthsDto);
+        }
+
+        [HttpGet("getProductTypesContent/{languageCode}")]
+        public async Task<IActionResult> GetProductTypesContnent([FromRoute] string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+                return BadRequest();
+
+            var includedProperties = new List<string>
+            {
+                nameof(Section.Language)
+            };
 
             var productTypes = await _productTypeRepository
                 .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
             if (productTypes == null)
                 return NotFound();
 
-            var widthInputs = await _widthInputRepository
-                .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
-            if (widthInputs == null)
-                return NotFound();
+            var productTypesDto = _mapper.Map<List<ProductTypeDto>>(productTypes);
 
-            var weightInputs = await _weightInputRepository
-                .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
-            if (weightInputs == null)
-                return NotFound();
+            return Ok(productTypesDto);
+        }
 
-            var lengthInputs = await _lengthInputRepository
-                .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
-            if (lengthInputs == null)
-                return NotFound();
+        [HttpGet("getHowItWorkContent/{languageCode}")]
+        public async Task<IActionResult> GetHowItWorkContnent([FromRoute] string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+                return BadRequest();
 
-            var heightInputs = await _heightInputRepository
-                .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
-            if (heightInputs == null)
-                return NotFound();
-
-            var boxCountInputs = await _boxCountInputRepository
-                .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
-            if (boxCountInputs == null)
-                return NotFound();
+            var includedProperties = new List<string>
+            {
+                nameof(Section.Language)
+            };
 
             var howItWork = await _howItWorkRepository
-                .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
+                .GetAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
             if (howItWork == null)
                 return NotFound();
+
+            var howItWorkDto = _mapper.Map<HowItWorkDto>(howItWork);
+
+            return Ok(howItWorkDto);
+        }
+
+        [HttpGet("getHowItWorkCardContent/{languageCode}")]
+        public async Task<IActionResult> GetHowItWorkCardContnent([FromRoute] string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+                return BadRequest();
+
+            var includedProperties = new List<string>
+            {
+                nameof(Section.Language)
+            };
 
             var howItWorkCard = await _howItWorkCardRepository
                 .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
             if (howItWorkCard == null)
                 return NotFound();
 
-            var sectionsDto = _mapper.Map<List<SectionDto>>(sections);
-            var auxiliarySectionsDto = _mapper.Map<List<AuxiliarySectionDto>>(auxiliarySections);
-            var authenticationsDto = _mapper.Map<List<AuthenticationDto>>(authentications);
-            var ordersDto = _mapper.Map<List<OrderDto>>(orders);
-            var calculatorsDto = _mapper.Map<List<CalculatorDto>>(calculators);
-            var countriesDto = _mapper.Map<List<CountryDto>>(countries);
-            var citiesDto = _mapper.Map<List<CityDto>>(cities);
-            var weightsDto = _mapper.Map<List<WeightDto>>(weights);
-            var unitsOfLengthsDto = _mapper.Map<List<UnitsOfLengthDto>>(unitsOfLengths);
-            var productTypesDto = _mapper.Map<List<ProductTypeDto>>(productTypes);
-            var widthInputsDto = _mapper.Map<List<WidthInputDto>>(widthInputs);
-            var weightInputsDto = _mapper.Map<List<WeightInputDto>>(weightInputs);
-            var lengthInputsDto = _mapper.Map<List<LengthInputDto>>(lengthInputs);
-            var heightInputsDto = _mapper.Map<List<HeightInputDto>>(heightInputs);
-            var boxCountInputsDto = _mapper.Map<List<BoxCountInputDto>>(boxCountInputs);
-            var howItWorksDto = _mapper.Map<List<HowItWorkDto>>(howItWork);
             var howItWorkCardsDto = _mapper.Map<List<HowItWorkCardDto>>(howItWorkCard);
 
-            var contentDto = new ContentDto
-            {
-                SectionsDto = sectionsDto,
-                AuxiliarySectionsDto = auxiliarySectionsDto,
-                AuthenticationsDto = authenticationsDto,
-                OrdersDto = ordersDto,
-                CalculatorsDto = calculatorsDto,
-                CountriesDto = countriesDto,
-                CitiesDto = citiesDto,
-                WeightsDto = weightsDto,
-                UnitsOfLengthsDto = unitsOfLengthsDto,
-                ProductTypesDto = productTypesDto,
-                WidthInputsDto = widthInputsDto,
-                WeightInputsDto = weightInputsDto,
-                LengthInputsDto = lengthInputsDto,
-                HeightInputsDto = heightInputsDto,
-                BoxCountInputsDto = boxCountInputsDto,
-                HowItWorksDto = howItWorksDto,
-                HowItWorkCardsDto = howItWorkCardsDto
-            };
-
-            return Ok(contentDto);
+            return Ok(howItWorkCardsDto);
         }
 
-        [HttpGet("getContnentCertificate/{languageCode}")]
+        [HttpGet("getCertificateContent/{languageCode}")]
         public async Task<IActionResult> GetCertificateContent([FromRoute] string languageCode)
         {
             if (string.IsNullOrEmpty(languageCode))
@@ -214,14 +229,68 @@ namespace LimakAz.Controllers
                 nameof(Section.Language)
             };
 
-            var certificates = await _certificateRepository
-                .GetAllAsync(x => x.IsDeleted == false && x.Language.Code == languageCode, includedProperties);
-            if (certificates == null)
+            var certificate = await _certificateRepository
+                .GetAsync(x => x.IsDeleted == false && x.Language.Code == languageCode, includedProperties);
+            if (certificate == null)
                 return NotFound();
 
-            var certificatesDto = _mapper.Map<List<CertificateDto>>(certificates);
+            var certificateDto = _mapper.Map<CertificateDto>(certificate);
 
-            return Ok(certificatesDto);
+            return Ok(certificateDto);
+        }
+
+        [HttpGet("GetAdvertisimentTitleContent/{languageCode}")]
+        public async Task<IActionResult> GetAdvertisimentTitleContent([FromRoute] string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+                return BadRequest();
+
+            var includedProperties = new List<string>
+            {
+                nameof(Language)
+            };
+
+            var advertisimentTitle = await _advertisimentTitleRepository
+                .GetAsync(x => x.IsDeleted == false && x.Language.Code == languageCode, includedProperties);
+            if (advertisimentTitle == null)
+                return NotFound();
+
+            var advertisimentTitleDto = _mapper.Map<AdvertisimentTitleDto>(advertisimentTitle);
+
+            return Ok(advertisimentTitleDto);
+        }
+
+        [HttpGet("getAdvertisimentContent/{languageCode}/{count}")]
+        public async Task<IActionResult> GetAdvertisementContent([FromRoute] string languageCode,int? count = 10)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+                return BadRequest();
+
+            if (count == null)
+                return NotFound();
+
+            var includedProperties = new List<string>
+            {
+                nameof(AdvertisementDetail),
+                nameof(Language)
+            };
+
+            var advertisiments = await _advertisementRepository
+                .GetAll(x => x.IsDeleted == false && x.Language.Code == languageCode, includedProperties)
+                .OrderByDescending(x => x.LastModificationDate).Take(count.Value).ToListAsync();
+            if (advertisiments == null)
+                return NotFound();
+
+            var advertisimentsDto = _mapper.Map<List<AdvertisementDto>>(advertisiments);
+            var advertisimentDetailDto = _mapper.Map<List<AdvertisementDetailDto>>(advertisiments);
+
+            var allAdvertisementDto = new AllAdvertisementDto
+            {
+                AdvertisementDto = advertisimentsDto,
+                AdvertisementDetailDto = advertisimentDetailDto
+            };
+
+            return Ok(allAdvertisementDto);
         }
     }
 }

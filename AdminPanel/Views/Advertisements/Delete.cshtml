@@ -21,6 +21,19 @@
                         <h4>Description:</h4>
                         <span class="ml-2">@advertisement.AdvertisementDetail.Description</span>
                     </div>
+                    <div class="item d-flex mt-2">
+                        <h4>Language:</h4>
+                        @{
+                            @if (Model.Language.IsDeleted == true)
+                            {
+                                <span class="ml-2">This section has no language</span>
+                            }
+                            else
+                            {
+                                <span class="ml-2">@Model.Language.Name (@Model.Language.Code)</span>
+                            }
+                        }
+                    </div>
                 </div>
             </div>
             <p class="text-danger mt-3">Do you want to delete?</p>

@@ -16,10 +16,12 @@ namespace AdminPanel.Controllers
     public class AdvertisementsController : Controller
     {
         private readonly IRepository<Advertisement> _repository;
+        private readonly IRepository<Language> _languageRepository;
 
-        public AdvertisementsController(IRepository<Advertisement> repository)
+        public AdvertisementsController(IRepository<Advertisement> repository, IRepository<Language> languageRepository)
         {
             _repository = repository;
+            _languageRepository = languageRepository;
         }
 
         public async Task<IActionResult> Index(int page = 1)
@@ -39,15 +41,21 @@ namespace AdminPanel.Controllers
 
         #region Create
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            ViewBag.Languages = languages;
+
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Advertisement advertisement)
+        public async Task<IActionResult> Create(Advertisement advertisement, int? languageId)
         {
+            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            ViewBag.Languages = languages;
+
             if (advertisement.Photo == null)
             {
                 ModelState.AddModelError("Photo", "Photo field cannot be empty");
@@ -66,7 +74,13 @@ namespace AdminPanel.Controllers
                 return View();
             }
 
-            var fileName = await FileUtil.GenerateFileAsync(Constants.ImageFolderPath, advertisement.Photo);
+            var folderList = new List<string>
+            {
+                Constants.ImageFolderPath,
+                @"D:\Programming\CodeAcademy\FrontEnd\FinalProject\limak-az--front-end\public\images"
+            };
+
+            var fileName = await FileUtil.GenerateFileAsync(folderList, advertisement.Photo);
 
             advertisement.Image = fileName;
 
@@ -75,10 +89,22 @@ namespace AdminPanel.Controllers
                 return View(advertisement);
             }
 
+            if (languageId == null)
+            {
+                ModelState.AddModelError("", "Please select language.");
+                return View();
+            }
+
+            if (languages.All(x => x.Id != languageId.Value))
+                return BadRequest();
+
             advertisement.CreationDate = DateTime.Now;
             advertisement.LastModificationDate = DateTime.Now;
 
-            await _repository.CreateAsync(advertisement,advertisement.AdvertisementDetail);
+            advertisement.LanguageId = languageId.Value;
+            advertisement.AdvertisementDetail.LanguageId = languageId.Value;
+
+            await _repository.CreateAsync(advertisement, advertisement.AdvertisementDetail);
 
             return RedirectToAction("Index");
         }
@@ -92,12 +118,15 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
+            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            ViewBag.Languages = languages;
+
             var includedProperties = new List<string>
             {
                 nameof(Advertisement.AdvertisementDetail)
             };
 
-            var advertisement = await _repository.GetAsync(x => x.Id == id.Value && x.IsDeleted == false,includedProperties);
+            var advertisement = await _repository.GetAsync(x => x.Id == id.Value && x.IsDeleted == false, includedProperties);
             if (advertisement == null)
                 return NotFound();
 
@@ -106,7 +135,7 @@ namespace AdminPanel.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(int? id,Advertisement advertisement)
+        public async Task<IActionResult> Update(int? id, Advertisement advertisement,int? languageId)
         {
             if (id == null)
                 return BadRequest();
@@ -114,9 +143,13 @@ namespace AdminPanel.Controllers
             if (id != advertisement.Id)
                 return BadRequest();
 
+            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            ViewBag.Languages = languages;
+
             var includedProperties = new List<string>
             {
-                nameof(Advertisement.AdvertisementDetail)
+                nameof(Advertisement.AdvertisementDetail),
+                nameof(Language)
             };
 
             var dbAdvertisement = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, includedProperties);
@@ -154,9 +187,20 @@ namespace AdminPanel.Controllers
                 return View(dbAdvertisement);
             }
 
+            if (languageId == null)
+            {
+                ModelState.AddModelError("", "Please select language.");
+                return View();
+            }
+
+            if (languages.All(x => x.Id != languageId.Value))
+                return BadRequest();
+
             dbAdvertisement.Title = advertisement.Title;
             dbAdvertisement.Image = fileName;
+            dbAdvertisement.LanguageId = languageId.Value;
             dbAdvertisement.AdvertisementDetail.Description = advertisement.AdvertisementDetail.Description;
+            dbAdvertisement.AdvertisementDetail.LanguageId = advertisement.LanguageId;
             dbAdvertisement.LastModificationDate = DateTime.Now;
 
             await _repository.UpdateAsync(dbAdvertisement);
@@ -175,7 +219,8 @@ namespace AdminPanel.Controllers
 
             var includedProperties = new List<string>
             {
-                nameof(Advertisement.AdvertisementDetail)
+                nameof(Advertisement.AdvertisementDetail),
+                nameof(Language)
             };
 
             var advertisements = await _repository.GetAsync(x => x.IsDeleted == false && x.Id == id, includedProperties);
@@ -220,7 +265,8 @@ namespace AdminPanel.Controllers
 
             var includedProperties = new List<string>
             {
-                nameof(Advertisement.AdvertisementDetail)
+                nameof(Advertisement.AdvertisementDetail),
+                nameof(Language)
             };
 
             var advertisements = await _repository.GetAsync(x => x.IsDeleted == false && x.Id == id, includedProperties);

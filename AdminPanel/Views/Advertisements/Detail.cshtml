@@ -30,6 +30,19 @@
                             <h4>Last Modification Date:</h4>
                             <span class="ml-2">@advertisement.LastModificationDate</span>
                         </div>
+                        <div class="item d-flex mt-2">
+                            <h4>Language:</h4>
+                            @{
+                                @if (Model.Language.IsDeleted == true)
+                                {
+                                    <span class="ml-2">This section has no language</span>
+                                }
+                                else
+                                {
+                                    <span class="ml-2">@Model.Language.Name (@Model.Language.Code)</span>
+                                }
+                            }
+                        </div>
                     </div>
                 </div>
                 <hr />

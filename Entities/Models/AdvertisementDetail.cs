@@ -17,6 +17,10 @@ namespace Entities.Models
 
         public bool IsDeleted { get; set; }
 
+        public int LanguageId { get; set; }
+
+        public Language Language { get; set; }
+
         [ForeignKey("Advertisement")]
         public int AdvertisementId { get; set; }
 

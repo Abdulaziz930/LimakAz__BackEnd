@@ -13,7 +13,7 @@ namespace Entities.Models
         [Required]
         public int Id { get; set; }
 
-        [Required,StringLength(60)]
+        [Required, StringLength(60)]
         public string Title { get; set; }
 
         public string Image { get; set; }
@@ -27,6 +27,10 @@ namespace Entities.Models
         public DateTime LastModificationDate { get; set; }
 
         public AdvertisementDetail AdvertisementDetail { get; set; }
+
+        public int LanguageId { get; set; }
+
+        public Language Language { get; set; }
 
         [NotMapped]
         public IFormFile Photo { get; set; }

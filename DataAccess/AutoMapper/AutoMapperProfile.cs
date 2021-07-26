@@ -56,6 +56,8 @@ namespace DataAccess.AutoMapper
             CreateMap<Certificate, CertificateDto>().ReverseMap();
 
             CreateMap<CertifcateContent, CertificateContentDto>().ReverseMap();
+
+            CreateMap<AdvertisimentTitle, AdvertisimentTitleDto>().ReverseMap();
         }
     }
 }

@@ -24,6 +24,15 @@
                     <input asp-for="Photo" class="form-control" accept="image/*" type="file">
                     <span asp-validation-for="Photo" class="text-danger"></span>
                 </div>
+                <div class="form-group" id="languageInput">
+                    <label>Languages</label>
+                    <select class="form-control" name="LanguageId" id="language">
+                        @foreach (Language item in ViewBag.Languages)
+                        {
+                            <option value="@item.Id">@item.Code (@item.Name)</option>
+                        }
+                    </select>
+                </div>
                 <button type="submit" class="btn btn-primary mr-2">Add</button>
                 <a asp-action="Index" class="btn btn-light">Cancel</a>
             </form>

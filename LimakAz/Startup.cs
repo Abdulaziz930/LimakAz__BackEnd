@@ -48,7 +48,7 @@ namespace LimakAz
                 options.AddPolicy(name: "AllowOrigin",
                     builder =>
                     {
-                        builder.WithOrigins("http://localhost:3000")
+                        builder.WithOrigins("*")
                                             .AllowAnyHeader()
                                             .AllowAnyMethod();
                     });

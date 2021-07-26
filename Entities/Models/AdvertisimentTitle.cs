@@ -6,22 +6,17 @@ using System.Text;
 
 namespace Entities.Models
 {
-    public class Country : IEntity
+    public class AdvertisimentTitle : IEntity
     {
         public int Id { get; set; }
 
-        [Required, StringLength(100)]
-        public string Name { get; set; }
-
-        [Required]
-        public string Value { get; set; }
+        [Required,StringLength(50)]
+        public string Title { get; set; }
 
         public bool IsDeleted { get; set; }
 
         public int LanguageId { get; set; }
 
         public Language Language { get; set; }
-
-        public ICollection<CountryProductType> CountryProductTypes { get; set; }
     }
 }

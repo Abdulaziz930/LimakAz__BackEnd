@@ -58,11 +58,12 @@ namespace DataAccess
 
         //public DbSet<Price> Prices { get; set; }
 
-        //public DbSet<CountryProductType> CountryProductTypes { get; set; }
+        public DbSet<CountryProductType> CountryProductTypes { get; set; }
 
         public DbSet<Certificate> Certificates { get; set; }
 
         public DbSet<CertifcateContent> CertifcateContents { get; set; }
 
+        public DbSet<AdvertisimentTitle> AdvertisimentTitles { get; set; }
     }
 }
