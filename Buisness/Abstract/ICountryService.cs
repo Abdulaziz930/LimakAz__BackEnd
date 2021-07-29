@@ -18,7 +18,7 @@ namespace Buisness.Abstract
 
         Task<List<Country>> GetAllCountriesAsync(string languageCode);
 
-        Task<List<Country>> GetAllCountriesAsync(int takeCount,int skipCount);
+        Task<List<Country>> GetAllCountriesAsync(int skipCount,int takeCount);
 
         Task<bool> AddAsync(Country country);
 

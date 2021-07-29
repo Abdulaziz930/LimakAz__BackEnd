@@ -16,261 +16,188 @@ namespace LimakAz.Controllers
     [ApiController]
     public class ContentController : ControllerBase
     {
-        //private readonly IRepository<Calculator> _calculatorRepository;
-        //private readonly IRepository<Country> _countryRepository;
-        //private readonly IRepository<City> _cityRepository;
-        //private readonly IRepository<Weight> _weightRepository;
-        //private readonly IRepository<UnitsOfLength> _unitsOfLengthRepository;
-        //private readonly IRepository<ProductType> _productTypeRepository;
-        //private readonly IRepository<HowItWork> _howItWorkRepository;
-        //private readonly IRepository<HowItWorkCard> _howItWorkCardRepository;
-        //private readonly IRepository<Certificate> _certificateRepository;
-        //private readonly IRepository<AdvertisimentTitle> _advertisimentTitleRepository;
-        //private readonly IRepository<Advertisement> _advertisementRepository;
-        //private readonly IRepository<Tariff> _tariffRepository;
-        //private readonly IRepository<CountryProductType> _countryProductTypeRepository;
         private readonly IAdvertisementService _advertisementService;
+        private readonly ICalculatorService _calculatorService;
+        private readonly ICountryService _countryService;
+        private readonly ICityService _cityService;
+        private readonly IWeightService _weightService;
+        private readonly IUnitsOfLengthService _unitsOfLengthService;
+        private readonly IProductTypeService _productTypeService;
+        private readonly IHowItWorkService _howItWorkService;
+        private readonly IHowItWorkCardService _howItWorkCardService;
+        private readonly ICertificateService _certificateService;
+        private readonly IAdvertisementTitleService _advertisementTitleService;
         private readonly IMapper _mapper;
 
-        public ContentController(IAdvertisementService advertisementService,IMapper mapper)
+        public ContentController(IAdvertisementService advertisementService,ICalculatorService calculatorService
+            ,ICountryService countryService,ICityService cityService,IWeightService weightService
+            ,IUnitsOfLengthService unitsOfLengthService,IProductTypeService productTypeService
+            ,IHowItWorkService howItWorkService,IHowItWorkCardService howItWorkCardService
+            ,ICertificateService certificateService,IAdvertisementTitleService advertisementTitleService,IMapper mapper)
         {
             _advertisementService = advertisementService;
+            _calculatorService = calculatorService;
+            _countryService = countryService;
+            _cityService = cityService;
+            _weightService = weightService;
+            _unitsOfLengthService = unitsOfLengthService;
+            _productTypeService = productTypeService;
+            _howItWorkService = howItWorkService;
+            _howItWorkCardService = howItWorkCardService;
+            _certificateService = certificateService;
+            _advertisementTitleService = advertisementTitleService;
             _mapper = mapper;
         }
 
-        //public ContentController(IRepository<Calculator> calculatorRepository, IRepository<Country> countryRepository
-        //    , IRepository<City> cityRepository, IRepository<Weight> weightRepository, IRepository<UnitsOfLength> unitsOfLengthRepository
-        //    , IRepository<ProductType> productTypeRepository
-        //    , IRepository<HowItWork> howItWorkRepository, IRepository<HowItWorkCard> howItWorkCardRepository
-        //    , IRepository<Certificate> certificateRepository, IRepository<AdvertisimentTitle> advertisimentTitleRepository
-        //    , IRepository<Advertisement> advertisementRepository,IRepository<Tariff> tariffRepository 
-        //    , IRepository<CountryProductType> countryProductTypeRepository,IMapper mapper)
-        //{
-        //    _calculatorRepository = calculatorRepository;
-        //    _countryRepository = countryRepository;
-        //    _cityRepository = cityRepository;
-        //    _weightRepository = weightRepository;
-        //    _unitsOfLengthRepository = unitsOfLengthRepository;
-        //    _productTypeRepository = productTypeRepository;
-        //    _howItWorkRepository = howItWorkRepository;
-        //    _howItWorkCardRepository = howItWorkCardRepository;
-        //    _certificateRepository = certificateRepository;
-        //    _advertisimentTitleRepository = advertisimentTitleRepository;
-        //    _advertisementRepository = advertisementRepository;
-        //    _tariffRepository = tariffRepository;
-        //    _countryProductTypeRepository = countryProductTypeRepository;
-        //    _mapper = mapper;
-        //}
+        [HttpGet("getCalculatorContent/{languageCode}")]
+        public async Task<IActionResult> GetCalculatorContent([FromRoute] string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+                return BadRequest();
 
-        //[HttpGet("getCalculatorContent/{languageCode}")]
-        //public async Task<IActionResult> GetCalculatorContent([FromRoute] string languageCode)
-        //{
-        //    if (string.IsNullOrEmpty(languageCode))
-        //        return BadRequest();
+            var calculator = await _calculatorService.GetCalculatorAsync(languageCode);
+            if (calculator == null)
+                return NotFound();
 
-        //    var includedProperties = new List<string>
-        //    {
-        //        nameof(Section.Language)
-        //    };
+            var calculatorDto = _mapper.Map<CalculatorDto>(calculator);
 
-        //    var calculator = await _calculatorRepository
-        //        .GetAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
-        //    if (calculator == null)
-        //        return NotFound();
+            return Ok(calculatorDto);
+        }
 
-        //    var calculatorDto = _mapper.Map<CalculatorDto>(calculator);
+        [HttpGet("getContriesContent/{languageCode}")]
+        public async Task<IActionResult> GetCountriesContnent([FromRoute] string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+                return BadRequest();
 
-        //    return Ok(calculatorDto);
-        //}
+            var countries = await _countryService.GetAllCountriesAsync(languageCode);
+            if (countries == null)
+                return NotFound();
 
-        //[HttpGet("getContriesContent/{languageCode}")]
-        //public async Task<IActionResult> GetCountriesContnent([FromRoute] string languageCode)
-        //{
-        //    if (string.IsNullOrEmpty(languageCode))
-        //        return BadRequest();
+            var countriesDto = _mapper.Map<List<CountryDto>>(countries);
 
-        //    var includedProperties = new List<string>
-        //    {
-        //        nameof(Section.Language)
-        //    };
+            return Ok(countriesDto);
+        }
 
-        //    var countries = await _countryRepository
-        //        .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
-        //    if (countries == null)
-        //        return NotFound();
+        [HttpGet("getCitiesContent/{languageCode}")]
+        public async Task<IActionResult> GetCitiesContnent([FromRoute] string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+                return BadRequest();
 
-        //    var countriesDto = _mapper.Map<List<CountryDto>>(countries);
+            var cities = await _cityService.GetAllCitiesAsync(languageCode);
+            if (cities == null)
+                return NotFound();
 
-        //    return Ok(countriesDto);
-        //}
+            var citiesDto = _mapper.Map<List<CityDto>>(cities);
 
-        //[HttpGet("getCitiesContent/{languageCode}")]
-        //public async Task<IActionResult> GetCitiesContnent([FromRoute] string languageCode)
-        //{
-        //    if (string.IsNullOrEmpty(languageCode))
-        //        return BadRequest();
+            return Ok(citiesDto);
+        }
 
-        //    var includedProperties = new List<string>
-        //    {
-        //        nameof(Section.Language)
-        //    };
+        [HttpGet("getWeightContent/{languageCode}")]
+        public async Task<IActionResult> GetWeightsContnent([FromRoute] string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+                return BadRequest();
 
-        //    var cities = await _cityRepository
-        //        .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
-        //    if (cities == null)
-        //        return NotFound();
+            var weights = await _weightService.GetAllWeightsAsync(languageCode);
+            if (weights == null)
+                return NotFound();
 
-        //    var citiesDto = _mapper.Map<List<CityDto>>(cities);
+            var weightsDto = _mapper.Map<List<WeightDto>>(weights);
 
-        //    return Ok(citiesDto);
-        //}
+            return Ok(weightsDto);
+        }
 
-        //[HttpGet("getWeightContent/{languageCode}")]
-        //public async Task<IActionResult> GetWeightsContnent([FromRoute] string languageCode)
-        //{
-        //    if (string.IsNullOrEmpty(languageCode))
-        //        return BadRequest();
+        [HttpGet("getUnitsOfLengthContent/{languageCode}")]
+        public async Task<IActionResult> GetUnitsOfLengthsContnent([FromRoute] string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+                return BadRequest();
 
-        //    var includedProperties = new List<string>
-        //    {
-        //        nameof(Section.Language)
-        //    };
+            var unitsOfLengths = await _unitsOfLengthService.GetAllUnitsOfLengthAsync(languageCode);
+            if (unitsOfLengths == null)
+                return NotFound();
 
-        //    var weights = await _weightRepository
-        //        .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
-        //    if (weights == null)
-        //        return NotFound();
+            var unitsOfLengthsDto = _mapper.Map<List<UnitsOfLengthDto>>(unitsOfLengths);
 
-        //    var weightsDto = _mapper.Map<List<WeightDto>>(weights);
+            return Ok(unitsOfLengthsDto);
+        }
 
-        //    return Ok(weightsDto);
-        //}
+        [HttpGet("getProductTypesContent/{languageCode}")]
+        public async Task<IActionResult> GetProductTypesContnent([FromRoute] string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+                return BadRequest();
 
-        //[HttpGet("getUnitsOfLengthContent/{languageCode}")]
-        //public async Task<IActionResult> GetUnitsOfLengthsContnent([FromRoute] string languageCode)
-        //{
-        //    if (string.IsNullOrEmpty(languageCode))
-        //        return BadRequest();
+            var productTypes = await _productTypeService.GetAllProductTypesAsync(languageCode);
+            if (productTypes == null)
+                return NotFound();
 
-        //    var includedProperties = new List<string>
-        //    {
-        //        nameof(Section.Language)
-        //    };
+            var productTypesDto = _mapper.Map<List<ProductTypeDto>>(productTypes);
 
-        //    var unitsOfLengths = await _unitsOfLengthRepository
-        //        .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
-        //    if (unitsOfLengths == null)
-        //        return NotFound();
+            return Ok(productTypesDto);
+        }
 
-        //    var unitsOfLengthsDto = _mapper.Map<List<UnitsOfLengthDto>>(unitsOfLengths);
+        [HttpGet("getHowItWorkContent/{languageCode}")]
+        public async Task<IActionResult> GetHowItWorkContnent([FromRoute] string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+                return BadRequest();
 
-        //    return Ok(unitsOfLengthsDto);
-        //}
+            var howItWork = await _howItWorkService.GetHowItWorkAsync(languageCode);
+            if (howItWork == null)
+                return NotFound();
 
-        //[HttpGet("getProductTypesContent/{languageCode}")]
-        //public async Task<IActionResult> GetProductTypesContnent([FromRoute] string languageCode)
-        //{
-        //    if (string.IsNullOrEmpty(languageCode))
-        //        return BadRequest();
+            var howItWorkDto = _mapper.Map<HowItWorkDto>(howItWork);
 
-        //    var includedProperties = new List<string>
-        //    {
-        //        nameof(Section.Language)
-        //    };
+            return Ok(howItWorkDto);
+        }
 
-        //    var productTypes = await _productTypeRepository
-        //        .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
-        //    if (productTypes == null)
-        //        return NotFound();
+        [HttpGet("getHowItWorkCardContent/{languageCode}")]
+        public async Task<IActionResult> GetHowItWorkCardContnent([FromRoute] string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+                return BadRequest();
 
-        //    var productTypesDto = _mapper.Map<List<ProductTypeDto>>(productTypes);
+            var howItWorkCard = await _howItWorkCardService.GetAllHowItWorkCardsAsync(languageCode);
+            if (howItWorkCard == null)
+                return NotFound();
 
-        //    return Ok(productTypesDto);
-        //}
+            var howItWorkCardsDto = _mapper.Map<List<HowItWorkCardDto>>(howItWorkCard);
 
-        //[HttpGet("getHowItWorkContent/{languageCode}")]
-        //public async Task<IActionResult> GetHowItWorkContnent([FromRoute] string languageCode)
-        //{
-        //    if (string.IsNullOrEmpty(languageCode))
-        //        return BadRequest();
+            return Ok(howItWorkCardsDto);
+        }
 
-        //    var includedProperties = new List<string>
-        //    {
-        //        nameof(Section.Language)
-        //    };
+        [HttpGet("getCertificateContent/{languageCode}")]
+        public async Task<IActionResult> GetCertificateContent([FromRoute] string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+                return BadRequest();
 
-        //    var howItWork = await _howItWorkRepository
-        //        .GetAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
-        //    if (howItWork == null)
-        //        return NotFound();
+            var certificate = await _certificateService.GetCertificateAsync(languageCode);
+            if (certificate == null)
+                return NotFound();
 
-        //    var howItWorkDto = _mapper.Map<HowItWorkDto>(howItWork);
+            var certificateDto = _mapper.Map<CertificateDto>(certificate);
 
-        //    return Ok(howItWorkDto);
-        //}
+            return Ok(certificateDto);
+        }
 
-        //[HttpGet("getHowItWorkCardContent/{languageCode}")]
-        //public async Task<IActionResult> GetHowItWorkCardContnent([FromRoute] string languageCode)
-        //{
-        //    if (string.IsNullOrEmpty(languageCode))
-        //        return BadRequest();
+        [HttpGet("GetAdvertisimentTitleContent/{languageCode}")]
+        public async Task<IActionResult> GetAdvertisimentTitleContent([FromRoute] string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+                return BadRequest();
 
-        //    var includedProperties = new List<string>
-        //    {
-        //        nameof(Section.Language)
-        //    };
+            var advertisimentTitle = await _advertisementTitleService.GetAdvertisementTitleAsync(languageCode);
+            if (advertisimentTitle == null)
+                return NotFound();
 
-        //    var howItWorkCard = await _howItWorkCardRepository
-        //        .GetAllAsync(x => x.Language.Code == languageCode && x.IsDeleted == false, includedProperties);
-        //    if (howItWorkCard == null)
-        //        return NotFound();
+            var advertisimentTitleDto = _mapper.Map<AdvertisimentTitleDto>(advertisimentTitle);
 
-        //    var howItWorkCardsDto = _mapper.Map<List<HowItWorkCardDto>>(howItWorkCard);
-
-        //    return Ok(howItWorkCardsDto);
-        //}
-
-        //[HttpGet("getCertificateContent/{languageCode}")]
-        //public async Task<IActionResult> GetCertificateContent([FromRoute] string languageCode)
-        //{
-        //    if (string.IsNullOrEmpty(languageCode))
-        //        return BadRequest();
-
-        //    var includedProperties = new List<string>
-        //    {
-        //        nameof(Section.Language)
-        //    };
-
-        //    var certificate = await _certificateRepository
-        //        .GetAsync(x => x.IsDeleted == false && x.Language.Code == languageCode, includedProperties);
-        //    if (certificate == null)
-        //        return NotFound();
-
-        //    var certificateDto = _mapper.Map<CertificateDto>(certificate);
-
-        //    return Ok(certificateDto);
-        //}
-
-        //[HttpGet("GetAdvertisimentTitleContent/{languageCode}")]
-        //public async Task<IActionResult> GetAdvertisimentTitleContent([FromRoute] string languageCode)
-        //{
-        //    if (string.IsNullOrEmpty(languageCode))
-        //        return BadRequest();
-
-        //    var includedProperties = new List<string>
-        //    {
-        //        nameof(Language)
-        //    };
-
-        //    var advertisimentTitle = await _advertisimentTitleRepository
-        //        .GetAsync(x => x.IsDeleted == false && x.Language.Code == languageCode, includedProperties);
-        //    if (advertisimentTitle == null)
-        //        return NotFound();
-
-        //    var advertisimentTitleDto = _mapper.Map<AdvertisimentTitleDto>(advertisimentTitle);
-
-        //    return Ok(advertisimentTitleDto);
-        //}
+            return Ok(advertisimentTitleDto);
+        }
 
         [HttpGet("getAdvertisimentContent/{languageCode}/{count}")]
         public async Task<IActionResult> GetAdvertisementContent([FromRoute] string languageCode, int? count = 10)
@@ -285,24 +212,7 @@ namespace LimakAz.Controllers
             if (advertisements == null)
                 return NotFound();
 
-            var advertisementsDto = new List<AdvertisementDto>();
-            foreach (var advertisement in advertisements)
-            {
-                var advertisementDetailDto = new AdvertisementDetailDto
-                {
-                    Id = advertisement.AdvertisementDetail.Id,
-                    Description = advertisement.AdvertisementDetail.Description
-                };
-                var advertisementDto = new AdvertisementDto
-                {
-                    Id = advertisement.Id,
-                    Title = advertisement.Title,
-                    Image = advertisement.Image,
-                    CreationDate = advertisement.CreationDate,
-                    AdvertisementDetailDto = advertisementDetailDto
-                };
-                advertisementsDto.Add(advertisementDto);
-            }
+            var advertisementsDto = _mapper.Map<List<AdvertisementDto>>(advertisements);
 
             return Ok(advertisementsDto);
         }

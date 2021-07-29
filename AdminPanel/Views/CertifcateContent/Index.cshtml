@@ -9,7 +9,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Certifcate Contents</h4>
-                @if (certifcateContents.Count < 3)
+                @if (certifcateContents.Count <= 3)
                 {
                     <a asp-action="Create" class="btn btn-primary">Add</a>
                 }

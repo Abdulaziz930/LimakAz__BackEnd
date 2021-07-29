@@ -14,7 +14,5 @@ namespace Entities.Dto
         public string Image { get; set; }
 
         public DateTime CreationDate { get; set; }
-
-        public AdvertisementDetailDto AdvertisementDetailDto { get; set; }
     }
 }

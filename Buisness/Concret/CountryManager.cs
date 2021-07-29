@@ -41,7 +41,7 @@ namespace Buisness.Concret
             return await _countryDal.GetAllMultiLanguageCountriesAsync(languageCode);
         }
 
-        public async Task<List<Country>> GetAllCountriesAsync(int takeCount, int skipCount)
+        public async Task<List<Country>> GetAllCountriesAsync(int skipCount, int takeCount)
         {
             return await _countryDal.GetCountriesByCountAsync(skipCount, takeCount);
         }

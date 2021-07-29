@@ -175,39 +175,22 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="Advertisements" asp-action="Index">
-                            <i class="mdi mdi-view-headline menu-icon"></i>
+                        <a class="nav-link" data-toggle="collapse" href="#advertisements" aria-expanded="false" aria-controls="advertisements">
+                            <i class="mdi mdi-circle-outline menu-icon"></i>
                             <span class="menu-title">Advertisements</span>
+                            <i class="menu-arrow"></i>
                         </a>
+                        <div class="collapse" id="advertisements">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"> <a class="nav-link" asp-controller="Advertisements" asp-action="Index">Advertisements Content</a></li>
+                                <li class="nav-item"> <a class="nav-link" asp-controller="AdvertisementTitles" asp-action="Index">Advertisement Titles</a></li>
+                            </ul>
+                        </div>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" asp-controller="Languages" asp-action="Index">
                             <i class="mdi mdi-chart-pie menu-icon"></i>
                             <span class="menu-title">Languages</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Section" asp-action="Index">
-                            <i class="mdi mdi-file-document-box-outline menu-icon"></i>
-                            <span class="menu-title">Sections</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="AuxiliarySection" asp-action="Index">
-                            <i class="mdi mdi-grid-large menu-icon"></i>
-                            <span class="menu-title">Auxiliary Section</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Authentication" asp-action="Index">
-                            <i class="mdi mdi-account-key menu-icon"></i>
-                            <span class="menu-title">Authentications</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Order" asp-action="Index">
-                            <i class="mdi mdi-cube menu-icon"></i>
-                            <span class="menu-title">Orders</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -247,77 +230,30 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="Width" asp-action="Index">
-                            <i class="mdi mdi-filmstrip menu-icon"></i>
-                            <span class="menu-title">Width Input</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="WeightInput" asp-action="Index">
-                            <i class="mdi mdi-weight menu-icon"></i>
-                            <span class="menu-title">Weight Input</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Length" asp-action="Index">
-                            <i class="mdi mdi-view-headline menu-icon"></i>
-                            <span class="menu-title">Length Input</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Height" asp-action="Index">
-                            <i class="mdi mdi-table-row-height menu-icon"></i>
-                            <span class="menu-title">Height Input</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="BoxCount" asp-action="Index">
-                            <i class="mdi mdi-counter menu-icon"></i>
-                            <span class="menu-title">Box Count Input</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="HowItWork" asp-action="Index">
-                            <i class="mdi mdi-worker menu-icon"></i>
-                            <span class="menu-title">How It Work</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="HowItWorkCard" asp-action="Index">
-                            <i class="mdi mdi-credit-card menu-icon"></i>
-                            <span class="menu-title">How It Work Cards</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Certifcate" asp-action="Index">
-                            <i class="mdi mdi-certificate menu-icon"></i>
-                            <span class="menu-title">Certifcate</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="CertifcateContent" asp-action="Index">
-                            <i class="mdi mdi-certificate menu-icon"></i>
-                            <span class="menu-title">Certifcate Content</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                        <a class="nav-link" data-toggle="collapse" href="#howItWork" aria-expanded="false" aria-controls="howItWork">
                             <i class="mdi mdi-circle-outline menu-icon"></i>
-                            <span class="menu-title">UI Elements</span>
+                            <span class="menu-title">How It Works</span>
                             <i class="menu-arrow"></i>
                         </a>
-                        <div class="collapse" id="ui-basic">
+                        <div class="collapse" id="howItWork">
                             <ul class="nav flex-column sub-menu">
-                                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/buttons.html">Buttons</a></li>
-                                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">Typography</a></li>
+                                <li class="nav-item"> <a class="nav-link" asp-controller="HowItWork" asp-action="Index">How It Work</a></li>
+                                <li class="nav-item"> <a class="nav-link" asp-controller="HowItWorkCard" asp-action="Index">How It Work Cards</a></li>
                             </ul>
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="pages/icons/mdi.html">
-                            <i class="mdi mdi-emoticon menu-icon"></i>
-                            <span class="menu-title">Icons</span>
+                        <a class="nav-link" data-toggle="collapse" href="#certifcate" aria-expanded="false" aria-controls="certifcate">
+                            <i class="mdi mdi-circle-outline menu-icon"></i>
+                            <span class="menu-title">Certifcates</span>
+                            <i class="menu-arrow"></i>
                         </a>
+                        <div class="collapse" id="certifcate">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"> <a class="nav-link" asp-controller="Certifcate" asp-action="Index">Certifcate Title</a></li>
+                                <li class="nav-item"> <a class="nav-link" asp-controller="CertifcateContent" asp-action="Index">Certifcate Content</a></li>
+                            </ul>
+                        </div>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
