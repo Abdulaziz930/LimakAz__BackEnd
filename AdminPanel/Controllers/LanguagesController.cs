@@ -1,4 +1,4 @@
-﻿using DataAccess.Interfaces;
+﻿using Buisness.Abstract;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,24 +11,25 @@ namespace AdminPanel.Controllers
 {
     public class LanguagesController : Controller
     {
-        private readonly IRepository<Language> _repository;
+        private readonly ILanguageService _languageService;
 
-        public LanguagesController(IRepository<Language> repository)
+        public LanguagesController(ILanguageService languageService)
         {
-            _repository = repository;
+            _languageService = languageService;
         }
 
         public async Task<IActionResult> Index(int page = 1)
         {
-            var allLanguages = await _repository.GetAllAsync(x => x.IsDeleted == false, null);
+            var allLanguages = await _languageService.GetAllLanguagesAsync();
             ViewBag.PageCount = Decimal.Ceiling((decimal)allLanguages.Count / 5);
             ViewBag.Page = page;
 
             if (ViewBag.PageCount < page || page <= 0)
                 return NotFound();
 
-            var languages = await _repository.GetAll(x => x.IsDeleted == false, null)
-                .OrderByDescending(x => x.Id).Skip((page - 1) * 5).Take(5).ToListAsync();
+            int skipCount = (page - 1) * 5;
+
+            var languages = await _languageService.GetAllLanguagesAsync(skipCount,5);
 
             return View(languages);
         }
@@ -49,14 +50,15 @@ namespace AdminPanel.Controllers
                 return View(language);
             }
 
-            var isExist = await _repository.GetAllAsync(x => (x.Name == language.Name || x.Code == language.Code) && x.IsDeleted == false);
+            var isExist = await _languageService.LanguagesAnyAsync(x => (x.Name == language.Name || x.Code == language.Code) 
+                                                                    && x.IsDeleted == false);
             if (isExist)
             {
                 ModelState.AddModelError("", "There is a language with this name or code");
                 return View();
             }
 
-            await _repository.CreateAsync(language);
+            await _languageService.AddAsync(language);
 
             return RedirectToAction("Index");
         }
@@ -70,7 +72,7 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var language = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false,null);
+            var language = await _languageService.GetLanguageAsync(id.Value);
             if (language == null)
                 return NotFound();
 
@@ -92,22 +94,22 @@ namespace AdminPanel.Controllers
                 return View(language);
             }
 
-            var isExist = await _repository.GetAllAsync(x => (x.Name == language.Name || x.Code == language.Code) 
-                                                        && x.IsDeleted == false && x.Id != language.Id);
+            var isExist = await _languageService.LanguagesAnyAsync(x => (x.Name == language.Name || x.Code == language.Code)
+                                                                    && x.IsDeleted == false && x.Id != language.Id);
             if (isExist)
             {
                 ModelState.AddModelError("", "There is a language with this name or code");
                 return View();
             }
 
-            var dbLanguage = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, null);
+            var dbLanguage = await _languageService.GetLanguageAsync(id.Value);
             if (dbLanguage == null)
                 return NotFound();
 
             dbLanguage.Name = language.Name;
             dbLanguage.Code = language.Code;
 
-            await _repository.UpdateAsync(dbLanguage);
+            await _languageService.UpdateAsync(dbLanguage);
 
             return RedirectToAction("Index");
         }
@@ -121,7 +123,7 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var language = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, null);
+            var language = await _languageService.GetLanguageAsync(id.Value);
             if (language == null)
                 return NotFound();
 
@@ -136,13 +138,13 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var language = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, null);
+            var language = await _languageService.GetLanguageAsync(id.Value);
             if (language == null)
                 return NotFound();
 
             language.IsDeleted = true;
 
-            await _repository.UpdateAsync(language);
+            await _languageService.UpdateAsync(language);
 
             return RedirectToAction("Index");
         }
@@ -156,7 +158,7 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var language = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, null);
+            var language = await _languageService.GetLanguageAsync(id.Value);
             if (language == null)
                 return NotFound();
 

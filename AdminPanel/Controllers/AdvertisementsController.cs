@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using Buisness.Abstract;
 using DataAccess;
-using DataAccess.Interfaces;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,26 +15,27 @@ namespace AdminPanel.Controllers
 {
     public class AdvertisementsController : Controller
     {
-        private readonly IRepository<Advertisement> _repository;
-        private readonly IRepository<Language> _languageRepository;
+        private readonly IAdvertisementService _advertisementService;
+        private readonly ILanguageService _languageService;
 
-        public AdvertisementsController(IRepository<Advertisement> repository, IRepository<Language> languageRepository)
+        public AdvertisementsController(IAdvertisementService advertisementService, ILanguageService languageService)
         {
-            _repository = repository;
-            _languageRepository = languageRepository;
+            _advertisementService = advertisementService;
+            _languageService = languageService;
         }
 
         public async Task<IActionResult> Index(int page = 1)
         {
-            var allAdvertisements = await _repository.GetAllAsync(x => x.IsDeleted == false, null);
+            var allAdvertisements = await _advertisementService.GetAllAdvertisementsAsync();
             ViewBag.PageCount = Decimal.Ceiling((decimal)allAdvertisements.Count / 5);
             ViewBag.Page = page;
 
             if (ViewBag.PageCount < page || page <= 0)
                 return NotFound();
 
-            var advertisements = await _repository.GetAll(x => x.IsDeleted == false, null)
-                .OrderByDescending(x => x.LastModificationDate).Skip((page - 1) * 5).Take(5).ToListAsync();
+            int skipCount = (page - 1) * 5;
+
+            var advertisements = await _advertisementService.GetAllAdvertisementsAsync(skipCount, 5);
 
             return View(advertisements);
         }
@@ -43,7 +44,7 @@ namespace AdminPanel.Controllers
 
         public async Task<IActionResult> Create()
         {
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync(x => x.IsDeleted == false);
             ViewBag.Languages = languages;
 
             return View();
@@ -53,7 +54,7 @@ namespace AdminPanel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Advertisement advertisement, int? languageId)
         {
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
             if (advertisement.Photo == null)
@@ -104,7 +105,7 @@ namespace AdminPanel.Controllers
             advertisement.LanguageId = languageId.Value;
             advertisement.AdvertisementDetail.LanguageId = languageId.Value;
 
-            await _repository.CreateAsync(advertisement, advertisement.AdvertisementDetail);
+            await _advertisementService.AddAsync(advertisement, advertisement.AdvertisementDetail);
 
             return RedirectToAction("Index");
         }
@@ -118,15 +119,10 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
-            var includedProperties = new List<string>
-            {
-                nameof(Advertisement.AdvertisementDetail)
-            };
-
-            var advertisement = await _repository.GetAsync(x => x.Id == id.Value && x.IsDeleted == false, includedProperties);
+            var advertisement = await _advertisementService.GetAdvertisementWithDetailAsync(id.Value);
             if (advertisement == null)
                 return NotFound();
 
@@ -143,16 +139,10 @@ namespace AdminPanel.Controllers
             if (id != advertisement.Id)
                 return BadRequest();
 
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
-            var includedProperties = new List<string>
-            {
-                nameof(Advertisement.AdvertisementDetail),
-                nameof(Language)
-            };
-
-            var dbAdvertisement = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, includedProperties);
+            var dbAdvertisement = await _advertisementService.GetAdvertisementWithDetailAndLanaguageAsync(id.Value);
             if (dbAdvertisement == null)
                 return NotFound();
 
@@ -203,7 +193,7 @@ namespace AdminPanel.Controllers
             dbAdvertisement.AdvertisementDetail.LanguageId = advertisement.LanguageId;
             dbAdvertisement.LastModificationDate = DateTime.Now;
 
-            await _repository.UpdateAsync(dbAdvertisement);
+            await _advertisementService.UpdateAsync(dbAdvertisement);
 
             return RedirectToAction("Index");
         }
@@ -217,13 +207,7 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var includedProperties = new List<string>
-            {
-                nameof(Advertisement.AdvertisementDetail),
-                nameof(Language)
-            };
-
-            var advertisements = await _repository.GetAsync(x => x.IsDeleted == false && x.Id == id, includedProperties);
+            var advertisements = await _advertisementService.GetAdvertisementWithDetailAndLanaguageAsync(id.Value);
             if (advertisements == null)
                 return NotFound();
 
@@ -238,18 +222,13 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var includedProperties = new List<string>
-            {
-                nameof(Advertisement.AdvertisementDetail)
-            };
-
-            var advertisements = await _repository.GetAsync(x => x.IsDeleted == false && x.Id == id, includedProperties);
+            var advertisements = await _advertisementService.GetAdvertisementWithDetailAsync(id.Value);
             if (advertisements == null)
                 return NotFound();
 
             advertisements.IsDeleted = true;
             advertisements.AdvertisementDetail.IsDeleted = true;
-            await _repository.UpdateAsync(advertisements);
+            await _advertisementService.UpdateAsync(advertisements);
 
             return RedirectToAction("Index");
         }
@@ -269,7 +248,7 @@ namespace AdminPanel.Controllers
                 nameof(Language)
             };
 
-            var advertisements = await _repository.GetAsync(x => x.IsDeleted == false && x.Id == id, includedProperties);
+            var advertisements = await _advertisementService.GetAdvertisementWithDetailAndLanaguageAsync(id.Value);
             if (advertisements == null)
                 return NotFound();
 

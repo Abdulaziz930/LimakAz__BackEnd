@@ -1,7 +1,9 @@
+using Buisness.Abstract;
+using Buisness.Concret;
 using DataAccess;
+using DataAccess.Abstract;
 using DataAccess.AutoMapper;
-using DataAccess.Implementations;
-using DataAccess.Interfaces;
+using DataAccess.Concret;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,15 +34,46 @@ namespace AdminPanel
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var connectionString = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<AppDbContext>(options =>
-            {
-                options.UseSqlServer(connectionString);
-            });
-
             services.AddAutoMapper(typeof(AutoMapperProfile));
 
-            services.AddScoped(typeof(IRepository<>), typeof(EfCoreRepository<>));
+            services.AddScoped<IAdvertisementService, AdvertisementManager>();
+            services.AddScoped<IAdvertisementDal, EFAdvertisementDal>();
+
+            services.AddScoped<ILanguageService, LanguageManager>();
+            services.AddScoped<ILangaugeDal, EFLanguageDal>();
+
+            services.AddScoped<ICertificateContentService, CertificateContentManager>();
+            services.AddScoped<ICertificateContentDal, EFCertificateContentDal>();
+
+            services.AddScoped<IAdvertisementTitleService, AdvertisementTitleManger>();
+            services.AddScoped<IAdvertisementTitleDal, EFAdvertisementTitleDal>();
+
+            services.AddScoped<ICalculatorService, CalculatorManger>();
+            services.AddScoped<ICalculatorDal, EFCalculatorDal>();
+
+            services.AddScoped<ICertificateService, CertificateManager>();
+            services.AddScoped<ICertificateDal, EFCertificateDal>();
+
+            services.AddScoped<ICityService, CityManager>();
+            services.AddScoped<ICityDal, EFCityDal>();
+
+            services.AddScoped<ICountryService, CountryManager>();
+            services.AddScoped<ICountryDal, EFCountryDal>();
+
+            services.AddScoped<IHowItWorkService, HowItWorkManager>();
+            services.AddScoped<IHowItWorkDal, EFHowItWorkDal>();
+
+            services.AddScoped<IHowItWorkCardService, HowItWorkCardManager>();
+            services.AddScoped<IHowItWorkCardDal, EFHowItWorkCardDal>();
+
+            services.AddScoped<IProductTypeService, ProductTypeManager>();
+            services.AddScoped<IProductTypeDal, EFProductTypeDal>();
+
+            services.AddScoped<IUnitsOfLengthService, UnitsOfLengthManager>();
+            services.AddScoped<IUnitsOfLengthDal, EFUnitsOfLengthDal>();
+
+            services.AddScoped<IWeightService, WeightManager>();
+            services.AddScoped<IWeightDal, EFWeightDal>();
 
             services.AddControllersWithViews();
 

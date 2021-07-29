@@ -1,4 +1,4 @@
-﻿using DataAccess.Interfaces;
+﻿using Buisness.Abstract;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,26 +11,27 @@ namespace AdminPanel.Controllers
 {
     public class HowItWorkController : Controller
     {
-        private readonly IRepository<HowItWork> _repository;
-        private readonly IRepository<Language> _languageRepository;
+        private readonly IHowItWorkService _howItWorkService;
+        private readonly ILanguageService _languageService;
 
-        public HowItWorkController(IRepository<HowItWork> repository, IRepository<Language> languageRepository)
+        public HowItWorkController(IHowItWorkService howItWorkService, ILanguageService languageService)
         {
-            _repository = repository;
-            _languageRepository = languageRepository;
+            _howItWorkService = howItWorkService;
+            _languageService = languageService;
         }
 
         public async Task<IActionResult> Index(int page = 1)
         {
-            var allHowItWorks = await _repository.GetAllAsync(x => x.IsDeleted == false, null);
+            var allHowItWorks = await _howItWorkService.GetAllHowItWorksAsync();
             ViewBag.PageCount = Decimal.Ceiling((decimal)allHowItWorks.Count / 5);
             ViewBag.Page = page;
 
             if (ViewBag.PageCount < page || page <= 0)
                 return NotFound();
 
-            var howItWorks = await _repository.GetAll(x => x.IsDeleted == false, null)
-                .OrderByDescending(x => x.Id).Skip((page - 1) * 5).Take(5).ToListAsync();
+            int skipCount = (page - 1) * 5;
+
+            var howItWorks = await _howItWorkService.GetAllHowItWorksAsync(skipCount,5);
             if (howItWorks == null)
                 return NotFound();
 
@@ -41,7 +42,7 @@ namespace AdminPanel.Controllers
 
         public async Task<IActionResult> Create()
         {
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
             return View();
@@ -51,7 +52,7 @@ namespace AdminPanel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(HowItWork howItWorks, int? languageId)
         {
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
             if (!ModelState.IsValid)
@@ -70,7 +71,7 @@ namespace AdminPanel.Controllers
 
             howItWorks.LanguageId = languageId.Value;
 
-            await _repository.CreateAsync(howItWorks);
+            await _howItWorkService.AddAsync(howItWorks);
 
             return RedirectToAction("Index");
         }
@@ -84,10 +85,10 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
-            var howItWorks = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, null);
+            var howItWorks = await _howItWorkService.GetHowItWorkAsync(id.Value);
             if (howItWorks == null)
                 return NotFound();
 
@@ -101,7 +102,7 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
             if (!ModelState.IsValid)
@@ -118,7 +119,7 @@ namespace AdminPanel.Controllers
             if (languages.All(x => x.Id != languageId.Value))
                 return BadRequest();
 
-            await _repository.UpdateAsync(howItWorks);
+            await _howItWorkService.UpdateAsync(howItWorks);
 
             return RedirectToAction("Index");
         }
@@ -132,12 +133,7 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var includedProperties = new List<string>
-            {
-                nameof(Language)
-            };
-
-            var howItWorks = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, includedProperties);
+            var howItWorks = await _howItWorkService.GetHowItWorkWithLanguageAsync(id.Value);
             if (howItWorks == null)
                 return NotFound();
 
@@ -152,13 +148,13 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var howItWorks = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, null);
+            var howItWorks = await _howItWorkService.GetHowItWorkAsync(id.Value);
             if (howItWorks == null)
                 return NotFound();
 
             howItWorks.IsDeleted = true;
 
-            await _repository.UpdateAsync(howItWorks);
+            await _howItWorkService.UpdateAsync(howItWorks);
 
             return RedirectToAction("Index");
         }
@@ -172,12 +168,7 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var includedProperties = new List<string>
-            {
-                nameof(Language)
-            };
-
-            var howItWorks = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, includedProperties);
+            var howItWorks = await _howItWorkService.GetHowItWorkWithLanguageAsync(id.Value);
             if (howItWorks == null)
                 return NotFound();
 

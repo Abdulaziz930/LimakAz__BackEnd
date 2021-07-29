@@ -1,4 +1,4 @@
-﻿using DataAccess.Interfaces;
+﻿using Buisness.Abstract;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,26 +13,27 @@ namespace AdminPanel.Controllers
 {
     public class HowItWorkCardController : Controller
     {
-        private readonly IRepository<HowItWorkCard> _repository;
-        private readonly IRepository<Language> _languageRepository;
+        private readonly IHowItWorkCardService _howItWorkCardService;
+        private readonly ILanguageService _languageService;
 
-        public HowItWorkCardController(IRepository<HowItWorkCard> repository, IRepository<Language> languageRepository)
+        public HowItWorkCardController(IHowItWorkCardService howItWorkCardService, ILanguageService languageService)
         {
-            _repository = repository;
-            _languageRepository = languageRepository;
+            _howItWorkCardService = howItWorkCardService;
+            _languageService = languageService;
         }
 
         public async Task<IActionResult> Index(int page = 1)
         {
-            var allHowItWorkCards = await _repository.GetAllAsync(x => x.IsDeleted == false, null);
+            var allHowItWorkCards = await _howItWorkCardService.GetAllHowItWorkCardsAsync();
             ViewBag.PageCount = Decimal.Ceiling((decimal)allHowItWorkCards.Count / 5);
             ViewBag.Page = page;
 
             if (ViewBag.PageCount < page || page <= 0)
                 return NotFound();
 
-            var howItWorkCards = await _repository.GetAll(x => x.IsDeleted == false, null)
-                .OrderByDescending(x => x.Id).Skip((page - 1) * 5).Take(5).ToListAsync();
+            int skipCount = (page - 1) * 5;
+
+            var howItWorkCards = await _howItWorkCardService.GetAllHowItWorkCardsAsync(skipCount,5);
             if (howItWorkCards == null)
                 return NotFound();
 
@@ -43,7 +44,7 @@ namespace AdminPanel.Controllers
 
         public async Task<IActionResult> Create()
         {
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
             return View();
@@ -53,7 +54,7 @@ namespace AdminPanel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(HowItWorkCard howItWorkCard, int? languageId)
         {
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
             if (howItWorkCard.Photo == null)
@@ -94,7 +95,7 @@ namespace AdminPanel.Controllers
 
             howItWorkCard.LanguageId = languageId.Value;
 
-            await _repository.CreateAsync(howItWorkCard);
+            await _howItWorkCardService.AddAsync(howItWorkCard);
 
             return RedirectToAction("Index");
         }
@@ -108,10 +109,10 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
-            var howItWorkCard = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, null);
+            var howItWorkCard = await _howItWorkCardService.GetHowItWorkCardAsync(id.Value);
             if (howItWorkCard == null)
                 return NotFound();
 
@@ -125,10 +126,10 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
-            var dbHowItWorkCard = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, null);
+            var dbHowItWorkCard = await _howItWorkCardService.GetHowItWorkCardAsync(id.Value);
             if (dbHowItWorkCard == null)
                 return NotFound();
 
@@ -174,7 +175,7 @@ namespace AdminPanel.Controllers
 
             howItWorkCard.Image = fileName;
 
-            await _repository.UpdateAsync(howItWorkCard);
+            await _howItWorkCardService.UpdateAsync(howItWorkCard);
 
             return RedirectToAction("Index");
         }
@@ -188,12 +189,7 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var includedProperties = new List<string>
-            {
-                nameof(Language)
-            };
-
-            var howItWorkCard = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, includedProperties);
+            var howItWorkCard = await _howItWorkCardService.GetHowItWorkCardWithLanguageAsync(id.Value);
             if (howItWorkCard == null)
                 return NotFound();
 
@@ -208,13 +204,13 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var howItWorkCard = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, null);
+            var howItWorkCard = await _howItWorkCardService.GetHowItWorkCardAsync(id.Value);
             if (howItWorkCard == null)
                 return NotFound();
 
             howItWorkCard.IsDeleted = true;
 
-            await _repository.UpdateAsync(howItWorkCard);
+            await _howItWorkCardService.UpdateAsync(howItWorkCard);
 
             return RedirectToAction("Index");
         }
@@ -228,12 +224,7 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var includedProperties = new List<string>
-            {
-                nameof(Language)
-            };
-
-            var howItWorkCard = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, includedProperties);
+            var howItWorkCard = await _howItWorkCardService.GetHowItWorkCardWithLanguageAsync(id.Value);
             if (howItWorkCard == null)
                 return NotFound();
 

@@ -1,4 +1,4 @@
-﻿using DataAccess.Interfaces;
+﻿using Buisness.Abstract;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,26 +11,27 @@ namespace AdminPanel.Controllers
 {
     public class UnitsOfLengthController : Controller
     {
-        private readonly IRepository<UnitsOfLength> _repository;
-        private readonly IRepository<Language> _languageRepository;
+        private readonly IUnitsOfLengthService _unitsOfLengthService;
+        private readonly ILanguageService _languageService;
 
-        public UnitsOfLengthController(IRepository<UnitsOfLength> repository, IRepository<Language> languageRepository)
+        public UnitsOfLengthController(IUnitsOfLengthService unitsOfLengthService, ILanguageService languageService)
         {
-            _repository = repository;
-            _languageRepository = languageRepository;
+            _unitsOfLengthService = unitsOfLengthService;
+            _languageService = languageService;
         }
 
         public async Task<IActionResult> Index(int page = 1)
         {
-            var allUnitsOfLengths = await _repository.GetAllAsync(x => x.IsDeleted == false, null);
+            var allUnitsOfLengths = await _unitsOfLengthService.GetAllUnitsOfLengthAsync();
             ViewBag.PageCount = Decimal.Ceiling((decimal)allUnitsOfLengths.Count / 5);
             ViewBag.Page = page;
 
             if (ViewBag.PageCount < page || page <= 0)
                 return NotFound();
 
-            var unitsOfLengths = await _repository.GetAll(x => x.IsDeleted == false, null)
-                .OrderByDescending(x => x.Id).Skip((page - 1) * 5).Take(5).ToListAsync();
+            int skipCount = (page - 1) * 5;
+
+            var unitsOfLengths = await _unitsOfLengthService.GetAllUnitsOfLengthAsync(skipCount,5);
             if (unitsOfLengths == null)
                 return NotFound();
 
@@ -41,7 +42,7 @@ namespace AdminPanel.Controllers
 
         public async Task<IActionResult> Create()
         {
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
             return View();
@@ -51,7 +52,7 @@ namespace AdminPanel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(UnitsOfLength unitsOfLength, int? languageId)
         {
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
             if (!ModelState.IsValid)
@@ -70,7 +71,7 @@ namespace AdminPanel.Controllers
 
             unitsOfLength.LanguageId = languageId.Value;
 
-            await _repository.CreateAsync(unitsOfLength);
+            await _unitsOfLengthService.AddAsync(unitsOfLength);
 
             return RedirectToAction("Index");
         }
@@ -84,10 +85,10 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
-            var unitsOfLength = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, null);
+            var unitsOfLength = await _unitsOfLengthService.GetUnitsOfLengthAsync(id.Value);
             if (unitsOfLength == null)
                 return NotFound();
 
@@ -101,7 +102,7 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
             if (!ModelState.IsValid)
@@ -118,7 +119,7 @@ namespace AdminPanel.Controllers
             if (languages.All(x => x.Id != languageId.Value))
                 return BadRequest();
 
-            await _repository.UpdateAsync(unitsOfLength);
+            await _unitsOfLengthService.UpdateAsync(unitsOfLength);
 
             return RedirectToAction("Index");
         }
@@ -132,12 +133,7 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var includedProperties = new List<string>
-            {
-                nameof(Language)
-            };
-
-            var unitsOfLength = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, includedProperties);
+            var unitsOfLength = await _unitsOfLengthService.GetUnitsOfLengthWithLanguageAsync(id.Value);
             if (unitsOfLength == null)
                 return NotFound();
 
@@ -152,13 +148,13 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var unitsOfLength = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, null);
+            var unitsOfLength = await _unitsOfLengthService.GetUnitsOfLengthAsync(id.Value);
             if (unitsOfLength == null)
                 return NotFound();
 
             unitsOfLength.IsDeleted = true;
 
-            await _repository.UpdateAsync(unitsOfLength);
+            await _unitsOfLengthService.UpdateAsync(unitsOfLength);
 
             return RedirectToAction("Index");
         }
@@ -172,12 +168,7 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var includedProperties = new List<string>
-            {
-                nameof(Language)
-            };
-
-            var unitsOfLength = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, includedProperties);
+            var unitsOfLength = await _unitsOfLengthService.GetUnitsOfLengthWithLanguageAsync(id.Value);
             if (unitsOfLength == null)
                 return NotFound();
 

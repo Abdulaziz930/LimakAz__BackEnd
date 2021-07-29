@@ -1,4 +1,4 @@
-﻿using Entities.Interfaces;
+﻿using Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -23,5 +23,7 @@ namespace Entities.Models
         public Language Language { get; set; }
 
         public ICollection<CountryProductType> CountryProductTypes { get; set; }
+
+        public Tab Tab { get; set; }
     }
 }

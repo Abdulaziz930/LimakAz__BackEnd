@@ -1,4 +1,4 @@
-﻿using DataAccess.Interfaces;
+﻿using Buisness.Abstract;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,26 +11,27 @@ namespace AdminPanel.Controllers
 {
     public class WeightController : Controller
     {
-        private readonly IRepository<Weight> _repository;
-        private readonly IRepository<Language> _languageRepository;
+        private readonly IWeightService _weightService;
+        private readonly ILanguageService _languageService;
 
-        public WeightController(IRepository<Weight> repository, IRepository<Language> languageRepository)
+        public WeightController(IWeightService weightService, ILanguageService languageService)
         {
-            _repository = repository;
-            _languageRepository = languageRepository;
+            _weightService = weightService;
+            _languageService = languageService;
         }
 
         public async Task<IActionResult> Index(int page = 1)
         {
-            var allWeights = await _repository.GetAllAsync(x => x.IsDeleted == false, null);
+            var allWeights = await _weightService.GetAllWeightsAsync();
             ViewBag.PageCount = Decimal.Ceiling((decimal)allWeights.Count / 5);
             ViewBag.Page = page;
 
             if (ViewBag.PageCount < page || page <= 0)
                 return NotFound();
 
-            var weights = await _repository.GetAll(x => x.IsDeleted == false, null)
-                .OrderByDescending(x => x.Id).Skip((page - 1) * 5).Take(5).ToListAsync();
+            int skipCount = (page - 1) * 5;
+
+            var weights = await _weightService.GetAllWeightsAsync(skipCount,5);
             if (weights == null)
                 return NotFound();
 
@@ -41,7 +42,7 @@ namespace AdminPanel.Controllers
 
         public async Task<IActionResult> Create()
         {
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
             return View();
@@ -51,7 +52,7 @@ namespace AdminPanel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Weight weight, int? languageId)
         {
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
             if (!ModelState.IsValid)
@@ -70,7 +71,7 @@ namespace AdminPanel.Controllers
 
             weight.LanguageId = languageId.Value;
 
-            await _repository.CreateAsync(weight);
+            await _weightService.AddAsync(weight);
 
             return RedirectToAction("Index");
         }
@@ -84,10 +85,10 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
-            var weight = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, null);
+            var weight = await _weightService.GetWeightAsync(id.Value);
             if (weight == null)
                 return NotFound();
 
@@ -101,7 +102,7 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
             if (!ModelState.IsValid)
@@ -118,7 +119,7 @@ namespace AdminPanel.Controllers
             if (languages.All(x => x.Id != languageId.Value))
                 return BadRequest();
 
-            await _repository.UpdateAsync(weight);
+            await _weightService.UpdateAsync(weight);
 
             return RedirectToAction("Index");
         }
@@ -132,12 +133,7 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var includedProperties = new List<string>
-            {
-                nameof(Language)
-            };
-
-            var weight = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, includedProperties);
+            var weight = await _weightService.GetWeightWithLanguageAsync(id.Value);
             if (weight == null)
                 return NotFound();
 
@@ -152,13 +148,13 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var weight = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, null);
+            var weight = await _weightService.GetWeightAsync(id.Value);
             if (weight == null)
                 return NotFound();
 
             weight.IsDeleted = true;
 
-            await _repository.UpdateAsync(weight);
+            await _weightService.UpdateAsync(weight);
 
             return RedirectToAction("Index");
         }
@@ -172,12 +168,7 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var includedProperties = new List<string>
-            {
-                nameof(Language)
-            };
-
-            var weight = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, includedProperties);
+            var weight = await _weightService.GetWeightWithLanguageAsync(id.Value);
             if (weight == null)
                 return NotFound();
 

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DataAccess.Interfaces;
+using Buisness.Abstract;
 using Entities.Dto;
 using Entities.Models;
 using Microsoft.AspNetCore.Cors;
@@ -16,12 +16,12 @@ namespace LimakAz.Controllers
     [ApiController]
     public class LanguageController : ControllerBase
     {
-        private readonly IRepository<Language> _repository;
+        private readonly ILanguageService _languageService;
         private readonly IMapper _mapper;
 
-        public LanguageController(IRepository<Language> repository, IMapper mapper)
+        public LanguageController(ILanguageService languageService, IMapper mapper)
         {
-            _repository = repository;
+            _languageService = languageService;
             _mapper = mapper;
         }
 
@@ -29,7 +29,7 @@ namespace LimakAz.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var language = await _repository.GetAllAsync(x => x.IsDeleted == false,null);
+            var language = await _languageService.GetAllLanguagesAsync();
 
             var languageDto = _mapper.Map<List<LanguageDto>>(language);
 

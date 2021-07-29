@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using DataAccess.Interfaces;
+using Buisness.Abstract;
 using Entities.Dto;
 using Entities.Models;
 using Microsoft.AspNetCore.Http;
@@ -15,19 +15,19 @@ namespace LimakAz.Controllers
     [ApiController]
     public class CertificateContentController : ControllerBase
     {
-        private readonly IRepository<CertifcateContent> _repository;
+        private readonly ICertificateContentService _certificateService; 
         private readonly IMapper _mapper;
 
-        public CertificateContentController(IRepository<CertifcateContent> repository,IMapper mapper)
+        public CertificateContentController(ICertificateContentService certificateService, IMapper mapper)
         {
-            _repository = repository;
+            _certificateService = certificateService;
             _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var certificates = await _repository.GetAllAsync(x => x.IsDeleted == false,null);
+            var certificates = await _certificateService.GetAllCertificatesAsync();
             if (certificates == null)
                 return NotFound();
 

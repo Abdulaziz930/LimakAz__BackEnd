@@ -1,4 +1,4 @@
-﻿using DataAccess.Interfaces;
+﻿using Buisness.Abstract;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,26 +11,27 @@ namespace AdminPanel.Controllers
 {
     public class CountryController : Controller
     {
-        private readonly IRepository<Country> _repository;
-        private readonly IRepository<Language> _languageRepository;
+        private readonly ICountryService _countryService;
+        private readonly ILanguageService _languageService;
 
-        public CountryController(IRepository<Country> repository, IRepository<Language> languageRepository)
+        public CountryController(ICountryService countryService, ILanguageService languageService)
         {
-            _repository = repository;
-            _languageRepository = languageRepository;
+            _countryService = countryService;
+            _languageService = languageService;
         }
 
         public async Task<IActionResult> Index(int page = 1)
         {
-            var allCountries = await _repository.GetAllAsync(x => x.IsDeleted == false, null);
+            var allCountries = await _countryService.GetAllCountriesAsync();
             ViewBag.PageCount = Decimal.Ceiling((decimal)allCountries.Count / 5);
             ViewBag.Page = page;
 
             if (ViewBag.PageCount < page || page <= 0)
                 return NotFound();
 
-            var countries = await _repository.GetAll(x => x.IsDeleted == false, null)
-                .OrderByDescending(x => x.Id).Skip((page - 1) * 5).Take(5).ToListAsync();
+            int skipCount = (page - 1) * 5;
+
+            var countries = await _countryService.GetAllCountriesAsync(skipCount,5);
             if (countries == null)
                 return NotFound();
 
@@ -41,7 +42,7 @@ namespace AdminPanel.Controllers
 
         public async Task<IActionResult> Create()
         {
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
             return View();
@@ -51,7 +52,7 @@ namespace AdminPanel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Country country, int? languageId)
         {
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
             if (!ModelState.IsValid)
@@ -70,7 +71,7 @@ namespace AdminPanel.Controllers
 
             country.LanguageId = languageId.Value;
 
-            await _repository.CreateAsync(country);
+            await _countryService.AddAsync(country);
 
             return RedirectToAction("Index");
         }
@@ -84,10 +85,10 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
-            var country = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, null);
+            var country = await _countryService.GetCountryAsync(id.Value);
             if (country == null)
                 return NotFound();
 
@@ -101,7 +102,7 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
             if (!ModelState.IsValid)
@@ -118,7 +119,7 @@ namespace AdminPanel.Controllers
             if (languages.All(x => x.Id != languageId.Value))
                 return BadRequest();
 
-            await _repository.UpdateAsync(country);
+            await _countryService.UpdateAsync(country);
 
             return RedirectToAction("Index");
         }
@@ -132,12 +133,7 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var includedProperties = new List<string>
-            {
-                nameof(Language)
-            };
-
-            var country = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, includedProperties);
+            var country = await _countryService.GetCountryWithLanguageAsync(id.Value);
             if (country == null)
                 return NotFound();
 
@@ -152,13 +148,13 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var country = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, null);
+            var country = await _countryService.GetCountryAsync(id.Value);
             if (country == null)
                 return NotFound();
 
             country.IsDeleted = true;
 
-            await _repository.UpdateAsync(country);
+            await _countryService.UpdateAsync(country);
 
             return RedirectToAction("Index");
         }
@@ -172,12 +168,7 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var includedProperties = new List<string>
-            {
-                nameof(Language)
-            };
-
-            var country = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, includedProperties);
+            var country = await _countryService.GetCountryWithLanguageAsync(id.Value);
             if (country == null)
                 return NotFound();
 

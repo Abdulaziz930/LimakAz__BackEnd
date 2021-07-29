@@ -1,4 +1,4 @@
-﻿using DataAccess.Interfaces;
+﻿using Buisness.Abstract;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,17 +13,16 @@ namespace AdminPanel.Controllers
 {
     public class CertifcateContentController : Controller
     {
-        private readonly IRepository<CertifcateContent> _repository;
+        private readonly ICertificateContentService _certificateContentService;
 
-        public CertifcateContentController(IRepository<CertifcateContent> repository)
+        public CertifcateContentController(ICertificateContentService certificateContentService)
         {
-            _repository = repository;
+            _certificateContentService = certificateContentService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var certifcateContents = await _repository.GetAll(x => x.IsDeleted == false, null)
-                .OrderByDescending(x => x.Id).ToListAsync();
+            var certifcateContents = await _certificateContentService.GetAllCertificatesAsync();
 
             return View(certifcateContents);
         }
@@ -66,7 +65,7 @@ namespace AdminPanel.Controllers
                 return View(certifcateContent);
             }
 
-            await _repository.CreateAsync(certifcateContent);
+            await _certificateContentService.AddAsync(certifcateContent);
 
             return RedirectToAction("Index");
         }
@@ -80,7 +79,7 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var certifcateContent = await _repository.GetAsync(x => x.Id == id.Value && x.IsDeleted == false, null);
+            var certifcateContent = await _certificateContentService.GetCertificateAsync(id.Value);
             if (certifcateContent == null)
                 return NotFound();
 
@@ -97,7 +96,7 @@ namespace AdminPanel.Controllers
             if (id != certifcateContent.Id)
                 return BadRequest();
 
-            var dbCertifcateContent = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, null);
+            var dbCertifcateContent = await _certificateContentService.GetCertificateAsync(id.Value);
             if (dbCertifcateContent == null)
                 return NotFound();
 
@@ -134,7 +133,7 @@ namespace AdminPanel.Controllers
 
             dbCertifcateContent.Image = fileName;
 
-            await _repository.UpdateAsync(dbCertifcateContent);
+            await _certificateContentService.UpdateAsync(dbCertifcateContent);
 
             return RedirectToAction("Index");
         }
@@ -148,7 +147,7 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var certifcateContent = await _repository.GetAsync(x => x.IsDeleted == false && x.Id == id, null);
+            var certifcateContent = await _certificateContentService.GetCertificateAsync(id.Value);
             if (certifcateContent == null)
                 return NotFound();
 
@@ -163,12 +162,12 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var certifcateContent = await _repository.GetAsync(x => x.IsDeleted == false && x.Id == id, null);
+            var certifcateContent = await _certificateContentService.GetCertificateAsync(id.Value);
             if (certifcateContent == null)
                 return NotFound();
 
             certifcateContent.IsDeleted = true;
-            await _repository.UpdateAsync(certifcateContent);
+            await _certificateContentService.UpdateAsync(certifcateContent);
 
             return RedirectToAction("Index");
         }
@@ -182,7 +181,7 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var certifcateContent = await _repository.GetAsync(x => x.IsDeleted == false && x.Id == id, null);
+            var certifcateContent = await _certificateContentService.GetCertificateAsync(id.Value);
             if (certifcateContent == null)
                 return NotFound();
 

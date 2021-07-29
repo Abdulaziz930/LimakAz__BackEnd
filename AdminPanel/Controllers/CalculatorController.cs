@@ -1,4 +1,4 @@
-﻿using DataAccess.Interfaces;
+﻿using Buisness.Abstract;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,26 +11,27 @@ namespace AdminPanel.Controllers
 {
     public class CalculatorController : Controller
     {
-        private readonly IRepository<Calculator> _repository;
-        private readonly IRepository<Language> _languageRepository;
+        private readonly ICalculatorService _calculatorService;
+        private readonly ILanguageService _languageService;
 
-        public CalculatorController(IRepository<Calculator> repository, IRepository<Language> languageRepository)
+        public CalculatorController(ICalculatorService calculatorService, ILanguageService languageService)
         {
-            _repository = repository;
-            _languageRepository = languageRepository;
+            _calculatorService = calculatorService;
+            _languageService = languageService;
         }
 
         public async Task<IActionResult> Index(int page = 1)
         {
-            var allCalculators = await _repository.GetAllAsync(x => x.IsDeleted == false, null);
+            var allCalculators = await _calculatorService.GetAllCalculatorContentsAsync();
             ViewBag.PageCount = Decimal.Ceiling((decimal)allCalculators.Count / 5);
             ViewBag.Page = page;
 
             if (ViewBag.PageCount < page || page <= 0)
                 return NotFound();
 
-            var calculators = await _repository.GetAll(x => x.IsDeleted == false, null)
-                .OrderByDescending(x => x.Id).Skip((page - 1) * 5).Take(5).ToListAsync();
+            int skipCount = (page - 1) * 5;
+
+            var calculators = await _calculatorService.GetAllCalculatorContentsAsync(skipCount,5);
             if (calculators == null)
                 return NotFound();
 
@@ -41,7 +42,7 @@ namespace AdminPanel.Controllers
 
         public async Task<IActionResult> Create()
         {
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
             return View();  
@@ -51,7 +52,7 @@ namespace AdminPanel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Calculator calculator, int? languageId)
         {
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
             if (!ModelState.IsValid)
@@ -70,7 +71,7 @@ namespace AdminPanel.Controllers
 
             calculator.LanguageId = languageId.Value;
 
-            await _repository.CreateAsync(calculator);
+            await _calculatorService.AddAsync(calculator);
 
             return RedirectToAction("Index");
         }
@@ -84,10 +85,10 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
-            var calculator = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, null);
+            var calculator = await _calculatorService.GetCalculatorAsync(id.Value);
             if (calculator == null)
                 return NotFound();
 
@@ -101,7 +102,7 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var languages = await _languageRepository.GetAllAsync(x => x.IsDeleted == false, null);
+            var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
             if (!ModelState.IsValid)
@@ -118,7 +119,7 @@ namespace AdminPanel.Controllers
             if (languages.All(x => x.Id != languageId.Value))
                 return BadRequest();
 
-            await _repository.UpdateAsync(calculator);
+            await _calculatorService.UpdateAsync(calculator);
 
             return RedirectToAction("Index");
         }
@@ -137,7 +138,7 @@ namespace AdminPanel.Controllers
                 nameof(Language)
             };
 
-            var calculator = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, includedProperties);
+            var calculator = await _calculatorService.GetCalculatorWithLanguageAsync(id.Value);
             if (calculator == null)
                 return NotFound();
 
@@ -152,13 +153,13 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var calculator = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, null);
+            var calculator = await _calculatorService.GetCalculatorAsync(id.Value);
             if (calculator == null)
                 return NotFound();
 
             calculator.IsDeleted = true;
 
-            await _repository.UpdateAsync(calculator);
+            await _calculatorService.UpdateAsync(calculator);
 
             return RedirectToAction("Index");
         }
@@ -177,7 +178,7 @@ namespace AdminPanel.Controllers
                 nameof(Language)
             };
 
-            var calculator = await _repository.GetAsync(x => x.Id == id && x.IsDeleted == false, includedProperties);
+            var calculator = await _calculatorService.GetCalculatorWithLanguageAsync(id.Value);
             if (calculator == null)
                 return NotFound();
 

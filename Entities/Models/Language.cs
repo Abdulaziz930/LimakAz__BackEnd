@@ -1,4 +1,4 @@
-﻿using Entities.Interfaces;
+﻿using Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -19,14 +19,6 @@ namespace Entities.Models
 
         public bool IsDeleted { get; set; }
 
-        public ICollection<Section> Sections { get; set; }
-
-        public ICollection<AuxiliarySection> AuxiliarySections { get; set; }
-
-        public ICollection<Authentication> Authentications { get; set; }
-
-        public ICollection<Order> Orders { get; set; }
-
         public ICollection<Calculator> Calculators { get; set; }
 
         public ICollection<Country> Countries { get; set; }
@@ -35,17 +27,7 @@ namespace Entities.Models
 
         public ICollection<Weight> Weights { get; set; }
 
-        public ICollection<WeightInput> WeightInputs { get; set; }
-
         public ICollection<UnitsOfLength> UnitsOfLengths { get; set; }
-
-        public ICollection<WidthInput> WidthInputs { get; set; }
-
-        public ICollection<HeightInput> HeightInputs { get; set; }
-
-        public ICollection<LengthInput> LengthInputs { get; set; }
-
-        public ICollection<BoxCountInput> BoxCountInputs { get; set; }
 
         public ICollection<ProductType> ProductTypes { get; set; }
 
@@ -60,5 +42,9 @@ namespace Entities.Models
         public ICollection<Advertisement> Advertisements { get; set; }
 
         public ICollection<AdvertisementDetail> AdvertisementDetails { get; set; }
+
+        public ICollection<Tab> Tabs { get; set; }
+
+        public ICollection<Tariff> Tariffs { get; set; }
     }
 }

@@ -3,15 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31410.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LimakAz", "LimakAz\LimakAz.csproj", "{6DE1B0CF-996E-4DE0-9EE8-7806FAF3A33A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LimakAz", "LimakAz\LimakAz.csproj", "{6DE1B0CF-996E-4DE0-9EE8-7806FAF3A33A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entities\Entities.csproj", "{7786A536-EECC-4AEA-94A6-BEB1807CA6FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{7786A536-EECC-4AEA-94A6-BEB1807CA6FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{07FA1945-0DEA-47C2-9396-5FA640C5EAB9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{07FA1945-0DEA-47C2-9396-5FA640C5EAB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminPanel", "AdminPanel\AdminPanel.csproj", "{7AA70B89-0BB4-4B0D-8CD3-F168427C07D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminPanel", "AdminPanel\AdminPanel.csproj", "{7AA70B89-0BB4-4B0D-8CD3-F168427C07D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "Utils\Utils.csproj", "{CADB5840-E603-47CE-9A4F-31DE27C28D5B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utils", "Utils\Utils.csproj", "{CADB5840-E603-47CE-9A4F-31DE27C28D5B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{9E70DC62-6F32-4C7E-B7EE-5305C2E4850A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Buisness", "Buisness\Buisness.csproj", "{1BAD0DDE-1DA6-48B0-9410-6FECEE90B312}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +43,14 @@ Global
 		{CADB5840-E603-47CE-9A4F-31DE27C28D5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CADB5840-E603-47CE-9A4F-31DE27C28D5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CADB5840-E603-47CE-9A4F-31DE27C28D5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E70DC62-6F32-4C7E-B7EE-5305C2E4850A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E70DC62-6F32-4C7E-B7EE-5305C2E4850A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E70DC62-6F32-4C7E-B7EE-5305C2E4850A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E70DC62-6F32-4C7E-B7EE-5305C2E4850A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BAD0DDE-1DA6-48B0-9410-6FECEE90B312}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BAD0DDE-1DA6-48B0-9410-6FECEE90B312}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BAD0DDE-1DA6-48B0-9410-6FECEE90B312}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BAD0DDE-1DA6-48B0-9410-6FECEE90B312}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
