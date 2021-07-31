@@ -75,6 +75,12 @@ namespace AdminPanel
             services.AddScoped<IWeightService, WeightManager>();
             services.AddScoped<IWeightDal, EFWeightDal>();
 
+            services.AddScoped<ITariffService, TariffManager>();
+            services.AddScoped<ITariffDal, EFTariffDal>();
+
+            services.AddScoped<IShopService, ShopManager>();
+            services.AddScoped<IShopDal, EFShopDal>();
+
             services.AddControllersWithViews();
 
             Constants.ImageFolderPath = Path.Combine(_environment.WebRootPath, "img");

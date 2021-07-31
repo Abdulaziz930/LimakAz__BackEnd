@@ -43,8 +43,8 @@ namespace Entities.Models
 
         public ICollection<AdvertisementDetail> AdvertisementDetails { get; set; }
 
-        public ICollection<Tab> Tabs { get; set; }
-
         public ICollection<Tariff> Tariffs { get; set; }
+
+        //public ICollection<Tab> Tabs { get; set; }
     }
 }

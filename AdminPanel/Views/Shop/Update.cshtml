@@ -1,0 +1,66 @@
+﻿@model Shop
+@{
+    ViewData["Title"] = "Update";
+}
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Update Shop</h4>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <form class="forms-sample" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label asp-for="Title">Title</label>
+                    <input asp-for="Title" class="form-control" placeholder="Title">
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Url">Url</label>
+                    <input asp-for="Url" class="form-control" rows="4" placeholder="Url">
+                    <span asp-validation-for="Url" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Photo">Image</label>
+                    <input asp-for="Photo" class="form-control" accept="image/*" type="file">
+                    <span asp-validation-for="Photo" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    @if (Model.IsRecommended)
+                    {
+                        <input asp-for="IsRecommended" class="form-check-input" name="IsRecommended" checked>
+                    }
+                    else
+                    {
+                        <input asp-for="IsRecommended" class="form-check-input" name="IsRecommended">
+                    }
+                    <label asp-for="IsRecommended" class="form-check-label">Is Recommended?</label>
+                </div>
+                <div class="form-group" id="countryInput">
+                    <label>Countries</label>
+                    <select class="form-control" name="CountryId" id="country" multiple>
+                        @foreach (Country item in ViewBag.Countries)
+                        {
+                            if (Model.ShopCountries.Any(x => x.CountryId == item.Id))
+                            {
+                                <option selected value="@item.Id">@item.Name</option>
+
+                            }
+                            else
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+
+                        }
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-warning mr-2">Update</button>
+                <a asp-action="Index" class="btn btn-light">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
+

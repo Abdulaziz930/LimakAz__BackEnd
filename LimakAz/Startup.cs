@@ -86,6 +86,12 @@ namespace LimakAz
             services.AddScoped<IWeightService, WeightManager>();
             services.AddScoped<IWeightDal, EFWeightDal>();
 
+            services.AddScoped<ITariffService, TariffManager>();
+            services.AddScoped<ITariffDal, EFTariffDal>();
+
+            services.AddScoped<IShopService, ShopManager>();
+            services.AddScoped<IShopDal, EFShopDal>();
+
             services.AddAutoMapper(typeof(AutoMapperProfile));
 
             services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);

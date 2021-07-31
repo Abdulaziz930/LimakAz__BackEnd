@@ -1,6 +1,7 @@
 ﻿using Core.Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Entities.Models
@@ -9,7 +10,12 @@ namespace Entities.Models
     {
         public int Id { get; set; }
 
+        [Required]
         public string Title { get; set; }
+
+        public decimal Price { get; set; }
+
+        public bool IsDeleted { get; set; }
 
         public int ProductTypeId { get; set; }
 
@@ -18,7 +24,5 @@ namespace Entities.Models
         public int LanguageId { get; set; }
 
         public Language Language { get; set; }
-
-        public ICollection<Price> Prices { get; set; }
     }
 }

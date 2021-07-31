@@ -27,13 +27,15 @@ namespace LimakAz.Controllers
         private readonly IHowItWorkCardService _howItWorkCardService;
         private readonly ICertificateService _certificateService;
         private readonly IAdvertisementTitleService _advertisementTitleService;
+        private readonly ITariffService _tariffService;
         private readonly IMapper _mapper;
 
         public ContentController(IAdvertisementService advertisementService,ICalculatorService calculatorService
             ,ICountryService countryService,ICityService cityService,IWeightService weightService
             ,IUnitsOfLengthService unitsOfLengthService,IProductTypeService productTypeService
             ,IHowItWorkService howItWorkService,IHowItWorkCardService howItWorkCardService
-            ,ICertificateService certificateService,IAdvertisementTitleService advertisementTitleService,IMapper mapper)
+            ,ICertificateService certificateService,IAdvertisementTitleService advertisementTitleService
+            ,ITariffService tariffService,IMapper mapper)
         {
             _advertisementService = advertisementService;
             _calculatorService = calculatorService;
@@ -46,6 +48,7 @@ namespace LimakAz.Controllers
             _howItWorkCardService = howItWorkCardService;
             _certificateService = certificateService;
             _advertisementTitleService = advertisementTitleService;
+            _tariffService = tariffService;
             _mapper = mapper;
         }
 
@@ -217,38 +220,15 @@ namespace LimakAz.Controllers
             return Ok(advertisementsDto);
         }
 
-        //[HttpGet("getTariffContent/{languageCode}")]
-        //public async Task<IActionResult> GetTariffContent([FromRoute] string languageCode)
-        //{
-        //    if (string.IsNullOrEmpty(languageCode))
-        //        return BadRequest();
+        [HttpGet("getTariffContent/{languageCode}")]
+        public async Task<IActionResult> GetTariffContent([FromRoute] string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+                return BadRequest();
 
-        //    var includedProperties = new List<string>
-        //    {
-        //        nameof(Language),
-        //        nameof(ProductType),
-        //        nameof(Tariff.Prices),
-        //    };
+            var tariffs = await _tariffService.GetMultiLanguageTrariffsAsync(languageCode);
 
-        //    var secondIncludedProperties = new List<string>
-        //    {
-        //        nameof(Country),
-        //        nameof(Country.Language)
-        //    };
-
-        //    var tariffs = await _tariffRepository
-        //        .GetAll(x => x.Language.Code == languageCode && x.ProductType.Language.Code == languageCode, includedProperties).ToListAsync();
-
-        //    var countryProductType = await _countryProductTypeRepository
-        //        .GetAllAsync(x => x.Country.Language.Code == languageCode,secondIncludedProperties);
-
-        //    var tariffDto = new TariffDto
-        //    {
-        //        Tariffs = tariffs,
-        //        CountryProductTypes = countryProductType
-        //    };
-
-        //    return Ok(tariffDto);
-        //}
+            return Ok(tariffs);
+        }
     }
 }

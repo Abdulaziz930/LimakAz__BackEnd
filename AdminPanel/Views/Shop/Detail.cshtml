@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewData["Title"] = "Detail";
+    Shop shop = Model;
+}
+
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">Shop Detail</h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <img src="~/img/@shop.Image" class="img-fluid" />
+                    </div>
+                    <div class="col-md-12">
+                        <div class="detailItem d-flex mt-2">
+                            <h4>Title:</h4>
+                            <span class="ml-2">@shop.Title</span>
+                        </div>
+                        <div class="detailItem d-flex mt-3">
+                            <h4>Url:</h4>
+                            <span class="ml-2">@shop.Url</span>
+                        </div>
+                        <div class="detailItem d-flex mt-3">
+                            <h4>Is Recommended:</h4>
+                            <span class="ml-2">@shop.IsRecommended</span>
+                        </div>
+                        <div class="detailItem d-flex mt-3">
+                            <h4>Creation Date:</h4>
+                            <span class="ml-2">@shop.CreationDate</span>
+                        </div>
+                        <div class="detailItem d-flex mt-3">
+                            <h4>Last Modification Date:</h4>
+                            <span class="ml-2">@shop.LastModificationDate</span>
+                        </div>
+                        <div class="item d-flex mt-2">
+                            <h4>Countries:</h4>
+                            @{
+                                <ul>
+                                    @foreach (var item in shop.ShopCountries)
+                                    {
+                                        @if (item.Country.IsDeleted == true)
+                                        {
+                                            <li class="ml-2">This section has no language</li>
+                                        }
+                                        else
+                                        {
+                                            <li>@item.Country.Name</li>
+                                        }
+                                    }
+                                </ul>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <a asp-action="Index" class="btn btn-info text-light my-button">
+                    <i class="mdi mdi-keyboard-backspace"></i> <span>Back</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

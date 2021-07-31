@@ -1,0 +1,59 @@
+﻿
+@{
+    ViewData["Title"] = "Delete";
+    Shop shop = Model;
+}
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Delete Shop</h4>
+            <div class="row">
+                <div class="col-md-12">
+                    <img src="~/img/@shop.Image" class="img-fluid" />
+                </div>
+                <div class="col-md-12">
+                    <div class="item d-flex mt-2">
+                        <h4>Title:</h4>
+                        <span class="ml-2">@shop.Title</span>
+                    </div>
+                    <div class="item d-flex mt-2">
+                        <h4>Url:</h4>
+                        <span class="ml-2">@shop.Url</span>
+                    </div>
+                    <div class="detailItem d-flex mt-3">
+                        <h4>Is Recommended:</h4>
+                        <span class="ml-2">@shop.IsRecommended</span>
+                    </div>
+                    <div class="item d-flex mt-2">
+                        <h4>Countries:</h4>
+                        @{
+                            <ul>
+                                @foreach (var item in shop.ShopCountries)
+                                {
+                                    @if (item.Country.IsDeleted == true)
+                                    {
+                                        <li class="ml-2">This section has no language</li>
+                                    }
+                                    else
+                                    {
+                                        <li>@item.Country.Name</li>
+                                    }
+                                }
+                            </ul>
+                        }
+                    </div>
+                </div>
+            </div>
+            <p class="text-danger mt-3">Do you want to delete?</p>
+            <hr />
+            <form method="post">
+                <a asp-action="Index" class="btn btn-primary">Go Back</a>
+                <button type="submit" class="btn btn-danger ml-2">Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+>
+

@@ -22,8 +22,8 @@ namespace Entities.Models
 
         public Language Language { get; set; }
 
-        public ICollection<CountryProductType> CountryProductTypes { get; set; }
-
         public ICollection<Tariff> Tariffs { get; set; }
+
+        public ICollection<CountryProductType> CountryProductTypes { get; set; }
     }
 }

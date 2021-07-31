@@ -1,11 +1,10 @@
-﻿using Core.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Entities.Models
 {
-    public class CountryProductType : IEntity
+    public class CountryProductType
     {
         public int Id { get; set; }
 

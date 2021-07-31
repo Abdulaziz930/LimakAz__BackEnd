@@ -1,4 +1,5 @@
-﻿using Entities.Models;
+﻿using Entities.Dto;
+using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -36,18 +37,20 @@ namespace DataAccess
 
         public DbSet<HowItWorkCard> HowItWorkCards { get; set; }
 
-        public DbSet<Tab> Tabs { get; set; }
-
         public DbSet<Tariff> Tariffs { get; set; }
-
-        public DbSet<Price> Prices { get; set; }
-
-        public DbSet<CountryProductType> CountryProductTypes { get; set; }
-
+        
         public DbSet<Certificate> Certificates { get; set; }
 
         public DbSet<CertifcateContent> CertifcateContents { get; set; }
 
         public DbSet<AdvertisimentTitle> AdvertisimentTitles { get; set; }
+
+        public DbSet<CountryProductType> CountryProductTypes { get; set; }
+
+        public DbSet<Tab> Tabs { get; set; }
+
+        public DbSet<Shop> Shops { get; set; }
+
+        public DbSet<ShopCountry> ShopCountries { get; set; }
     }
 }
