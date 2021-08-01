@@ -39,7 +39,7 @@ namespace DataAccess.AutoMapper
 
             CreateMap<SocialMedia, SocialMediaDto>().ReverseMap();
 
-            CreateMap<Service, ServiceDto>().ReverseMap();
+            CreateMap<ContactContent, ContactContentDto>().ReverseMap();
         }
     }
 }

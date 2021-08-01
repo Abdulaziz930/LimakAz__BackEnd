@@ -45,6 +45,8 @@ namespace Entities.Models
 
         public ICollection<Tariff> Tariffs { get; set; }
 
+        public ICollection<ContactContent> ContactContents { get; set; }
+
         //public ICollection<Tab> Tabs { get; set; }
     }
 }

@@ -11,6 +11,8 @@ namespace Entities.Dto
 
         public string CityName { get; set; }
 
+        public string CityValue { get; set; }
+
         public string Location { get; set; }
 
         public string IframeLocation { get; set; }

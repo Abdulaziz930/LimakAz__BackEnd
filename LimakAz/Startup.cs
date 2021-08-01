@@ -97,6 +97,9 @@ namespace LimakAz
 
             services.AddScoped<IContactService, ContactManager>();
             services.AddScoped<IContactDal, EFContactDal>();
+            
+            services.AddScoped<IContactContentService, ContactContentManager>();
+            services.AddScoped<IContactContentDal, EFContactContentDal>();
 
             services.AddAutoMapper(typeof(AutoMapperProfile));
 

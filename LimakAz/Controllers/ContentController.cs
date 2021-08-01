@@ -36,7 +36,7 @@ namespace LimakAz.Controllers
             , IUnitsOfLengthService unitsOfLengthService, IProductTypeService productTypeService
             , IHowItWorkService howItWorkService, IHowItWorkCardService howItWorkCardService
             , ICertificateService certificateService, IAdvertisementTitleService advertisementTitleService
-            , ITariffService tariffService, IContactService contactService, IMapper mapper)
+            , ITariffService tariffService, IContactService contactService,IMapper mapper)
         {
             _advertisementService = advertisementService;
             _calculatorService = calculatorService;
@@ -231,50 +231,6 @@ namespace LimakAz.Controllers
             var tariffs = await _tariffService.GetMultiLanguageTrariffsAsync(languageCode);
 
             return Ok(tariffs);
-        }
-
-        [HttpGet("getContactsContent/{languageCode}")]
-        public async Task<IActionResult> GetContactsContent([FromRoute] string languageCode)
-        {
-            if (string.IsNullOrEmpty(languageCode))
-                return BadRequest();
-
-            var contacts = await _contactService.GetAllContactsAsync(languageCode);
-            if (contacts == null)
-                return NotFound();
-
-
-            var contactsDto = new List<ContactsDto>();
-            foreach (var cityItem in contacts)
-            {
-                var servicesDto = new List<ServiceDto>();
-                foreach (var contactItem in cityItem.Contacts)
-                {
-                    foreach (var item in contactItem.Services)
-                    {
-                        var serviceDto = new ServiceDto
-                        {
-                            Id = item.Id,
-                            ServiceTitle = item.ServiceTitle,
-                            ServiceValue = item.ServiceValue
-                        };
-                        servicesDto.Add(serviceDto);
-                    }
-                    var contactDto = new ContactsDto
-                    {
-                        Id = contactItem.Id,
-                        CityName = cityItem.Name,
-                        Location = contactItem.Location,
-                        IframeLocation = contactItem.IframeLocation,
-                        Phone = contactItem.Phone,
-                        Email = contactItem.Email,
-                        ServicesDto = servicesDto
-                    };
-                    contactsDto.Add(contactDto);
-                }
-            }
-
-            return Ok(contactsDto);
         }
 
         [HttpGet("getContactContent/{languageCode}")]

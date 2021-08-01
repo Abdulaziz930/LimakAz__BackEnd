@@ -58,5 +58,7 @@ namespace DataAccess
         public DbSet<Contact> Contacts { get; set; }
 
         public DbSet<Service> Services { get; set; }
+
+        public DbSet<ContactContent> ContactContents { get; set; }
     }
 }
