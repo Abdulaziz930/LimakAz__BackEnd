@@ -52,5 +52,11 @@ namespace DataAccess
         public DbSet<Shop> Shops { get; set; }
 
         public DbSet<ShopCountry> ShopCountries { get; set; }
+
+        public DbSet<SocialMedia> SocialMedias { get; set; }
+
+        public DbSet<Contact> Contacts { get; set; }
+
+        public DbSet<Service> Services { get; set; }
     }
 }

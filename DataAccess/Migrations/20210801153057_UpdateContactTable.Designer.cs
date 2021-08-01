@@ -4,14 +4,16 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210801153057_UpdateContactTable")]
+    partial class UpdateContactTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -240,6 +242,9 @@ namespace DataAccess.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -251,6 +256,8 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CityId");
+
+                    b.HasIndex("LanguageId");
 
                     b.ToTable("Contacts");
                 });
@@ -430,6 +437,9 @@ namespace DataAccess.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ServiceTitle")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -441,6 +451,8 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ContactId");
+
+                    b.HasIndex("LanguageId");
 
                     b.ToTable("Services");
                 });
@@ -734,7 +746,15 @@ namespace DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Entities.Models.Language", "Language")
+                        .WithMany("Contacts")
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("City");
+
+                    b.Navigation("Language");
                 });
 
             modelBuilder.Entity("Entities.Models.Country", b =>
@@ -808,7 +828,15 @@ namespace DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Entities.Models.Language", "Language")
+                        .WithMany("Services")
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Contact");
+
+                    b.Navigation("Language");
                 });
 
             modelBuilder.Entity("Entities.Models.ShopCountry", b =>
@@ -926,6 +954,8 @@ namespace DataAccess.Migrations
 
                     b.Navigation("Cities");
 
+                    b.Navigation("Contacts");
+
                     b.Navigation("Countries");
 
                     b.Navigation("HowItWorkCards");
@@ -933,6 +963,8 @@ namespace DataAccess.Migrations
                     b.Navigation("HowItWorks");
 
                     b.Navigation("ProductTypes");
+
+                    b.Navigation("Services");
 
                     b.Navigation("Tariffs");
 

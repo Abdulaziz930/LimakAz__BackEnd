@@ -4,14 +4,16 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210801135758_AddSocialMediaTable")]
+    partial class AddSocialMediaTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -219,42 +221,6 @@ namespace DataAccess.Migrations
                     b.ToTable("Cities");
                 });
 
-            modelBuilder.Entity("Entities.Models.Contact", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CityId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IframeLocation")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CityId");
-
-                    b.ToTable("Contacts");
-                });
-
             modelBuilder.Entity("Entities.Models.Country", b =>
                 {
                     b.Property<int>("Id")
@@ -417,34 +383,6 @@ namespace DataAccess.Migrations
                     b.ToTable("ProductTypes");
                 });
 
-            modelBuilder.Entity("Entities.Models.Service", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ContactId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ServiceTitle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ServiceValue")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ContactId");
-
-                    b.ToTable("Services");
-                });
-
             modelBuilder.Entity("Entities.Models.Shop", b =>
                 {
                     b.Property<int>("Id")
@@ -511,18 +449,15 @@ namespace DataAccess.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Icon")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Url")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -726,17 +661,6 @@ namespace DataAccess.Migrations
                     b.Navigation("Language");
                 });
 
-            modelBuilder.Entity("Entities.Models.Contact", b =>
-                {
-                    b.HasOne("Entities.Models.City", "City")
-                        .WithMany("Contacts")
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("City");
-                });
-
             modelBuilder.Entity("Entities.Models.Country", b =>
                 {
                     b.HasOne("Entities.Models.Language", "Language")
@@ -798,17 +722,6 @@ namespace DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Language");
-                });
-
-            modelBuilder.Entity("Entities.Models.Service", b =>
-                {
-                    b.HasOne("Entities.Models.Contact", "Contact")
-                        .WithMany("Services")
-                        .HasForeignKey("ContactId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Contact");
                 });
 
             modelBuilder.Entity("Entities.Models.ShopCountry", b =>
@@ -891,16 +804,6 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Entities.Models.Advertisement", b =>
                 {
                     b.Navigation("AdvertisementDetail");
-                });
-
-            modelBuilder.Entity("Entities.Models.City", b =>
-                {
-                    b.Navigation("Contacts");
-                });
-
-            modelBuilder.Entity("Entities.Models.Contact", b =>
-                {
-                    b.Navigation("Services");
                 });
 
             modelBuilder.Entity("Entities.Models.Country", b =>

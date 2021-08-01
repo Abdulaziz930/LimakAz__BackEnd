@@ -22,5 +22,7 @@ namespace Entities.Models
         public int LanguageId { get; set; }
 
         public Language Language { get; set; }
+
+        public ICollection<Contact> Contacts { get; set; }
     }
 }

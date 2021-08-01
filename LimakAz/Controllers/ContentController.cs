@@ -28,14 +28,15 @@ namespace LimakAz.Controllers
         private readonly ICertificateService _certificateService;
         private readonly IAdvertisementTitleService _advertisementTitleService;
         private readonly ITariffService _tariffService;
+        private readonly IContactService _contactService;
         private readonly IMapper _mapper;
 
-        public ContentController(IAdvertisementService advertisementService,ICalculatorService calculatorService
-            ,ICountryService countryService,ICityService cityService,IWeightService weightService
-            ,IUnitsOfLengthService unitsOfLengthService,IProductTypeService productTypeService
-            ,IHowItWorkService howItWorkService,IHowItWorkCardService howItWorkCardService
-            ,ICertificateService certificateService,IAdvertisementTitleService advertisementTitleService
-            ,ITariffService tariffService,IMapper mapper)
+        public ContentController(IAdvertisementService advertisementService, ICalculatorService calculatorService
+            , ICountryService countryService, ICityService cityService, IWeightService weightService
+            , IUnitsOfLengthService unitsOfLengthService, IProductTypeService productTypeService
+            , IHowItWorkService howItWorkService, IHowItWorkCardService howItWorkCardService
+            , ICertificateService certificateService, IAdvertisementTitleService advertisementTitleService
+            , ITariffService tariffService, IContactService contactService, IMapper mapper)
         {
             _advertisementService = advertisementService;
             _calculatorService = calculatorService;
@@ -49,6 +50,7 @@ namespace LimakAz.Controllers
             _certificateService = certificateService;
             _advertisementTitleService = advertisementTitleService;
             _tariffService = tariffService;
+            _contactService = contactService;
             _mapper = mapper;
         }
 
@@ -211,7 +213,7 @@ namespace LimakAz.Controllers
             if (count == null)
                 return NotFound();
 
-            var advertisements = await _advertisementService.GetAllAdvertisementsAsync(count.Value,languageCode);
+            var advertisements = await _advertisementService.GetAllAdvertisementsAsync(count.Value, languageCode);
             if (advertisements == null)
                 return NotFound();
 
@@ -229,6 +231,69 @@ namespace LimakAz.Controllers
             var tariffs = await _tariffService.GetMultiLanguageTrariffsAsync(languageCode);
 
             return Ok(tariffs);
+        }
+
+        [HttpGet("getContactsContent/{languageCode}")]
+        public async Task<IActionResult> GetContactsContent([FromRoute] string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+                return BadRequest();
+
+            var contacts = await _contactService.GetAllContactsAsync(languageCode);
+            if (contacts == null)
+                return NotFound();
+
+
+            var contactsDto = new List<ContactsDto>();
+            foreach (var cityItem in contacts)
+            {
+                var servicesDto = new List<ServiceDto>();
+                foreach (var contactItem in cityItem.Contacts)
+                {
+                    foreach (var item in contactItem.Services)
+                    {
+                        var serviceDto = new ServiceDto
+                        {
+                            Id = item.Id,
+                            ServiceTitle = item.ServiceTitle,
+                            ServiceValue = item.ServiceValue
+                        };
+                        servicesDto.Add(serviceDto);
+                    }
+                    var contactDto = new ContactsDto
+                    {
+                        Id = contactItem.Id,
+                        CityName = cityItem.Name,
+                        Location = contactItem.Location,
+                        IframeLocation = contactItem.IframeLocation,
+                        Phone = contactItem.Phone,
+                        Email = contactItem.Email,
+                        ServicesDto = servicesDto
+                    };
+                    contactsDto.Add(contactDto);
+                }
+            }
+
+            return Ok(contactsDto);
+        }
+
+        [HttpGet("getContactContent/{languageCode}")]
+        public async Task<IActionResult> GetContactContent([FromRoute] string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+                return BadRequest();
+
+            var contact = await _contactService.GetContactAsync(languageCode);
+            if (contact == null)
+                return NotFound();
+
+            var contactDto = new ContactDto
+            {
+                Id = contact.Contacts.FirstOrDefault().Id,
+                Location = contact.Contacts.FirstOrDefault().Location
+            };
+
+            return Ok(contactDto);
         }
     }
 }
