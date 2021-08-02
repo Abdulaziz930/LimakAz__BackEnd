@@ -47,6 +47,8 @@ namespace Entities.Models
 
         public ICollection<ContactContent> ContactContents { get; set; }
 
+        public ICollection<ShopContent> ShopContents { get; set; }
+
         //public ICollection<Tab> Tabs { get; set; }
     }
 }

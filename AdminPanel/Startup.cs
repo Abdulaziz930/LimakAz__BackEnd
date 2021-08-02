@@ -90,6 +90,9 @@ namespace AdminPanel
             services.AddScoped<IContactContentService, ContactContentManager>();
             services.AddScoped<IContactContentDal, EFContactContentDal>();
 
+            services.AddScoped<IShopContentService, ShopContentManager>();
+            services.AddScoped<IShopContentDal, EFShopContentDal>();
+
             services.AddControllersWithViews();
 
             Constants.ImageFolderPath = Path.Combine(_environment.WebRootPath, "img");

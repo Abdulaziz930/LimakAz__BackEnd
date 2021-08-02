@@ -48,7 +48,7 @@ namespace Buisness.Concret
 
         public async Task<ContactContent> GetContactContentAsync(string languageCode)
         {
-            return await _contactContentDal.GetContactContent(languageCode);
+            return await _contactContentDal.GetContactContentAsync(languageCode);
         }
 
         public async Task<bool> UpdateAsync(ContactContent contactContent)

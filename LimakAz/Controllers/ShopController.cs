@@ -33,32 +33,33 @@ namespace LimakAz.Controllers
             var shopsDto = new List<ShopDto>();
             foreach (var shop in shops)
             {
-                foreach (var item in shop.ShopCountries)
+                var shopDto = new ShopDto
                 {
-                    var shopDto = new ShopDto
-                    {
-                        Id = shop.Id,
-                        Title = shop.Title,
-                        Url = shop.Url,
-                        Image = shop.Image,
-                        CountryId = item.CountryId
-                    };
-                    shopsDto.Add(shopDto);
-                }
+                    Id = shop.Id,
+                    Title = shop.Title,
+                    Url = shop.Url,
+                    Image = shop.Image,
+                    CountryId = id.Value
+                };
+                shopsDto.Add(shopDto);
             }
-            //foreach (var shop in shops)
-            //{
-            //    var shopDto = new ShopDto
-            //    {
-            //        Id = shop.Id,
-            //        Title = shop.Title,
-            //        Url = shop.Url,
-            //        Image = shop.Image,
-            //        CountryId = shop.ShopCountries.
-            //    }
-            //}
 
             return Ok(shopsDto);
+        }
+
+        [HttpGet("getShopsCount/{id}")]
+        public async Task<IActionResult> GetShopsCount([FromRoute] int? id)
+        {
+            if (id == null)
+                return BadRequest();
+
+            var shops = await _shopService.GetAllShopsAsync(id.Value);
+            if (shops == null)
+                return NotFound();
+
+            var count = shops.Count;
+
+            return Ok(count);
         }
 
         [HttpGet]

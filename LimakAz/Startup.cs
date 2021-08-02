@@ -101,6 +101,9 @@ namespace LimakAz
             services.AddScoped<IContactContentService, ContactContentManager>();
             services.AddScoped<IContactContentDal, EFContactContentDal>();
 
+            services.AddScoped<IShopContentService, ShopContentManager>();
+            services.AddScoped<IShopContentDal, EFShopContentDal>();
+
             services.AddAutoMapper(typeof(AutoMapperProfile));
 
             services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);

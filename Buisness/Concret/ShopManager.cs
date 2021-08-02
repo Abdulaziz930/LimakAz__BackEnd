@@ -62,5 +62,10 @@ namespace Buisness.Concret
 
             return true;
         }
+
+        public async Task<List<Shop>> GetAllShopsAsync(int id)
+        {
+            return await _shopDal.GetShopsByCountry(id);
+        }
     }
 }

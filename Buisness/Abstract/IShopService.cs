@@ -16,6 +16,8 @@ namespace Buisness.Abstract
 
         Task<List<Shop>> GetAllShopsAsync(int id, int skipCount, int takeCount);
 
+        Task<List<Shop>> GetAllShopsAsync(int id);
+
         Task<List<Shop>> GetAllRecommendedShopsAsync();
 
         Task<bool> AddAsync(Shop shop);

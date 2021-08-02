@@ -15,6 +15,8 @@ namespace DataAccess.Abstract
 
         Task<List<Shop>> GetShopsByCountAsync(int id, int skipCount, int takeCount);
 
+        Task<List<Shop>> GetShopsByCountry(int id);
+
         Task<List<Shop>> GetRecommendedShopsAsync();
     }
 }
