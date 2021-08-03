@@ -10,6 +10,11 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <form class="forms-sample" method="post" enctype="multipart/form-data">
                 <div class="form-group">
+                    <label asp-for="AboutTitle">About page title</label>
+                    <input asp-for="AboutTitle" class="form-control" placeholder="About page title">
+                    <span asp-validation-for="AboutTitle" class="text-danger"></span>
+                </div>
+                <div class="form-group">
                     <label asp-for="Description">Description</label>
                     <textarea asp-for="Description" class="form-control" rows="4" placeholder="Description"></textarea>
                     <span asp-validation-for="Description" class="text-danger"></span>

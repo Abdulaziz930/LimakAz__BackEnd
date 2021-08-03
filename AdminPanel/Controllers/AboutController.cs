@@ -181,6 +181,7 @@ namespace AdminPanel.Controllers
 
             dbAbout.Description = about.Description;
             dbAbout.Image = fileName;
+            dbAbout.AboutTitle = about.AboutTitle;
             dbAbout.LanguageId = languageId.Value;
 
             await _aboutService.UpdateAsync(dbAbout);
