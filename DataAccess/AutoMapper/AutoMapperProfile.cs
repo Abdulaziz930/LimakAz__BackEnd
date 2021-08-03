@@ -60,6 +60,8 @@ namespace DataAccess.AutoMapper
             CreateMap<QuestionContent, QuestionContentDto>().ReverseMap();
 
             CreateMap<About, AboutDto>().ReverseMap();
+
+            CreateMap<Privacy, PrivacyDto>().ReverseMap();
         }
     }
 }
