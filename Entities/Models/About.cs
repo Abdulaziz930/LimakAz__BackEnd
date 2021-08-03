@@ -15,6 +15,9 @@ namespace Entities.Models
         [Required]
         public string Description { get; set; }
 
+        [Required]
+        public string AboutTitle { get; set; }
+
         public string Image { get; set; }
 
         public bool IsDeleted { get; set; }
