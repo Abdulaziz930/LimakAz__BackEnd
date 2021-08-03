@@ -61,6 +61,8 @@ namespace Entities.Models
 
         public ICollection<Question> Questions { get; set; }
 
+        public ICollection<QuestionContent> QuestionContents { get; set; }
+
         //public ICollection<Tab> Tabs { get; set; }
     }
 }

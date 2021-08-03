@@ -54,6 +54,10 @@ namespace DataAccess.AutoMapper
             CreateMap<Rule, RuleDto>().ReverseMap();
 
             CreateMap<RuleContent, RuleContentDto>().ReverseMap();
+
+            CreateMap<Question, QuestionDto>().ReverseMap();
+
+            CreateMap<QuestionContent, QuestionContentDto>().ReverseMap();
         }
     }
 }
