@@ -62,5 +62,13 @@ namespace DataAccess
         public DbSet<ContactContent> ContactContents { get; set; }
 
         public DbSet<ShopContent> ShopContents { get; set; }
+
+        public DbSet<CountryContent> CountryContents { get; set; }
+
+        public DbSet<CalculatorIntormationContent> CalculatorIntormationContents { get; set; }
+
+        public DbSet<CurrencyContent> CurrencyContents { get; set; }
+
+        public DbSet<CalculatorContent> CalculatorContents { get; set; }
     }
 }

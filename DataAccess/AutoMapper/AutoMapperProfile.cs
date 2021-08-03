@@ -42,6 +42,14 @@ namespace DataAccess.AutoMapper
             CreateMap<ContactContent, ContactContentDto>().ReverseMap();
 
             CreateMap<ShopContent, ShopContentDto>().ReverseMap();
+
+            CreateMap<CountryContent, CountryContentDto>().ReverseMap();
+
+            CreateMap<CalculatorIntormationContent, CalculatorInformationContentDto>().ReverseMap();
+
+            CreateMap<CurrencyContent, CurrencyContentDto>().ReverseMap();
+
+            CreateMap<CalculatorContent, CalculatorContentDto>().ReverseMap();
         }
     }
 }

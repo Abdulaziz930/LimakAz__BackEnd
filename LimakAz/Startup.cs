@@ -104,6 +104,18 @@ namespace LimakAz
             services.AddScoped<IShopContentService, ShopContentManager>();
             services.AddScoped<IShopContentDal, EFShopContentDal>();
 
+            services.AddScoped<ICountryContentService, CountryContentManager>();
+            services.AddScoped<ICountryContentDal, EFCountryContentDal>();
+
+            services.AddScoped<ICalculatorInformationContentService, CalculatorInformationContentManager>();
+            services.AddScoped<ICalculatorInformationContentDal, EFCalculatorInformationContentDal>();
+
+            services.AddScoped<ICurrencyContentService, CurrencyContentManager>();
+            services.AddScoped<ICurrencyContentDal, EFCurrencyContentDal>();
+
+            services.AddScoped<ICalculatorContentService, CalculatorContentManager>();
+            services.AddScoped<ICalculatorContentDal, EFCalculatorContentDal>();
+
             services.AddAutoMapper(typeof(AutoMapperProfile));
 
             services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);

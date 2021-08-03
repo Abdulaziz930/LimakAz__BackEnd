@@ -49,6 +49,12 @@ namespace Entities.Models
 
         public ICollection<ShopContent> ShopContents { get; set; }
 
+        public ICollection<CountryContent> CountryContents { get; set; }
+
+        public ICollection<CalculatorIntormationContent> CalculatorIntormationContents { get; set; }
+
+        public ICollection<CalculatorContent> CalculatorContents { get; set; }
+
         //public ICollection<Tab> Tabs { get; set; }
     }
 }

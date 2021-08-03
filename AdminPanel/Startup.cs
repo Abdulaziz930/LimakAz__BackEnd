@@ -93,6 +93,18 @@ namespace AdminPanel
             services.AddScoped<IShopContentService, ShopContentManager>();
             services.AddScoped<IShopContentDal, EFShopContentDal>();
 
+            services.AddScoped<ICountryContentService, CountryContentManager>();
+            services.AddScoped<ICountryContentDal, EFCountryContentDal>();
+
+            services.AddScoped<ICalculatorInformationContentService, CalculatorInformationContentManager>();
+            services.AddScoped<ICalculatorInformationContentDal, EFCalculatorInformationContentDal>();
+
+            services.AddScoped<ICurrencyContentService, CurrencyContentManager>();
+            services.AddScoped<ICurrencyContentDal, EFCurrencyContentDal>();
+
+            services.AddScoped<ICalculatorContentService, CalculatorContentManager>();
+            services.AddScoped<ICalculatorContentDal, EFCalculatorContentDal>();
+
             services.AddControllersWithViews();
 
             Constants.ImageFolderPath = Path.Combine(_environment.WebRootPath, "img");
