@@ -242,12 +242,6 @@ namespace AdminPanel.Controllers
             if (id == null)
                 return BadRequest();
 
-            var includedProperties = new List<string>
-            {
-                nameof(Advertisement.AdvertisementDetail),
-                nameof(Language)
-            };
-
             var advertisements = await _advertisementService.GetAdvertisementWithDetailAndLanaguageAsync(id.Value);
             if (advertisements == null)
                 return NotFound();

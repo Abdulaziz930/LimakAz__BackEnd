@@ -4,14 +4,16 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210803141743_AddRulesTable")]
+    partial class AddRulesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -591,34 +593,6 @@ namespace DataAccess.Migrations
                     b.ToTable("Rules");
                 });
 
-            modelBuilder.Entity("Entities.Models.RuleContent", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("RuleHeaderTitle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RuleTitle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
-
-                    b.ToTable("RuleContents");
-                });
-
             modelBuilder.Entity("Entities.Models.Service", b =>
                 {
                     b.Property<int>("Id")
@@ -1093,17 +1067,6 @@ namespace DataAccess.Migrations
                     b.Navigation("Language");
                 });
 
-            modelBuilder.Entity("Entities.Models.RuleContent", b =>
-                {
-                    b.HasOne("Entities.Models.Language", "Language")
-                        .WithMany("RuleContents")
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Language");
-                });
-
             modelBuilder.Entity("Entities.Models.Service", b =>
                 {
                     b.HasOne("Entities.Models.Contact", "Contact")
@@ -1256,8 +1219,6 @@ namespace DataAccess.Migrations
                     b.Navigation("HowItWorks");
 
                     b.Navigation("ProductTypes");
-
-                    b.Navigation("RuleContents");
 
                     b.Navigation("Rules");
 

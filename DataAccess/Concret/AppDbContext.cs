@@ -70,5 +70,9 @@ namespace DataAccess
         public DbSet<CurrencyContent> CurrencyContents { get; set; }
 
         public DbSet<CalculatorContent> CalculatorContents { get; set; }
+
+        public DbSet<Rule> Rules { get; set; }
+
+        public DbSet<RuleContent> RuleContents { get; set; }
     }
 }

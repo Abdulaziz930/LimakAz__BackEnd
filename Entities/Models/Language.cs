@@ -55,6 +55,10 @@ namespace Entities.Models
 
         public ICollection<CalculatorContent> CalculatorContents { get; set; }
 
+        public ICollection<Rule> Rules { get; set; }
+
+        public ICollection<RuleContent> RuleContents { get; set; }
+
         //public ICollection<Tab> Tabs { get; set; }
     }
 }

@@ -50,6 +50,10 @@ namespace DataAccess.AutoMapper
             CreateMap<CurrencyContent, CurrencyContentDto>().ReverseMap();
 
             CreateMap<CalculatorContent, CalculatorContentDto>().ReverseMap();
+
+            CreateMap<Rule, RuleDto>().ReverseMap();
+
+            CreateMap<RuleContent, RuleContentDto>().ReverseMap();
         }
     }
 }
