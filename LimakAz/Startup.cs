@@ -131,6 +131,9 @@ namespace LimakAz
             services.AddScoped<IAboutService, AboutManager>();
             services.AddScoped<IAboutDal, EFAboutDal>();
 
+            services.AddScoped<IPrivacyService, PrivacyManager>();
+            services.AddScoped<IPrivacyDal, EFPrivacyDal>();
+
             services.AddAutoMapper(typeof(AutoMapperProfile));
 
             services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
