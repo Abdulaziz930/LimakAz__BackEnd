@@ -88,7 +88,7 @@ namespace AdminPanel.Controllers
             var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
-            var question = await _questionService.GetQuestionAsync(id.Value);
+            var question = await _questionService.GetQuestionWithLanguageAsync(id.Value);
             if (question == null)
                 return NotFound();
 

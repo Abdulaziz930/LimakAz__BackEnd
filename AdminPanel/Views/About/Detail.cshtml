@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewData["Title"] = "Detail";
+    About about = Model;
+}
+
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">About Detail</h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <img src="~/img/@about.Image" class="img-fluid" />
+                    </div>
+                    <div class="col-md-12">
+                        <div class="detailItem d-flex mt-3">
+                            <h4>Description:</h4>
+                            <span class="ml-2">@Html.Raw(about.Description)</span>
+                        </div>
+                        <div class="item d-flex mt-2">
+                            <h4>Language:</h4>
+                            @{
+                                @if (about.Language.IsDeleted == true)
+                                {
+                                    <span class="ml-2">This section has no language</span>
+                                }
+                                else
+                                {
+                                    <span class="ml-2">@about.Language.Name (@about.Language.Code)</span>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <a asp-action="Index" class="btn btn-info text-light my-button">
+                    <i class="mdi mdi-keyboard-backspace"></i> <span>Back</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -78,5 +78,7 @@ namespace DataAccess
         public DbSet<Question> Questions { get; set; }
 
         public DbSet<QuestionContent> QuestionContents { get; set; }
+
+        public DbSet<About> Abouts { get; set; }
     }
 }

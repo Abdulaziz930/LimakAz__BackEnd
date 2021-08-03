@@ -88,7 +88,7 @@ namespace AdminPanel.Controllers
             var languages = await _languageService.GetAllLanguagesAsync();
             ViewBag.Languages = languages;
 
-            var rule = await _ruleService.GetRuleAsync(id.Value);
+            var rule = await _ruleService.GetRuleWithLanguageAsync(id.Value);
             if (rule == null)
                 return NotFound();
 
