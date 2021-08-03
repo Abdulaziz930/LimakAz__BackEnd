@@ -111,6 +111,9 @@ namespace AdminPanel
             services.AddScoped<IRuleContentService, RuleContentManager>();
             services.AddScoped<IRuleContentDal, EFRuleContentDal>();
 
+            services.AddScoped<IQuestionService, QuestionManager>();
+            services.AddScoped<IQuestionDal, EFQuestionDal>();
+
             services.AddControllersWithViews();
 
             Constants.ImageFolderPath = Path.Combine(_environment.WebRootPath, "img");

@@ -1,42 +1,42 @@
 ﻿
 @{
     ViewData["Title"] = "Detail";
-    Rule rule = Model;
+    Question question = Model;
 }
 
 <div class="row">
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h3 class="card-title">Rule Detail</h3>
+                <h3 class="card-title">Question Detail</h3>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="detailItem d-flex mt-2">
                             <h4>Title:</h4>
-                            <span class="ml-2">@rule.Title</span>
+                            <span class="ml-2">@question.Title</span>
                         </div>
                         <div class="detailItem d-flex mt-3">
                             <h4>Content:</h4>
-                            <span class="ml-2">@Html.Raw(rule.Content)</span>
+                            <span class="ml-2">@Html.Raw(question.Content)</span>
                         </div>
                         <div class="detailItem d-flex mt-3">
                             <h4>Creation Date:</h4>
-                            <span class="ml-2">@rule.CreationDate</span>
+                            <span class="ml-2">@question.CreationDate</span>
                         </div>
                         <div class="detailItem d-flex mt-3">
                             <h4>Last Modification Date:</h4>
-                            <span class="ml-2">@rule.LastModificationDate</span>
+                            <span class="ml-2">@question.LastModificationDate</span>
                         </div>
                         <div class="item d-flex mt-2">
                             <h4>Language:</h4>
                             @{
-                                @if (rule.Language.IsDeleted == true)
+                                @if (question.Language.IsDeleted == true)
                                 {
                                     <span class="ml-2">This section has no language</span>
                                 }
                                 else
                                 {
-                                    <span class="ml-2">@rule.Language.Name (@rule.Language.Code)</span>
+                                    <span class="ml-2">@question.Language.Name (@question.Language.Code)</span>
                                 }
                             }
                         </div>

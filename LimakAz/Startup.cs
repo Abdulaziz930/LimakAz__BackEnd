@@ -122,6 +122,9 @@ namespace LimakAz
             services.AddScoped<IRuleContentService, RuleContentManager>();
             services.AddScoped<IRuleContentDal, EFRuleContentDal>();
 
+            services.AddScoped<IQuestionService, QuestionManager>();
+            services.AddScoped<IQuestionDal, EFQuestionDal>();
+
             services.AddAutoMapper(typeof(AutoMapperProfile));
 
             services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);

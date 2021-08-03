@@ -24,13 +24,13 @@
                     <div class="item d-flex mt-2">
                         <h4>Language:</h4>
                         @{
-                            @if (Model.Language.IsDeleted == true)
+                            @if (advertisement.Language.IsDeleted == true)
                             {
                                 <span class="ml-2">This section has no language</span>
                             }
                             else
                             {
-                                <span class="ml-2">@Model.Language.Name (@Model.Language.Code)</span>
+                                <span class="ml-2">@advertisement.Language.Name (@advertisement.Language.Code)</span>
                             }
                         }
                     </div>

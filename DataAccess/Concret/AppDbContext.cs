@@ -74,5 +74,7 @@ namespace DataAccess
         public DbSet<Rule> Rules { get; set; }
 
         public DbSet<RuleContent> RuleContents { get; set; }
+
+        public DbSet<Question> Questions { get; set; }
     }
 }

@@ -59,6 +59,8 @@ namespace Entities.Models
 
         public ICollection<RuleContent> RuleContents { get; set; }
 
+        public ICollection<Question> Questions { get; set; }
+
         //public ICollection<Tab> Tabs { get; set; }
     }
 }
