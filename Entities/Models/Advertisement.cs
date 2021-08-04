@@ -18,6 +18,9 @@ namespace Entities.Models
 
         public string Image { get; set; }
 
+        [Required]
+        public int Key { get; set; }
+
         public bool IsDeleted { get; set; }
 
         [Required]

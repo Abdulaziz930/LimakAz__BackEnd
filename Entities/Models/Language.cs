@@ -67,5 +67,6 @@ namespace Entities.Models
 
         public ICollection<TariffHeader> TariffHeaders { get; set; }
 
+        public ICollection<AdvertisementHeader> AdvertisementHeaders { get; set; }
     }
 }

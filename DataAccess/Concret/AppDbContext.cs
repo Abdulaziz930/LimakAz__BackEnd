@@ -82,5 +82,7 @@ namespace DataAccess
         public DbSet<Privacy> Privacies { get; set; }
 
         public DbSet<TariffHeader> TariffHeaders { get; set; }
+
+        public DbSet<AdvertisementHeader> AdvertisementHeaders { get; set; }
     }
 }

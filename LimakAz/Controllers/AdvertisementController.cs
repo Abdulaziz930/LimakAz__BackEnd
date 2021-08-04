@@ -15,10 +15,15 @@ namespace LimakAz.Controllers
     public class AdvertisementController : ControllerBase
     {
         private readonly IAdvertisementService _advertisementService;
+        private readonly IAdvertisementHeaderService _advertisementHeaderService;
+        private readonly IMapper _mapper;
 
-        public AdvertisementController(IAdvertisementService advertisementService)
+        public AdvertisementController(IAdvertisementService advertisementService
+            ,IAdvertisementHeaderService advertisementHeaderService,IMapper mapper)
         {
             _advertisementService = advertisementService;
+            _advertisementHeaderService = advertisementHeaderService;
+            _mapper = mapper;
         }
 
         [HttpGet("getAdvertisementDetail/{id}/{languageCode}")]
@@ -36,7 +41,7 @@ namespace LimakAz.Controllers
 
             var advertisementDetailDto = new AdvertisementDetailDto
             {
-                Id = advertisement.Id,
+                Id = advertisement.Key,
                 Title = advertisement.Title,
                 Description = advertisement.AdvertisementDetail.Description,
                 Image = advertisement.Image,
@@ -44,6 +49,21 @@ namespace LimakAz.Controllers
             };
 
             return Ok(advertisementDetailDto);
+        }
+
+        [HttpGet("getAdvertisementHeader/{languageCode}")]
+        public async Task<IActionResult> GetAdvertisementHeader([FromRoute] string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+                return BadRequest();
+
+            var advertisementHeader = await _advertisementHeaderService.GetAdvertisementHeaderAsync(languageCode);
+            if (advertisementHeader == null)
+                return NotFound();
+
+            var advertisementHeaderDto = _mapper.Map<AdvertisementHeaderDto>(advertisementHeader);
+
+            return Ok(advertisementHeaderDto);
         }
     }
 }

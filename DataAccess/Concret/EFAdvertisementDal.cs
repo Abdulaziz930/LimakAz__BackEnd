@@ -23,7 +23,7 @@ namespace DataAccess.Concret
         {
             await using var context = new AppDbContext();
             return await context.Advertisements.Include(x => x.Language).Include(x => x.AdvertisementDetail)
-                .FirstOrDefaultAsync(x => x.Id == id && x.Language.Code == languageCode && x.IsDeleted == false 
+                .FirstOrDefaultAsync(x => x.Key == id && x.Language.Code == languageCode && x.IsDeleted == false 
                                     && x.AdvertisementDetail.Language.Code == languageCode
                                     && x.AdvertisementDetail.IsDeleted == false
                                     && x.Language.IsDeleted == false);

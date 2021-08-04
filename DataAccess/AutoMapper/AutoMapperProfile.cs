@@ -11,7 +11,7 @@ namespace DataAccess.AutoMapper
     {
         public AutoMapperProfile()
         {
-            CreateMap<Advertisement, AdvertisementDto>().ReverseMap();
+            CreateMap<Advertisement, AdvertisementDto>().ForMember(x => x.Id, y => y.MapFrom(x => x.Key)).ReverseMap();
 
             CreateMap<Language, LanguageDto>().ReverseMap();
 
@@ -66,6 +66,8 @@ namespace DataAccess.AutoMapper
             CreateMap<Tariff, TariffDto>().ReverseMap();
 
             CreateMap<TariffHeader, TariffHeaderDto>().ReverseMap();
+
+            CreateMap<AdvertisementHeader, AdvertisementHeaderDto>().ReverseMap();
         }
     }
 }
