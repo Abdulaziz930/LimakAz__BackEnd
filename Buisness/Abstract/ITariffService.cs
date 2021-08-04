@@ -12,7 +12,7 @@ namespace Buisness.Abstract
 
         Task<List<Tariff>> GetAllTariffContentsAsync();
 
-        //Task<List<Tariff>> GetAllTariffContentsAsync(int skipCount, int takeCount);
+        Task<List<Tariff>> GetAllTariffContentsAsync(int productTypeId, int countryId);
 
         Task<bool> AddAsync(Tariff tariff);
 
@@ -20,6 +20,6 @@ namespace Buisness.Abstract
 
         Task<bool> DeleteAsync(int id);
 
-        Task<List<CountryProductType>> GetMultiLanguageTrariffsAsync(string languageCode);
+        Task<List<Country>> GetMultiLanguageTrariffsAsync(string languageCode);
     }
 }

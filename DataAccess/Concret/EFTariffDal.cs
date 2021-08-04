@@ -12,12 +12,26 @@ namespace DataAccess.Concret
 {
     public class EFTariffDal : EFRepositoryBase<Tariff, AppDbContext>, ITariffDal
     {
-        public async Task<List<CountryProductType>> GetMultiLanguageTrariffsWithIncludesAsync(string languageCode)
+        public async Task<List<Tariff>> GetMultiLanguageTrariffsAsync(string languageCode)
         {
-            //var list = new List<Tariff>();
             await using var context = new AppDbContext();
-            return await context.CountryProductTypes.Include(x => x.ProductType).ThenInclude(x => x.Tariffs)
-                .ThenInclude(x => x.Language).Include(x => x.Country).ThenInclude(x => x.Tab).ToListAsync();
+            return await context.Tariffs.ToListAsync();
+        }
+
+        public async Task<List<Country>> GetMultiLanguageTrariffsWithIncludesAsync(string languageCode)
+        {
+            await using var context = new AppDbContext();
+            return await context.Countries.Include(x => x.Language).Include(x => x.Tab)
+                .Where(x => x.Language.Code == languageCode && x.IsDeleted == false).ToListAsync();
+        }
+
+        public async Task<List<Tariff>> GetTrariffsWithIncludeAsync(int productTypeId,int countryId)
+        {
+            await using var context = new AppDbContext();
+            return await context.Tariffs.Include(x => x.ProductType).Include(x => x.Country)
+                .Where(x => x.ProductTypeId == productTypeId 
+                        && x.ConutryId == countryId && x.IsDeleted == false 
+                        && x.ProductType.IsDeleted == false && x.Country.IsDeleted == false).ToListAsync();
         }
     }
 }

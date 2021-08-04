@@ -28,6 +28,7 @@ namespace LimakAz.Controllers
         private readonly ICertificateService _certificateService;
         private readonly IAdvertisementTitleService _advertisementTitleService;
         private readonly ITariffService _tariffService;
+        private readonly ITariffHeaderService _tariffHeaderService;
         private readonly IContactService _contactService;
         private readonly IMapper _mapper;
 
@@ -36,7 +37,7 @@ namespace LimakAz.Controllers
             , IUnitsOfLengthService unitsOfLengthService, IProductTypeService productTypeService
             , IHowItWorkService howItWorkService, IHowItWorkCardService howItWorkCardService
             , ICertificateService certificateService, IAdvertisementTitleService advertisementTitleService
-            , ITariffService tariffService, IContactService contactService,IMapper mapper)
+            , ITariffService tariffService, ITariffHeaderService tariffHeaderService, IContactService contactService, IMapper mapper)
         {
             _advertisementService = advertisementService;
             _calculatorService = calculatorService;
@@ -51,6 +52,7 @@ namespace LimakAz.Controllers
             _advertisementTitleService = advertisementTitleService;
             _tariffService = tariffService;
             _contactService = contactService;
+            _tariffHeaderService = tariffHeaderService;
             _mapper = mapper;
         }
 
@@ -228,9 +230,63 @@ namespace LimakAz.Controllers
             if (string.IsNullOrEmpty(languageCode))
                 return BadRequest();
 
-            var tariffs = await _tariffService.GetMultiLanguageTrariffsAsync(languageCode);
+            var productTypes = await _productTypeService.GetAllProductTypesWithTariffAsync(languageCode);
+            if (productTypes == null)
+                return NotFound();
 
-            return Ok(tariffs);
+            var tariffContents = await _tariffService.GetMultiLanguageTrariffsAsync(languageCode);
+            if (tariffContents == null)
+                return NotFound();
+
+            var tariffContentsDto = new List<TariffContentDto>();
+            foreach (var countryItem in tariffContents)
+            {
+                var productTypesDto = new List<ProductTypeContentDto>();
+                foreach (var productType in productTypes)
+                {
+                    var tariffs = await _tariffService.GetAllTariffContentsAsync(productType.Id,countryItem.Id);
+                    if (tariffs == null)
+                        return NotFound();
+
+                    var tariffsDto = _mapper.Map<List<TariffDto>>(tariffs);
+                    var productTypeDto = new ProductTypeContentDto
+                    {
+                        Id = productType.Id,
+                        Name = productType.Name,
+                        Value = productType.Value,
+                        TariffsDto = tariffsDto
+                    };
+                    productTypesDto.Add(productTypeDto);
+                }
+                var tariffContentDto = new TariffContentDto
+                {
+                    Id = countryItem.Id,
+                    ConutryName = countryItem.Name,
+                    CountryValue = countryItem.Value,
+                    TabTitle = countryItem.Tab.Title,
+                    TabDescription = countryItem.Tab.Description,
+                    TabImage = countryItem.Tab.TabImage,
+                    ProductTypesDto = productTypesDto
+                };
+                tariffContentsDto.Add(tariffContentDto);
+            }
+            
+            return Ok(tariffContentsDto);
+        }
+
+        [HttpGet("getTariffHeaderContent/{languageCode}")]
+        public async Task<IActionResult> GetTariffHeaderContent([FromRoute] string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+                return BadRequest();
+
+            var tariffHeader = await _tariffHeaderService.GetTariffHeaderAsync(languageCode);
+            if (tariffHeader == null)
+                return NotFound();
+
+            var tariffHeaderDto = _mapper.Map<TariffHeaderDto>(tariffHeader);
+
+            return Ok(tariffHeaderDto);
         }
 
         [HttpGet("getContactContent/{languageCode}")]

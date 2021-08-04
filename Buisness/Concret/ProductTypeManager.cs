@@ -46,6 +46,11 @@ namespace Buisness.Concret
             return await _productTypeDal.GetProductTypesByCountAsync(skipCount, takeCount);
         }
 
+        public async Task<List<ProductType>> GetAllProductTypesWithTariffAsync(string languageCode)
+        {
+            return await _productTypeDal.GetAllMultiLanguageProductTypeWhithIncludeAsync(languageCode);
+        }
+
         public async Task<ProductType> GetProductTypeAsync(int id)
         {
             return await _productTypeDal.GetAsync(x => x.Id == id);

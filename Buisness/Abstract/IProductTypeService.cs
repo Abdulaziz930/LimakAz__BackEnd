@@ -16,6 +16,8 @@ namespace Buisness.Abstract
 
         Task<List<ProductType>> GetAllProductTypesAsync(string languageCode);
 
+        Task<List<ProductType>> GetAllProductTypesWithTariffAsync(string languageCode);
+
         Task<List<ProductType>> GetAllProductTypesAsync(int skipCount,int takeCount);
 
         Task<bool> AddAsync(ProductType productType);

@@ -21,8 +21,8 @@ namespace Entities.Models
 
         public ProductType ProductType { get; set; }
 
-        public int LanguageId { get; set; }
+        public int ConutryId { get; set; }
 
-        public Language Language { get; set; }
+        public Country Country { get; set; }
     }
 }

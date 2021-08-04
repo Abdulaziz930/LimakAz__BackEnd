@@ -13,6 +13,8 @@ namespace DataAccess.Abstract
 
         Task<List<ProductType>> GetAllMultiLanguageProductTypeAsync(string languageCode);
 
+        Task<List<ProductType>> GetAllMultiLanguageProductTypeWhithIncludeAsync(string languageCode);
+
         Task<List<ProductType>> GetProductTypesByCountAsync(int skipCount, int takeCount);
     }
 }

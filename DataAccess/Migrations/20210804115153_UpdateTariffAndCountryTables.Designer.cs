@@ -4,14 +4,16 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210804115153_UpdateTariffAndCountryTables")]
+    partial class UpdateTariffAndCountryTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -915,9 +917,6 @@ namespace DataAccess.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TabImage")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
@@ -962,30 +961,6 @@ namespace DataAccess.Migrations
                     b.HasIndex("ProductTypeId");
 
                     b.ToTable("Tariffs");
-                });
-
-            modelBuilder.Entity("Entities.Models.TariffHeader", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
-
-                    b.ToTable("TariffHeaders");
                 });
 
             modelBuilder.Entity("Entities.Models.UnitsOfLength", b =>
@@ -1354,17 +1329,6 @@ namespace DataAccess.Migrations
                     b.Navigation("ProductType");
                 });
 
-            modelBuilder.Entity("Entities.Models.TariffHeader", b =>
-                {
-                    b.HasOne("Entities.Models.Language", "Language")
-                        .WithMany("TariffHeaders")
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Language");
-                });
-
             modelBuilder.Entity("Entities.Models.UnitsOfLength", b =>
                 {
                     b.HasOne("Entities.Models.Language", "Language")
@@ -1454,8 +1418,6 @@ namespace DataAccess.Migrations
                     b.Navigation("Rules");
 
                     b.Navigation("ShopContents");
-
-                    b.Navigation("TariffHeaders");
 
                     b.Navigation("UnitsOfLengths");
 

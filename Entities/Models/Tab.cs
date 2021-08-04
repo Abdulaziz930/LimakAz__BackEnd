@@ -13,13 +13,11 @@ namespace Entities.Models
 
         public string Description { get; set; }
 
+        public string TabImage { get; set; }
+
         [ForeignKey("Country")]
         public int CountryId { get; set; }
 
         public Country Country { get; set; }
-
-        public int LangaugeId { get; set; }
-
-        public Language Language { get; set; }
     }
 }

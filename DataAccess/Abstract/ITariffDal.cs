@@ -9,6 +9,10 @@ namespace DataAccess.Abstract
 {
     public interface ITariffDal : IRepository<Tariff>
     {
-        Task<List<CountryProductType>> GetMultiLanguageTrariffsWithIncludesAsync(string languageCode);
+        Task<List<Country>> GetMultiLanguageTrariffsWithIncludesAsync(string languageCode);
+
+        //Task<List<ProductType>> GetMultiLanguageTrariffsAsync(string languageCode);
+
+        Task<List<Tariff>> GetTrariffsWithIncludeAsync(int productTypeId,int countryId);
     }
 }

@@ -19,6 +19,13 @@ namespace DataAccess.Concret
                 .Where(x => x.Language.Code == languageCode && x.Language.IsDeleted == false && x.IsDeleted == false).ToListAsync();
         }
 
+        public async Task<List<ProductType>> GetAllMultiLanguageProductTypeWhithIncludeAsync(string languageCode)
+        {
+            await using var context = new AppDbContext();
+            return await context.ProductTypes.Include(x => x.Language).Include(x => x.Tariffs)
+                .Where(x => x.Language.Code == languageCode && x.Language.IsDeleted == false && x.IsDeleted == false).ToListAsync();
+        }
+
         public async Task<List<ProductType>> GetProductTypesByCountAsync(int skipCount, int takeCount)
         {
             await using var context = new AppDbContext();

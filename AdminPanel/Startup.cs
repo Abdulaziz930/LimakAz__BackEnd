@@ -123,6 +123,9 @@ namespace AdminPanel
             services.AddScoped<IPrivacyService, PrivacyManager>();
             services.AddScoped<IPrivacyDal, EFPrivacyDal>();
 
+            services.AddScoped<ITariffHeaderService, TariffHeaderManager>();
+            services.AddScoped<ITariffHeaderDal, EFTariffHeaderDal>();
+
             services.AddControllersWithViews();
 
             Constants.ImageFolderPath = Path.Combine(_environment.WebRootPath, "img");

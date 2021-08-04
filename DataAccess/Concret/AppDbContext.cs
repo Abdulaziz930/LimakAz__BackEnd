@@ -45,8 +45,6 @@ namespace DataAccess
 
         public DbSet<AdvertisimentTitle> AdvertisimentTitles { get; set; }
 
-        public DbSet<CountryProductType> CountryProductTypes { get; set; }
-
         public DbSet<Tab> Tabs { get; set; }
 
         public DbSet<Shop> Shops { get; set; }
@@ -82,5 +80,7 @@ namespace DataAccess
         public DbSet<About> Abouts { get; set; }
 
         public DbSet<Privacy> Privacies { get; set; }
+
+        public DbSet<TariffHeader> TariffHeaders { get; set; }
     }
 }

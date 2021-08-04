@@ -62,6 +62,10 @@ namespace DataAccess.AutoMapper
             CreateMap<About, AboutDto>().ReverseMap();
 
             CreateMap<Privacy, PrivacyDto>().ReverseMap();
+
+            CreateMap<Tariff, TariffDto>().ReverseMap();
+
+            CreateMap<TariffHeader, TariffHeaderDto>().ReverseMap();
         }
     }
 }

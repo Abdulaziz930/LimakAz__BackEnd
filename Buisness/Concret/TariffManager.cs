@@ -36,7 +36,12 @@ namespace Buisness.Concret
             return await _tariffDal.GetAllAsync();
         }
 
-        public async Task<List<CountryProductType>> GetMultiLanguageTrariffsAsync(string languageCode)
+        public async Task<List<Tariff>> GetAllTariffContentsAsync(int productTypeId,int countryId)
+        {
+            return await _tariffDal.GetTrariffsWithIncludeAsync(productTypeId,countryId);
+        }
+
+        public async Task<List<Country>> GetMultiLanguageTrariffsAsync(string languageCode)
         {
             return await _tariffDal.GetMultiLanguageTrariffsWithIncludesAsync(languageCode);
         }

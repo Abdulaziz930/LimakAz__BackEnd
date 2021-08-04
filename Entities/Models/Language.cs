@@ -43,8 +43,6 @@ namespace Entities.Models
 
         public ICollection<AdvertisementDetail> AdvertisementDetails { get; set; }
 
-        public ICollection<Tariff> Tariffs { get; set; }
-
         public ICollection<ContactContent> ContactContents { get; set; }
 
         public ICollection<ShopContent> ShopContents { get; set; }
@@ -67,6 +65,7 @@ namespace Entities.Models
 
         public ICollection<Privacy> Privacies { get; set; }
 
-        //public ICollection<Tab> Tabs { get; set; }
+        public ICollection<TariffHeader> TariffHeaders { get; set; }
+
     }
 }
