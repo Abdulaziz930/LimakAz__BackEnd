@@ -10,6 +10,8 @@ namespace Buisness.Abstract
     {
         Task<Advertisement> GetAdvertisementAsync(int id);
 
+        Task<Advertisement> GetAdvertisementAsync(int id, string langaugeCode);
+
         Task<Advertisement> GetAdvertisementWithDetailAsync(int id);
 
         Task<Advertisement> GetAdvertisementWithDetailAndLanaguageAsync(int id);
