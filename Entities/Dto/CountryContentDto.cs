@@ -9,5 +9,7 @@ namespace Entities.Dto
         public int Id { get; set; }
 
         public string Title { get; set; }
+
+        public string BreadcrumbPathname { get; set; }
     }
 }

@@ -15,5 +15,7 @@ namespace Entities.Dto
         public string ConverterDescription { get; set; }
 
         public string ConverterButton { get; set; }
+
+        public string BreadcrumbPathname { get; set; }
     }
 }

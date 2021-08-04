@@ -16,6 +16,9 @@ namespace Entities.Models
         [Required]
         public string QuestionHeaderTitle { get; set; }
 
+        [Required]
+        public string BreadcrumbPathname { get; set; }
+
         public bool IsDeleted { get; set; }
 
         public int LanguageId { get; set; }

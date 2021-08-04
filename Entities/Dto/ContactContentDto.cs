@@ -13,5 +13,7 @@ namespace Entities.Dto
         public string WriteUsTitle { get; set; }
 
         public string WriteUsButton { get; set; }
+
+        public string BreadcrumbPathname { get; set; }
     }
 }

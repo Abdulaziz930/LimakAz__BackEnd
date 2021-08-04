@@ -11,5 +11,7 @@ namespace Entities.Dto
         public string QuestionTitle { get; set; }
 
         public string QuestionHeaderTitle { get; set; }
+
+        public string BreadcrumbPathname { get; set; }
     }
 }

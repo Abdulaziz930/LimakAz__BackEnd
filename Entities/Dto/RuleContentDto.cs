@@ -11,5 +11,7 @@ namespace Entities.Dto
         public string RuleTitle { get; set; }
 
         public string RuleHeaderTitle { get; set; }
+
+        public string BreadcrumbPathname { get; set; }
     }
 }

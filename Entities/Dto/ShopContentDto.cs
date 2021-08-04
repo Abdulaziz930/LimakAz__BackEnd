@@ -15,5 +15,7 @@ namespace Entities.Dto
         public string CountryListTitle { get; set; }
 
         public string ButtonName { get; set; }
+
+        public string BreadcrumbPathname { get; set; }
     }
 }

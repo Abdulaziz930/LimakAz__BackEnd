@@ -16,6 +16,9 @@ namespace Entities.Models
         public string PrivacyTitle { get; set; }
 
         [Required]
+        public string BreadcrumbPathname { get; set; }
+
+        [Required]
         public string Description { get; set; }
 
         public string Image { get; set; }
