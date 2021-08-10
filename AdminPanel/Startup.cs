@@ -129,6 +129,15 @@ namespace AdminPanel
             services.AddScoped<IAdvertisementHeaderService, AdvertisementHeaderManager>();
             services.AddScoped<IAdvertisementHeaderDal, EFAdvertisementHeaderDal>();
 
+            services.AddScoped<IUserRuleService, UserRuleManager>();
+            services.AddScoped<IUserRuleDal, EFUserRuleDal>();
+
+            services.AddScoped<IRegisterContentService, RegisterContentManager>();
+            services.AddScoped<IRegisterContentDal, EFRegisterContentDal>();
+
+            services.AddScoped<IRegisterInformationService, RegisterInformationManager>();
+            services.AddScoped<IRegisterInformationDal, EFRegisterInformationDal>();
+
             services.AddControllersWithViews();
 
             Constants.ImageFolderPath = Path.Combine(_environment.WebRootPath, "img");

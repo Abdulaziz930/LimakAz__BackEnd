@@ -4,14 +4,16 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210806145535_Test1")]
+    partial class Test1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -813,74 +815,6 @@ namespace DataAccess.Migrations
                     b.ToTable("QuestionContents");
                 });
 
-            modelBuilder.Entity("Entities.Models.RegisterContent", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("IDTitle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ProfileTitle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RegisterTitle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RuleTitle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
-
-                    b.ToTable("RegisterContents");
-                });
-
-            modelBuilder.Entity("Entities.Models.RegisterInformation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ButtonName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
-
-                    b.ToTable("RegisterInformations");
-                });
-
             modelBuilder.Entity("Entities.Models.Rule", b =>
                 {
                     b.Property<int>("Id")
@@ -1213,34 +1147,6 @@ namespace DataAccess.Migrations
                     b.HasIndex("LanguageId");
 
                     b.ToTable("UnitsOfLengths");
-                });
-
-            modelBuilder.Entity("Entities.Models.UserRule", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
-
-                    b.ToTable("UserRules");
                 });
 
             modelBuilder.Entity("Entities.Models.Weight", b =>
@@ -1631,28 +1537,6 @@ namespace DataAccess.Migrations
                     b.Navigation("Language");
                 });
 
-            modelBuilder.Entity("Entities.Models.RegisterContent", b =>
-                {
-                    b.HasOne("Entities.Models.Language", "Language")
-                        .WithMany("RegisterContents")
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Language");
-                });
-
-            modelBuilder.Entity("Entities.Models.RegisterInformation", b =>
-                {
-                    b.HasOne("Entities.Models.Language", "Language")
-                        .WithMany("RegisterInformations")
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Language");
-                });
-
             modelBuilder.Entity("Entities.Models.Rule", b =>
                 {
                     b.HasOne("Entities.Models.Language", "Language")
@@ -1759,17 +1643,6 @@ namespace DataAccess.Migrations
                 {
                     b.HasOne("Entities.Models.Language", "Language")
                         .WithMany("UnitsOfLengths")
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Language");
-                });
-
-            modelBuilder.Entity("Entities.Models.UserRule", b =>
-                {
-                    b.HasOne("Entities.Models.Language", "Language")
-                        .WithMany("UserRules")
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1903,10 +1776,6 @@ namespace DataAccess.Migrations
 
                     b.Navigation("Questions");
 
-                    b.Navigation("RegisterContents");
-
-                    b.Navigation("RegisterInformations");
-
                     b.Navigation("RuleContents");
 
                     b.Navigation("Rules");
@@ -1916,8 +1785,6 @@ namespace DataAccess.Migrations
                     b.Navigation("TariffHeaders");
 
                     b.Navigation("UnitsOfLengths");
-
-                    b.Navigation("UserRules");
 
                     b.Navigation("Weights");
                 });

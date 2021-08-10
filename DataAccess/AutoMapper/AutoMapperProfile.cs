@@ -68,6 +68,12 @@ namespace DataAccess.AutoMapper
             CreateMap<TariffHeader, TariffHeaderDto>().ReverseMap();
 
             CreateMap<AdvertisementHeader, AdvertisementHeaderDto>().ReverseMap();
+
+            CreateMap<UserRule, UserRuleDto>().ReverseMap();
+
+            CreateMap<RegisterContent, RegisterContentDto>().ReverseMap();
+
+            CreateMap<RegisterInformation, RegisterInformationDto>().ReverseMap();
         }
     }
 }

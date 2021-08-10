@@ -25,7 +25,6 @@ namespace LimakAz.Controllers
             _mapper = mapper;
         }
 
-        [EnableCors("AllowOrigin")]
         [HttpGet]
         public async Task<IActionResult> Get()
         {

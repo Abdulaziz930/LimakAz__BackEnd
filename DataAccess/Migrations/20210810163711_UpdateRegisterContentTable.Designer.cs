@@ -4,14 +4,16 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210810163711_UpdateRegisterContentTable")]
+    partial class UpdateRegisterContentTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -849,38 +851,6 @@ namespace DataAccess.Migrations
                     b.ToTable("RegisterContents");
                 });
 
-            modelBuilder.Entity("Entities.Models.RegisterInformation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ButtonName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
-
-                    b.ToTable("RegisterInformations");
-                });
-
             modelBuilder.Entity("Entities.Models.Rule", b =>
                 {
                     b.Property<int>("Id")
@@ -1642,17 +1612,6 @@ namespace DataAccess.Migrations
                     b.Navigation("Language");
                 });
 
-            modelBuilder.Entity("Entities.Models.RegisterInformation", b =>
-                {
-                    b.HasOne("Entities.Models.Language", "Language")
-                        .WithMany("RegisterInformations")
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Language");
-                });
-
             modelBuilder.Entity("Entities.Models.Rule", b =>
                 {
                     b.HasOne("Entities.Models.Language", "Language")
@@ -1904,8 +1863,6 @@ namespace DataAccess.Migrations
                     b.Navigation("Questions");
 
                     b.Navigation("RegisterContents");
-
-                    b.Navigation("RegisterInformations");
 
                     b.Navigation("RuleContents");
 

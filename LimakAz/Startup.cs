@@ -4,20 +4,26 @@ using DataAccess;
 using DataAccess.Abstract;
 using DataAccess.AutoMapper;
 using DataAccess.Concret;
+using DataAccess.Identity;
+using Entities.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace LimakAz
@@ -35,6 +41,43 @@ namespace LimakAz
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<UserDbContext>(options =>
+            {
+                options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]);
+
+            });
+            services.AddIdentity<AppUser, IdentityRole>(options =>
+            {
+                options.Password.RequiredLength = 8;
+
+                options.User.RequireUniqueEmail = true;
+
+                options.Lockout.MaxFailedAccessAttempts = 3;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+                options.Lockout.AllowedForNewUsers = true;
+
+            }).AddEntityFrameworkStores<UserDbContext>().AddDefaultTokenProviders();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(o =>
+            {
+                o.RequireHttpsMetadata = false;
+                o.SaveToken = true;
+                o.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero,
+                    ValidIssuer = Configuration["JWT:Issuer"],
+                    ValidAudience = Configuration["JWT:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Key"]))
+                };
+            });
 
             services.AddCors(options =>
             {
@@ -140,6 +183,15 @@ namespace LimakAz
             services.AddScoped<IAdvertisementHeaderService, AdvertisementHeaderManager>();
             services.AddScoped<IAdvertisementHeaderDal, EFAdvertisementHeaderDal>();
 
+            services.AddScoped<IUserRuleService, UserRuleManager>();
+            services.AddScoped<IUserRuleDal, EFUserRuleDal>();
+
+            services.AddScoped<IRegisterContentService, RegisterContentManager>();
+            services.AddScoped<IRegisterContentDal, EFRegisterContentDal>();
+
+            services.AddScoped<IRegisterInformationService, RegisterInformationManager>();
+            services.AddScoped<IRegisterInformationDal, EFRegisterInformationDal>();
+
             services.AddAutoMapper(typeof(AutoMapperProfile));
 
             services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
@@ -162,6 +214,8 @@ namespace LimakAz
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

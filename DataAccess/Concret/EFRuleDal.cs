@@ -21,6 +21,7 @@ namespace DataAccess.Concret
                 .OrderByDescending(x => x.LastModificationDate).ToListAsync();
         }
 
+
         public async Task<List<Rule>> GetRulesByCountAsync(int skipCount, int takeCount)
         {
             await using var context = new AppDbContext();

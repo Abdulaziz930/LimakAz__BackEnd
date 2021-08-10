@@ -1,5 +1,6 @@
 ﻿using Entities.Dto;
 using Entities.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace DataAccess
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<AppUser>
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -84,5 +85,11 @@ namespace DataAccess
         public DbSet<TariffHeader> TariffHeaders { get; set; }
 
         public DbSet<AdvertisementHeader> AdvertisementHeaders { get; set; }
+
+        public DbSet<UserRule> UserRules { get; set; }
+
+        public DbSet<RegisterContent> RegisterContents { get; set; }
+
+        public DbSet<RegisterInformation> RegisterInformations { get; set; }
     }
 }

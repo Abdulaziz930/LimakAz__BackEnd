@@ -68,5 +68,11 @@ namespace Entities.Models
         public ICollection<TariffHeader> TariffHeaders { get; set; }
 
         public ICollection<AdvertisementHeader> AdvertisementHeaders { get; set; }
+
+        public ICollection<UserRule> UserRules { get; set; }
+
+        public ICollection<RegisterContent> RegisterContents { get; set; }
+
+        public ICollection<RegisterInformation> RegisterInformations { get; set; }
     }
 }
