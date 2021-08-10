@@ -138,6 +138,9 @@ namespace AdminPanel
             services.AddScoped<IRegisterInformationService, RegisterInformationManager>();
             services.AddScoped<IRegisterInformationDal, EFRegisterInformationDal>();
 
+            services.AddScoped<IGenderService, GenderManager>();
+            services.AddScoped<IGenderDal, EFGenderDal>();
+
             services.AddControllersWithViews();
 
             Constants.ImageFolderPath = Path.Combine(_environment.WebRootPath, "img");

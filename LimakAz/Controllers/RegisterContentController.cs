@@ -16,13 +16,18 @@ namespace LimakAz.Controllers
     {
         private readonly IRegisterContentService _registerContentService;
         private readonly IRegisterInformationService _registerInformationService;
+        private readonly IGenderService _genderService;
+        private readonly IUserRuleService _userRuleService;
         private readonly IMapper _mapper;
 
         public RegisterContentController(IRegisterContentService registerContentService
-            , IRegisterInformationService registerInformationService, IMapper mapper)
+            , IRegisterInformationService registerInformationService, IGenderService genderService
+            , IUserRuleService userRuleService, IMapper mapper)
         {
             _registerContentService = registerContentService;
             _registerInformationService = registerInformationService;
+            _genderService = genderService;
+            _userRuleService = userRuleService;
             _mapper = mapper;
         }
 
@@ -54,6 +59,36 @@ namespace LimakAz.Controllers
             var registerInformationDto = _mapper.Map<RegisterInformationDto>(registerınformation);
 
             return Ok(registerInformationDto);
+        }
+
+        [HttpGet("getGenders/{langaugeCode}")]
+        public async Task<IActionResult> GetGender([FromRoute] string langaugeCode)
+        {
+            if (string.IsNullOrEmpty(langaugeCode))
+                return BadRequest();
+
+            var genders = await _genderService.GetAllGendersAsync(langaugeCode);
+            if (genders == null)
+                return NotFound();
+
+            var gendersDto = _mapper.Map<List<GenderDto>>(genders);
+
+            return Ok(gendersDto);
+        }
+
+        [HttpGet("getUserRule/{langaugeCode}")]
+        public async Task<IActionResult> GetUserRule([FromRoute] string langaugeCode)
+        {
+            if (string.IsNullOrEmpty(langaugeCode))
+                return BadRequest();
+
+            var userRule = await _userRuleService.GetUserRuleAsync(langaugeCode);
+            if (userRule == null)
+                return NotFound();
+
+            var userRuleDto = _mapper.Map<UserRuleDto>(userRule);
+
+            return Ok(userRuleDto);
         }
     }
 }

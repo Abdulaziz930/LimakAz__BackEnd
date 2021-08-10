@@ -15,5 +15,7 @@ namespace Entities.Dto
         public string RuleTitle { get; set; }
 
         public string RegisterTitle { get; set; }
+
+        public string ButtonName { get; set; }
     }
 }

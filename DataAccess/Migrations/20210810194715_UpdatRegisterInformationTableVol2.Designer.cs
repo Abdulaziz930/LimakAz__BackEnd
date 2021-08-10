@@ -4,14 +4,16 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210810194715_UpdatRegisterInformationTableVol2")]
+    partial class UpdatRegisterInformationTableVol2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -601,27 +603,6 @@ namespace DataAccess.Migrations
                     b.ToTable("CurrencyContents");
                 });
 
-            modelBuilder.Entity("Entities.Models.Gender", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
-
-                    b.ToTable("Genders");
-                });
-
             modelBuilder.Entity("Entities.Models.HowItWork", b =>
                 {
                     b.Property<int>("Id")
@@ -840,10 +821,6 @@ namespace DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ButtonName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IDTitle")
                         .IsRequired()
@@ -1593,17 +1570,6 @@ namespace DataAccess.Migrations
                     b.Navigation("Language");
                 });
 
-            modelBuilder.Entity("Entities.Models.Gender", b =>
-                {
-                    b.HasOne("Entities.Models.Language", "Language")
-                        .WithMany("Genders")
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Language");
-                });
-
             modelBuilder.Entity("Entities.Models.HowItWork", b =>
                 {
                     b.HasOne("Entities.Models.Language", "Language")
@@ -1929,8 +1895,6 @@ namespace DataAccess.Migrations
                     b.Navigation("Countries");
 
                     b.Navigation("CountryContents");
-
-                    b.Navigation("Genders");
 
                     b.Navigation("HowItWorkCards");
 

@@ -22,6 +22,9 @@ namespace Entities.Models
         [Required]
         public string RegisterTitle { get; set; }
 
+        [Required]
+        public string ButtonName { get; set; }
+
         public bool IsDeleted { get; set; }
 
         public int LanguageId { get; set; }

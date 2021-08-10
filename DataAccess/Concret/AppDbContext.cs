@@ -91,5 +91,7 @@ namespace DataAccess
         public DbSet<RegisterContent> RegisterContents { get; set; }
 
         public DbSet<RegisterInformation> RegisterInformations { get; set; }
+
+        public DbSet<Gender> Genders { get; set; }
     }
 }

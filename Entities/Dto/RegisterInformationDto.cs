@@ -13,5 +13,7 @@ namespace Entities.Dto
         public string Description { get; set; }
 
         public string ButtonName { get; set; }
+
+        public string Image { get; set; }
     }
 }

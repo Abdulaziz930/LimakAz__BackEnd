@@ -192,6 +192,9 @@ namespace LimakAz
             services.AddScoped<IRegisterInformationService, RegisterInformationManager>();
             services.AddScoped<IRegisterInformationDal, EFRegisterInformationDal>();
 
+            services.AddScoped<IGenderService, GenderManager>();
+            services.AddScoped<IGenderDal, EFGenderDal>();
+
             services.AddAutoMapper(typeof(AutoMapperProfile));
 
             services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);

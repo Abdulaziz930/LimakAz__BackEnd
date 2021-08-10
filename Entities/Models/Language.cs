@@ -74,5 +74,7 @@ namespace Entities.Models
         public ICollection<RegisterContent> RegisterContents { get; set; }
 
         public ICollection<RegisterInformation> RegisterInformations { get; set; }
+
+        public ICollection<Gender> Genders { get; set; }
     }
 }
