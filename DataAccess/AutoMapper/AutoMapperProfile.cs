@@ -76,6 +76,8 @@ namespace DataAccess.AutoMapper
             CreateMap<RegisterInformation, RegisterInformationDto>().ReverseMap();
 
             CreateMap<Gender, GenderDto>().ReverseMap();
+
+            CreateMap<LoginContent, LoginContentDto>().ReverseMap();
         }
     }
 }

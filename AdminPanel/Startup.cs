@@ -141,6 +141,9 @@ namespace AdminPanel
             services.AddScoped<IGenderService, GenderManager>();
             services.AddScoped<IGenderDal, EFGenderDal>();
 
+            services.AddScoped<ILoginContentService, LoginContentManager>();
+            services.AddScoped<ILoginContentDal, EFLoginContentDal>();
+
             services.AddControllersWithViews();
 
             Constants.ImageFolderPath = Path.Combine(_environment.WebRootPath, "img");
