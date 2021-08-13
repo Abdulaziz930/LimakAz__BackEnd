@@ -78,5 +78,7 @@ namespace Entities.Models
         public ICollection<Gender> Genders { get; set; }
 
         public ICollection<LoginContent> LoginContents { get; set; }
+
+        public ICollection<ForgotPasswordContent> ForgotPasswordContents { get; set; }
     }
 }

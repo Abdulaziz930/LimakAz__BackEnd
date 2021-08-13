@@ -58,6 +58,9 @@ namespace LimakAz
 
             }).AddEntityFrameworkStores<UserDbContext>().AddDefaultTokenProviders();
 
+            services.Configure<DataProtectionTokenProviderOptions>(options =>
+                options.TokenLifespan = TimeSpan.FromMinutes(5));
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -197,6 +200,9 @@ namespace LimakAz
 
             services.AddScoped<ILoginContentService, LoginContentManager>();
             services.AddScoped<ILoginContentDal, EFLoginContentDal>();
+
+            services.AddScoped<IForgotPasswordContentService, ForgotPasswordContentManager>();
+            services.AddScoped<IForgotPasswordContentDal, EFForgotPasswordContentDal>();
 
             services.AddAutoMapper(typeof(AutoMapperProfile));
 

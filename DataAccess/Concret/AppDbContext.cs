@@ -95,5 +95,7 @@ namespace DataAccess
         public DbSet<Gender> Genders { get; set; }
 
         public DbSet<LoginContent> LoginContents { get; set; }
+
+        public DbSet<ForgotPasswordContent> ForgotPasswordContents { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Buisness.Abstract;
 using DataAccess.Identity;
+using EduHome.Areas.AdminPanel.Utils;
 using Entities.Dto;
 using Entities.Models;
 using Microsoft.AspNetCore.Http;
@@ -76,7 +77,7 @@ namespace LimakAz.Controllers
         public async Task<IActionResult> Login([FromBody] LoginDto login)
         {
             var user = await _userManager.FindByNameAsync(login.UserName);
-            if (user == null && !(await _userManager.CheckPasswordAsync(user, login.Password)))
+            if (user == null || !(await _userManager.CheckPasswordAsync(user, login.Password)))
                 return Unauthorized(new ResponseDto { Status = "Error", Message = "Username or Password invalid" });
 
             var authClaims = new List<Claim>
@@ -107,26 +108,57 @@ namespace LimakAz.Controllers
             });
         }
 
-        [HttpGet("getUsers")]
-        public async Task<IActionResult> GetUsers()
+        [HttpPost("forgotPassword")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto forgotPassword)
         {
-            var users = await _userManager.Users.Where(x => x.IsActive == true).ToListAsync();
-            if (users == null)
+            if (string.IsNullOrEmpty(forgotPassword.Email))
+                return BadRequest();
+
+            var dbUser = await _userManager.FindByEmailAsync(forgotPassword.Email);
+            if (dbUser == null)
+                return NotFound(new ResponseDto { Status = "Error", Message = "No user found matching this email" });
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(dbUser);
+
+            var link = $"http://localhost:3000/reset-password?id={dbUser.Id}&token={token}";
+
+            //var link = Url.Action("ForgotPassword", "Authenticate", new { dbUser.Id, token }, protocol: HttpContext.Request.Scheme);
+            var message = $"<a href={link}>For Reset password click here</a>";
+            await EmailUtil.SendEmailAsync(dbUser.Email, message, "ResetPassword");
+
+            return Ok(new ResponseDto { Status = "Success", Message = "Email sent successfully" });
+        }
+
+        [HttpPost("resetPassword")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto resetPassword)
+        {
+            if (string.IsNullOrEmpty(resetPassword.Id))
+                return BadRequest();
+
+            if (string.IsNullOrEmpty(resetPassword.Token))
+                return BadRequest();
+
+            if (string.IsNullOrEmpty(resetPassword.Password))
+                return BadRequest();
+
+            if (string.IsNullOrEmpty(resetPassword.ConfirmPassword))
+                return BadRequest();
+
+            var dbUser = await _userManager.FindByIdAsync(resetPassword.Id);
+            if (dbUser == null)
                 return NotFound();
 
-            var usersDto = new List<UserDto>();
-            foreach (var user in users)
+            var result = await _userManager.ResetPasswordAsync(dbUser, resetPassword.Token, resetPassword.Password);
+            if (!result.Succeeded)
             {
-                var userDto = new UserDto
+                foreach (var error in result.Errors)
                 {
-                    Id = user.Id,
-                    UserName = user.UserName,
-                    Email = user.Email
-                };
-                usersDto.Add(userDto);
+                    return StatusCode(StatusCodes.Status403Forbidden,
+                        new ResponseDto { Status = error.Code, Message = error.Description });
+                }
             }
 
-            return Ok(usersDto);
+            return Ok(new ResponseDto { Status = "Success", Message = "Password has been successfully updated" });
         }
     }
 }

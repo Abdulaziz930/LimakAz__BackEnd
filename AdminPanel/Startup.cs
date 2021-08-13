@@ -144,6 +144,9 @@ namespace AdminPanel
             services.AddScoped<ILoginContentService, LoginContentManager>();
             services.AddScoped<ILoginContentDal, EFLoginContentDal>();
 
+            services.AddScoped<IForgotPasswordContentService, ForgotPasswordContentManager>();
+            services.AddScoped<IForgotPasswordContentDal, EFForgotPasswordContentDal>();
+
             services.AddControllersWithViews();
 
             Constants.ImageFolderPath = Path.Combine(_environment.WebRootPath, "img");
