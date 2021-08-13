@@ -16,6 +16,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Utils;
 
 namespace LimakAz.Controllers
 {
@@ -122,8 +123,7 @@ namespace LimakAz.Controllers
 
             var link = $"http://localhost:3000/reset-password?id={dbUser.Id}&token={token}";
 
-            //var link = Url.Action("ForgotPassword", "Authenticate", new { dbUser.Id, token }, protocol: HttpContext.Request.Scheme);
-            var message = $"<a href={link}>For Reset password click here</a>";
+            var message = ViewConstant.GetEmailView(link);
             await EmailUtil.SendEmailAsync(dbUser.Email, message, "ResetPassword");
 
             return Ok(new ResponseDto { Status = "Success", Message = "Email sent successfully" });
