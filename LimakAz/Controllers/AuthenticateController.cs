@@ -26,12 +26,15 @@ namespace LimakAz.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IExpiredVerifyEmailTokenService _expiredVerifyEmailTokenService;
+        private readonly IResetPasswordExpiredTokenService _resetPasswordExpiredTokenService;
         public IConfiguration Configuration { get; }
         public AuthenticateController(UserManager<AppUser> userManager
-            , IExpiredVerifyEmailTokenService expiredVerifyEmailTokenService, IConfiguration configuration)
+            , IExpiredVerifyEmailTokenService expiredVerifyEmailTokenService
+            , IResetPasswordExpiredTokenService resetPasswordExpiredTokenService , IConfiguration configuration)
         {
             _userManager = userManager;
             _expiredVerifyEmailTokenService = expiredVerifyEmailTokenService;
+            _resetPasswordExpiredTokenService = resetPasswordExpiredTokenService;
             Configuration = configuration;
         }
 
@@ -171,6 +174,10 @@ namespace LimakAz.Controllers
             if (dbUser == null)
                 return NotFound();
 
+            if(await _resetPasswordExpiredTokenService.CheckExpiredVerifyEmailTokeAsync(resetPassword.Token))
+                return StatusCode(StatusCodes.Status400BadRequest,
+                    new ResponseDto { Status = "Bad Request", Message = "This link is expired" });
+
             var result = await _userManager.ResetPasswordAsync(dbUser, resetPassword.Token, resetPassword.Password);
             if (!result.Succeeded)
             {
@@ -180,6 +187,13 @@ namespace LimakAz.Controllers
                         new ResponseDto { Status = error.Code, Message = error.Description });
                 }
             }
+
+            var expiredToken = new ResetPasswordExpiredToken
+            {
+                Token = resetPassword.Token
+            };
+
+            await _resetPasswordExpiredTokenService.AddAsync(expiredToken);
 
             return Ok(new ResponseDto { Status = "Success", Message = "Password has been successfully updated" });
         }

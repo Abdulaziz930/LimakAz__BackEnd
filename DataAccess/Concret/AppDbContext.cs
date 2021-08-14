@@ -99,5 +99,7 @@ namespace DataAccess
         public DbSet<ForgotPasswordContent> ForgotPasswordContents { get; set; }
 
         public DbSet<ExpiredVerifyEmailToken> ExpiredVerifyEmailTokens { get; set; }
+
+        public DbSet<ResetPasswordExpiredToken> ResetPasswordExpiredTokens { get; set; }
     }
 }

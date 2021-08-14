@@ -207,6 +207,9 @@ namespace LimakAz
             services.AddScoped<IExpiredVerifyEmailTokenService, ExpiredVerifyEmailTokenManager>();
             services.AddScoped<IExpiredVerifyEmailTokenDal, EFExpiredVerifyEmailToken>();
 
+            services.AddScoped<IResetPasswordExpiredTokenService, ResetPasswordExpiredTokenManager>();
+            services.AddScoped<IResetPasswordExpiredTokenDal, EFResetPasswordExpiredTokenDal>();
+
             services.AddAutoMapper(typeof(AutoMapperProfile));
 
             services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);

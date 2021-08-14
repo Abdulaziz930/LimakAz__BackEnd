@@ -147,9 +147,6 @@ namespace AdminPanel
             services.AddScoped<IForgotPasswordContentService, ForgotPasswordContentManager>();
             services.AddScoped<IForgotPasswordContentDal, EFForgotPasswordContentDal>();
 
-            services.AddScoped<IExpiredVerifyEmailTokenService, ExpiredVerifyEmailTokenManager>();
-            services.AddScoped<IExpiredVerifyEmailTokenDal, EFExpiredVerifyEmailToken>();
-
             services.AddControllersWithViews();
 
             Constants.ImageFolderPath = Path.Combine(_environment.WebRootPath, "img");
