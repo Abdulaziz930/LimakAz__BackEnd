@@ -25,10 +25,13 @@ namespace LimakAz.Controllers
     public class AuthenticateController : ControllerBase
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly IExpiredVerifyEmailTokenService _expiredVerifyEmailTokenService;
         public IConfiguration Configuration { get; }
-        public AuthenticateController(UserManager<AppUser> userManager, IConfiguration configuration)
+        public AuthenticateController(UserManager<AppUser> userManager
+            , IExpiredVerifyEmailTokenService expiredVerifyEmailTokenService, IConfiguration configuration)
         {
             _userManager = userManager;
+            _expiredVerifyEmailTokenService = expiredVerifyEmailTokenService;
             Configuration = configuration;
         }
 
@@ -71,7 +74,17 @@ namespace LimakAz.Controllers
 
             await _userManager.AddToRoleAsync(user, RoleConstants.MemberRole);
 
-            return Ok(new ResponseDto { Status = "Success", Message = $"{user.UserName} Successfully registered" });
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            var link = $"http://localhost:3000/verify-email?id={user.Id}&token={token}";
+            var title = "Verify E-Mail Address";
+            var description = $"Welcome to Limak.az, {user.UserName}! To complete your Limak.az sign up, we just need to verify your email address";
+            var buttonName = "Verify";
+
+            var message = ViewConstant.GetEmailView(link, title, description, buttonName);
+            await EmailUtil.SendEmailAsync(user.Email, message, "Limak.az - Verify Email Adress");
+
+            return Ok(new ResponseDto { Status = "Success", Message = "Confirmation email sent" });
         }
 
         [HttpPost("login")]
@@ -80,6 +93,9 @@ namespace LimakAz.Controllers
             var user = await _userManager.FindByNameAsync(login.UserName);
             if (user == null || !(await _userManager.CheckPasswordAsync(user, login.Password)))
                 return Unauthorized(new ResponseDto { Status = "Error", Message = "Username or Password invalid" });
+
+            if (!user.EmailConfirmed)
+                return Unauthorized(new ResponseDto { Status = "Error", Message = "Your email address not verified" });
 
             var authClaims = new List<Claim>
             {
@@ -103,7 +119,8 @@ namespace LimakAz.Controllers
                 signingCredentials: new SigningCredentials(signInKey, SecurityAlgorithms.HmacSha256)
             );
 
-            return Ok(new { 
+            return Ok(new
+            {
                 token = new JwtSecurityTokenHandler().WriteToken(token),
                 expires = token.ValidTo
             });
@@ -119,12 +136,18 @@ namespace LimakAz.Controllers
             if (dbUser == null)
                 return NotFound(new ResponseDto { Status = "Error", Message = "No user found matching this email" });
 
+            if (!dbUser.EmailConfirmed)
+                return Unauthorized(new ResponseDto { Status = "Error", Message = "Your email address not verified" });
+
             var token = await _userManager.GeneratePasswordResetTokenAsync(dbUser);
 
             var link = $"http://localhost:3000/reset-password?id={dbUser.Id}&token={token}";
+            var title = "FORGOT YOUR PASSWORD?";
+            var description = "Not to worry, we got you! Let’s get you a new password.";
+            var buttonName = "Reset Password";
 
-            var message = ViewConstant.GetEmailView(link);
-            await EmailUtil.SendEmailAsync(dbUser.Email, message, "ResetPassword");
+            var message = ViewConstant.GetEmailView(link, title, description, buttonName);
+            await EmailUtil.SendEmailAsync(dbUser.Email, message, "Limak.az - Reset Password");
 
             return Ok(new ResponseDto { Status = "Success", Message = "Email sent successfully" });
         }
@@ -159,6 +182,54 @@ namespace LimakAz.Controllers
             }
 
             return Ok(new ResponseDto { Status = "Success", Message = "Password has been successfully updated" });
+        }
+
+        [HttpPost("verifyEmail")]
+        public async Task<IActionResult> VerifyEmail([FromBody] VerifyEmailDto verifyEmail)
+        {
+            if (verifyEmail.Id == null || verifyEmail.Token == null)
+                return StatusCode(StatusCodes.Status400BadRequest,
+                    new ResponseDto { Status = "Bad Request", Message = "Email or Token is Null" });
+
+            var isExist = await _expiredVerifyEmailTokenService.GetExpiredVerifyEmailTokeAsync(verifyEmail.Token);
+            if (isExist)
+                return StatusCode(StatusCodes.Status400BadRequest,
+                    new ResponseDto { Status = "Bad Request", Message = "This e-mail alredy verified" });
+
+            var user = await _userManager.FindByIdAsync(verifyEmail.Id);
+            if (user == null)
+                return NotFound();
+
+            var result = await _userManager.ConfirmEmailAsync(user, verifyEmail.Token);
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    if (error.Code == "InvalidToken")
+                    {
+                        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                        var link = $"http://localhost:3000/verify-email?id={user.Id}&token={token}";
+                        var title = "Verify E-Mail Address";
+                        var description = $"Welcome to Limak.az, {user.UserName}! To complete your Limak.az sign up, we just need to verify your email address";
+                        var buttonName = "Verify";
+
+                        var message = ViewConstant.GetEmailView(link, title, description, buttonName);
+                        await EmailUtil.SendEmailAsync(user.Email, message, "Limak.az - Verify Email Adress");
+                    }
+                    return StatusCode(StatusCodes.Status403Forbidden,
+                        new ResponseDto { Status = error.Code, Message = error.Description });
+                }
+            }
+
+            var expiredToken = new ExpiredVerifyEmailToken
+            {
+                Token = verifyEmail.Token
+            };
+
+            await _expiredVerifyEmailTokenService.AddAsync(expiredToken);
+
+            return Ok(new ResponseDto { Status = "Success", Message = "Email has been confirmed" });
         }
     }
 }
