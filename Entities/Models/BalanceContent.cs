@@ -28,6 +28,15 @@ namespace Entities.Models
         [Required]
         public string TableDateHeader { get; set; }
 
+        [Required]
+        public string IncreaseBalanceHeader { get; set; }
+
+        [Required]
+        public string IncreaseBalanceDescription { get; set; }
+
+        [Required]
+        public string IncreaseBalanceButtonName { get; set; }
+
         public int LanguageId { get; set; }
 
         public Language Language { get; set; }

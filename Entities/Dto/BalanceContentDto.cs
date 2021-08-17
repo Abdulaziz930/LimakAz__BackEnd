@@ -19,5 +19,11 @@ namespace Entities.Dto
         public string TablePriceHeader { get; set; }
 
         public string TableDateHeader { get; set; }
+
+        public string IncreaseBalanceHeader { get; set; }
+
+        public string IncreaseBalanceDescription { get; set; }
+
+        public string IncreaseBalanceButtonName { get; set; }
     }
 }
