@@ -80,6 +80,10 @@ namespace DataAccess.AutoMapper
             CreateMap<LoginContent, LoginContentDto>().ReverseMap();
 
             CreateMap<ForgotPasswordContent, ForgotPasswordContentDto>().ReverseMap();
+
+            CreateMap<BalanceContent, BalanceContentDto>().ReverseMap();
+
+            CreateMap<AddressContent, AddressContentDto>().ReverseMap();
         }
     }
 }

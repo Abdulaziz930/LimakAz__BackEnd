@@ -25,6 +25,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 namespace LimakAz
 {
@@ -80,6 +83,9 @@ namespace LimakAz
                     ValidAudience = Configuration["JWT:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Key"]))
                 };
+            }).AddGoogle(o => {
+                o.ClientId = Configuration["Authentication:Google:ClientId"];
+                o.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
             });
 
             services.AddCors(options =>
@@ -87,7 +93,7 @@ namespace LimakAz
                 options.AddPolicy(name: "AllowOrigin",
                     builder =>
                     {
-                        builder.WithOrigins("*")
+                        builder.WithOrigins("http://localhost:3000")
                                             .AllowAnyHeader()
                                             .AllowAnyMethod();
                     });
@@ -209,6 +215,12 @@ namespace LimakAz
 
             services.AddScoped<IResetPasswordExpiredTokenService, ResetPasswordExpiredTokenManager>();
             services.AddScoped<IResetPasswordExpiredTokenDal, EFResetPasswordExpiredTokenDal>();
+
+            services.AddScoped<IBalanceContentService, BalanceContentMananger>();
+            services.AddScoped<IBalanceContentDal, EFBalanceContentDal>();
+
+            services.AddScoped<IAddressContentService, AddressContentManager>();
+            services.AddScoped<IAddressContentDal, EFAddressContentDal>();
 
             services.AddAutoMapper(typeof(AutoMapperProfile));
 

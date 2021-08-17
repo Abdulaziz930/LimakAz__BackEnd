@@ -178,6 +178,7 @@ namespace LimakAz.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest,
                     new ResponseDto { Status = "Bad Request", Message = "This link is expired" });
 
+            //await _userManager.UpdateSecurityStampAsync(dbUser);
             var result = await _userManager.ResetPasswordAsync(dbUser, resetPassword.Token, resetPassword.Password);
             if (!result.Succeeded)
             {

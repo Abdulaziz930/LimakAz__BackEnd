@@ -4,14 +4,16 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210817121212_AddBalanceContentsTable")]
+    partial class AddBalanceContentsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,31 +54,6 @@ namespace DataAccess.Migrations
                     b.HasIndex("LanguageId");
 
                     b.ToTable("Abouts");
-                });
-
-            modelBuilder.Entity("Entities.Models.AddressContent", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CountryId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CountryId");
-
-                    b.ToTable("AddressContents");
                 });
 
             modelBuilder.Entity("Entities.Models.Advertisement", b =>
@@ -1625,17 +1602,6 @@ namespace DataAccess.Migrations
                     b.Navigation("Language");
                 });
 
-            modelBuilder.Entity("Entities.Models.AddressContent", b =>
-                {
-                    b.HasOne("Entities.Models.Country", "Country")
-                        .WithMany("AddressContents")
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Country");
-                });
-
             modelBuilder.Entity("Entities.Models.Advertisement", b =>
                 {
                     b.HasOne("Entities.Models.Language", "Language")
@@ -2122,8 +2088,6 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entities.Models.Country", b =>
                 {
-                    b.Navigation("AddressContents");
-
                     b.Navigation("ShopCountries");
 
                     b.Navigation("Tab");

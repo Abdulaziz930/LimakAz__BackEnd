@@ -27,5 +27,7 @@ namespace Entities.Models
         public ICollection<ShopCountry> ShopCountries { get; set; }
 
         public ICollection<Tariff> Tariffs { get; set; }
+
+        public ICollection<AddressContent> AddressContents { get; set; }
     }
 }
