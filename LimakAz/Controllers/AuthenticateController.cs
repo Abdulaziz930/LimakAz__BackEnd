@@ -246,5 +246,28 @@ namespace LimakAz.Controllers
 
             return Ok(new ResponseDto { Status = "Success", Message = "Email has been confirmed" });
         }
+
+        [HttpPost("changePassword")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePassword)
+        {
+            var user = await _userManager.FindByNameAsync(changePassword.UserName);
+            if (user == null)
+                return NotFound();
+
+            if (!await _userManager.CheckPasswordAsync(user, changePassword.OldPassword))
+                return Unauthorized(new ResponseDto { Status = "Error", Message = "Old password is not valid." });
+
+            var result = await _userManager.ChangePasswordAsync(user, changePassword.OldPassword, changePassword.NewPassword);
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    return StatusCode(StatusCodes.Status403Forbidden,
+                        new ResponseDto { Status = error.Code, Message = error.Description });
+                }
+            }
+
+            return Ok(new ResponseDto { Status = "Success", Message = "Password has been successfully updated" });
+        }
     }
 }
