@@ -8,8 +8,8 @@ namespace Utils
     {
         public static string ImageFolderPath = "";
 
-        public static string EmailAdress = "automessagesender6@gmail.com";
+        public static string EmailAdress = "";
 
-        public static string EmailPassword = "autoM@20";
+        public static string EmailPassword = "";
     }
 }

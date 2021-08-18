@@ -28,6 +28,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Utils;
 
 namespace LimakAz
 {
@@ -93,7 +94,7 @@ namespace LimakAz
                 options.AddPolicy(name: "AllowOrigin",
                     builder =>
                     {
-                        builder.WithOrigins("http://localhost:3000")
+                        builder.WithOrigins(Configuration["ClientPort:Port"])
                                             .AllowAnyHeader()
                                             .AllowAnyMethod();
                     });
@@ -223,6 +224,9 @@ namespace LimakAz
             services.AddScoped<IAddressContentDal, EFAddressContentDal>();
 
             services.AddAutoMapper(typeof(AutoMapperProfile));
+
+            Constants.EmailAdress = Configuration["Gmail:Address"];
+            Constants.EmailPassword = Configuration["Gmail:Password"];
 
             services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
             services.AddSwaggerGen(c =>
