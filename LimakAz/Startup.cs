@@ -228,6 +228,8 @@ namespace LimakAz
             Constants.EmailAdress = Configuration["Gmail:Address"];
             Constants.EmailPassword = Configuration["Gmail:Password"];
 
+            Constants.ClientPort = Configuration["ClientPort:Port"];
+
             services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
             services.AddSwaggerGen(c =>
             {

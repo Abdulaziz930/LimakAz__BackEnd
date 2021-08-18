@@ -11,5 +11,7 @@ namespace Utils
         public static string EmailAdress = "";
 
         public static string EmailPassword = "";
+
+        public static string ClientPort = "";
     }
 }

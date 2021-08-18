@@ -79,7 +79,7 @@ namespace LimakAz.Controllers
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-            var link = $"http://localhost:3000/verify-email?id={user.Id}&token={token}";
+            var link = $"{Constants.ClientPort}/verify-email?id={user.Id}&token={token}";
             var title = "Verify E-Mail Address";
             var description = $"Welcome to Limak.az, {user.UserName}! To complete your Limak.az sign up, we just need to verify your email address";
             var buttonName = "Verify";
@@ -144,7 +144,7 @@ namespace LimakAz.Controllers
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(dbUser);
 
-            var link = $"http://localhost:3000/reset-password?id={dbUser.Id}&token={token}";
+            var link = $"{Constants.ClientPort}/reset-password?id={dbUser.Id}&token={token}";
             var title = "FORGOT YOUR PASSWORD?";
             var description = "Not to worry, we got you! Let’s get you a new password.";
             var buttonName = "Reset Password";
@@ -224,7 +224,7 @@ namespace LimakAz.Controllers
                     {
                         var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-                        var link = $"http://localhost:3000/verify-email?id={user.Id}&token={token}";
+                        var link = $"{Constants.ClientPort}/verify-email?id={user.Id}&token={token}";
                         var title = "Verify E-Mail Address";
                         var description = $"Welcome to Limak.az, {user.UserName}! To complete your Limak.az sign up, we just need to verify your email address";
                         var buttonName = "Verify";
