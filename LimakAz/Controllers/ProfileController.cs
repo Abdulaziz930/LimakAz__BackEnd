@@ -1,4 +1,6 @@
-﻿using Entities.Dto;
+﻿using AutoMapper;
+using Buisness.Abstract;
+using Entities.Dto;
 using Entities.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -15,10 +17,15 @@ namespace LimakAz.Controllers
     public class ProfileController : ControllerBase
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly ISettingContentService _settingContentService;
+        private readonly IMapper _mapper;
 
-        public ProfileController(UserManager<AppUser> userManager)
+        public ProfileController(UserManager<AppUser> userManager
+            , IMapper mapper,ISettingContentService settingContentService)
         {
             _userManager = userManager;
+            _settingContentService = settingContentService;
+            _mapper = mapper;
         }
 
         [HttpGet("getUserInfo/{userName}")]
@@ -73,6 +80,21 @@ namespace LimakAz.Controllers
             await _userManager.UpdateAsync(appUser);
 
             return Ok(new ResponseDto { Status = "Success", Message = "User successfully updated" });
+        }
+
+        [HttpGet("getSettingContent/{languageCode}")]
+        public async Task<IActionResult> GetSettingContent([FromRoute] string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+                return BadRequest();
+
+            var setting = await _settingContentService.GetSettingContentAsync(languageCode);
+            if (setting == null)
+                return NotFound();
+
+            var settingDto = _mapper.Map<SettingContentDto>(setting);
+
+            return Ok(settingDto);
         }
     }
 }

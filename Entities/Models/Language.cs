@@ -82,5 +82,7 @@ namespace Entities.Models
         public ICollection<ForgotPasswordContent> ForgotPasswordContents { get; set; }
 
         public ICollection<BalanceContent> BalanceContents { get; set; }
+
+        public ICollection<SettingContent> SettingContents { get; set; }
     }
 }
