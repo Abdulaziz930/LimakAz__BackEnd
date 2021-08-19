@@ -13,5 +13,7 @@ namespace Utils
         public static string EmailPassword = "";
 
         public static string ClientPort = "";
+
+        public static string PaymentSecretKey = "";
     }
 }

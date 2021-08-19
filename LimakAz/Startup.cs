@@ -233,6 +233,8 @@ namespace LimakAz
 
             Constants.ClientPort = Configuration["ClientPort:Port"];
 
+            Constants.PaymentSecretKey = Configuration["StripePayment:SecretKey"];
+
             services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
             services.AddSwaggerGen(c =>
             {

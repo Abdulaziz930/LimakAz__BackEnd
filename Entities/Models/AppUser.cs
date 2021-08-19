@@ -32,6 +32,8 @@ namespace Entities.Models
         [Required]
         public string Address { get; set; }
 
+        public decimal Balance { get; set; }
+
         public bool IsActive { get; set; }
 
     }

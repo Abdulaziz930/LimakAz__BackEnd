@@ -117,7 +117,7 @@ namespace LimakAz.Controllers
             var token = new JwtSecurityToken(
                 issuer: Configuration["JWT:Issuer"],
                 audience: Configuration["JWT:Audience"],
-                expires: DateTime.Now.AddMinutes(60),
+                expires: DateTime.UtcNow.AddMinutes(60),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(signInKey, SecurityAlgorithms.HmacSha256)
             );
