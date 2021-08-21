@@ -86,6 +86,10 @@ namespace DataAccess.AutoMapper
             CreateMap<AddressContent, AddressContentDto>().ReverseMap();
 
             CreateMap<SettingContent, SettingContentDto>().ReverseMap();
+
+            CreateMap<Transaction, TransactionDto>().ReverseMap();
+
+            CreateMap<BalanceModalContent, BalanceModalContentDto>().ReverseMap();
         }
     }
 }

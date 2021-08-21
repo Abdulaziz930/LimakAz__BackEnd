@@ -4,14 +4,16 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210821083438_UpdateBalanceTable")]
+    partial class UpdateBalanceTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -356,43 +358,6 @@ namespace DataAccess.Migrations
                     b.HasIndex("LanguageId");
 
                     b.ToTable("BalanceContents");
-                });
-
-            modelBuilder.Entity("Entities.Models.BalanceModalContent", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AmountTitle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DateTimeTitle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ModalHeader")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NewBalanceTitle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OldBalanceTitle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
-
-                    b.ToTable("BalanceModalContents");
                 });
 
             modelBuilder.Entity("Entities.Models.Calculator", b =>
@@ -1810,17 +1775,6 @@ namespace DataAccess.Migrations
                     b.Navigation("Language");
                 });
 
-            modelBuilder.Entity("Entities.Models.BalanceModalContent", b =>
-                {
-                    b.HasOne("Entities.Models.Language", "Language")
-                        .WithMany("BalanceModalContents")
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Language");
-                });
-
             modelBuilder.Entity("Entities.Models.Calculator", b =>
                 {
                     b.HasOne("Entities.Models.Language", "Language")
@@ -2291,8 +2245,6 @@ namespace DataAccess.Migrations
                     b.Navigation("AdvertisimentTitles");
 
                     b.Navigation("BalanceContents");
-
-                    b.Navigation("BalanceModalContents");
 
                     b.Navigation("CalculatorContents");
 

@@ -12,35 +12,27 @@ namespace Utils
     {
         public static async Task<Charge> PayAsync(PaymentDto payment)
         {
-                StripeConfiguration.ApiKey = Constants.PaymentSecretKey;
+            StripeConfiguration.ApiKey = Constants.PaymentSecretKey;
 
-                var optionsToken = new TokenCreateOptions
-                {
-                    Card = new TokenCardOptions
-                    {
-                        Number = payment.CardNumber,
-                        ExpMonth = payment.Mounth,
-                        ExpYear = payment.Year,
-                        Cvc = payment.Cvc
-                    }
-                };
+            var customers = new CustomerService();
+            var charges = new ChargeService();
 
-                var serviceToken = new TokenService();
-                Token stripeToken = await serviceToken.CreateAsync(optionsToken);
+            var customer = await customers.CreateAsync(new CustomerCreateOptions
+            {
+                Email = payment.Email,
+                Source = payment.Token
+            });
 
-                var options = new ChargeCreateOptions
-                {
-                    Amount = payment.Amount,
-                    Currency = "usd",
-                    Description = "test",
-                    Source = stripeToken.Id
-                };
+            var charge = await charges.CreateAsync(new ChargeCreateOptions
+            {
+                Amount = (int)(payment.Sum * 100),
+                Description = "Limak.az payment",
+                Currency = "usd",
+                Customer = customer.Id
+            });
 
-                var service = new ChargeService();
-                Charge charge = await service.CreateAsync(options);
+            return charge;
 
-                return charge;
-            
         }
     }
 }

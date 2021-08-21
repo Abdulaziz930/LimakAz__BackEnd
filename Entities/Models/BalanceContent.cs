@@ -20,13 +20,16 @@ namespace Entities.Models
         public string ButtonName { get; set; }
 
         [Required]
-        public string TableActionHeader { get; set; }
+        public string TableDetailHeader { get; set; }
 
         [Required]
         public string TablePriceHeader { get; set; }
 
         [Required]
         public string TableDateHeader { get; set; }
+
+        [Required]
+        public string TableButtonName { get; set; }
 
         [Required]
         public string IncreaseBalanceHeader { get; set; }

@@ -14,9 +14,11 @@ namespace Entities.Dto
 
         public string ButtonName { get; set; }
 
-        public string TableActionHeader { get; set; }
+        public string TableDetailHeader { get; set; }
 
         public string TablePriceHeader { get; set; }
+
+        public string TableButtonName { get; set; }
 
         public string TableDateHeader { get; set; }
 

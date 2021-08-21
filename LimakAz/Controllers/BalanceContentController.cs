@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Buisness.Abstract;
 using Entities.Dto;
+using Entities.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -17,15 +19,20 @@ namespace LimakAz.Controllers
     public class BalanceContentController : ControllerBase
     {
         private readonly IBalanceContentService _balanceContentService;
+        private readonly IBalanceModalContentService _balanceModalContentService;
+        private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
 
-        public BalanceContentController(IBalanceContentService balanceContentService,IMapper mapper)
+        public BalanceContentController(IBalanceContentService balanceContentService
+            ,IBalanceModalContentService balanceModalContentService ,IMapper mapper ,UserManager<AppUser> userManager)
         {
             _balanceContentService = balanceContentService;
+            _balanceModalContentService = balanceModalContentService;
+            _userManager = userManager;
             _mapper = mapper;
         }
 
-        [HttpGet("balanceContent/{languageCode}")]
+        [HttpGet("getBalanceContent/{languageCode}")]
         public async Task<IActionResult> GetBalanceCotent([FromRoute] string languageCode)
         {
             if (string.IsNullOrEmpty(languageCode))
@@ -38,6 +45,39 @@ namespace LimakAz.Controllers
             var balanceContentDto = _mapper.Map<BalanceContentDto>(balanceContent);
 
             return Ok(balanceContentDto);
+        }
+
+        [HttpGet("getBalance/{userName}")]
+        public async Task<IActionResult> GetBalance([FromRoute] string userName)
+        {
+            if (string.IsNullOrEmpty(userName))
+                return BadRequest();
+
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null)
+                return NotFound();
+
+            var balanceDto = new BalanceDto
+            {
+                Balance = user.Balance
+            };
+
+            return Ok(balanceDto);
+        }
+
+        [HttpGet("getBalanceModalContent/{languageCode}")]
+        public async Task<IActionResult> GetBalanceModalContent([FromRoute] string languageCode)
+        {
+            if (string.IsNullOrEmpty(languageCode))
+                return BadRequest();
+
+            var balanceModalContent = await _balanceModalContentService.GetBalanceModalContentAsync(languageCode);
+            if (balanceModalContent == null)
+                return NotFound();
+
+            var balanceModalContentDto = _mapper.Map<BalanceModalContentDto>(balanceModalContent);
+
+            return Ok(balanceModalContentDto);
         }
     }
 }

@@ -8,16 +8,12 @@ namespace Entities.Dto
     public class PaymentDto
     {
         [Required]
-        public string UserName { get; set; }
+        public string Email { get; set; }
 
-        public string CardNumber { get; set; }
+        public string Token { get; set; }
 
-        public int Mounth { get; set; }
+        public double Sum { get; set; }
 
-        public int Year { get; set; }
-
-        public string Cvc { get; set; }
-
-        public int Amount { get; set; }
+        public double Amount { get; set; }
     }
 }

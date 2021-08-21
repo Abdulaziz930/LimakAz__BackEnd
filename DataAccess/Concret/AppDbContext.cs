@@ -107,5 +107,9 @@ namespace DataAccess
         public DbSet<AddressContent> AddressContents { get; set; }
 
         public DbSet<SettingContent> SettingContents { get; set; }
+
+        public DbSet<Transaction> Transactions { get; set; }
+
+        public DbSet<BalanceModalContent> BalanceModalContents { get; set; }
     }
 }
