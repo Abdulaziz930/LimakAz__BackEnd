@@ -62,6 +62,7 @@ namespace LimakAz.Controllers
                     {
                         OldBalance = oldBalance,
                         Amount = (decimal)payment.Amount,
+                        NewBalance = oldBalance + (decimal)payment.Amount,
                         DateTime = DateTime.Now,
                         AppUserId = user.Id
                     };
@@ -79,6 +80,34 @@ namespace LimakAz.Controllers
             {
                 return BadRequest(e.Message);
             }
+        }
+
+        [HttpPost("decreaseBalance")]
+        public async Task<IActionResult> DecreaseBalance([FromBody] DecreaseBalanceDto payment)
+        {
+            if (payment.UserName == null)
+                return BadRequest(new ResponseDto { Status = "Email address cannot be empty" });
+
+            var user = await _userManager.FindByNameAsync(payment.UserName);
+            if (user == null)
+                return NotFound();
+
+            var oldBalance = user.Balance;
+            user.Balance = (decimal)(payment.ResultBalance);
+            await _userManager.UpdateAsync(user);
+
+            var transaction = new Transaction
+            {
+                OldBalance = oldBalance,
+                Amount = (decimal)payment.Amount,
+                NewBalance = oldBalance - (decimal)payment.Amount,
+                DateTime = DateTime.Now,
+                AppUserId = user.Id
+            };
+
+            await _transactionService.AddAsync(transaction);
+
+            return Ok(new ResponseDto { Status = "Success", Message = "Payment is successful " });
         }
 
         [HttpGet("getTransactions/{userName}")]
@@ -152,7 +181,7 @@ namespace LimakAz.Controllers
             {
                 OldBalance = transaction.OldBalance,
                 Amount = transaction.Amount,
-                NewBalance = transaction.OldBalance + transaction.Amount,
+                NewBalance = transaction.NewBalance,
                 DateTime = transaction.DateTime
             };
 
@@ -181,6 +210,7 @@ namespace LimakAz.Controllers
                     Id = transaction.Id,
                     OldBalance = transaction.OldBalance,
                     Amount = transaction.Amount,
+                    NewBalance = transaction.NewBalance,
                     DateTime = transaction.DateTime.ToString("dd/MM/yyyy hh:mm:ss")
                 };
                 transactionsDto.Add(transactionDto);

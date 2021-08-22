@@ -12,6 +12,8 @@ namespace Entities.Dto
 
         public decimal Amount { get; set; }
 
+        public decimal NewBalance { get; set; }
+
         public string DateTime { get; set; }
     }
 }

@@ -15,6 +15,9 @@ namespace Entities.Models
         public decimal OldBalance { get; set; }
 
         [Required]
+        public decimal NewBalance { get; set; }
+
+        [Required]
         public decimal Amount { get; set; }
 
         [Required]
