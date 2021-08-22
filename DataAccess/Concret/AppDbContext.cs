@@ -111,5 +111,11 @@ namespace DataAccess
         public DbSet<Transaction> Transactions { get; set; }
 
         public DbSet<BalanceModalContent> BalanceModalContents { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
+
+        public DbSet<Status> Statuses { get; set; }
+
+        public DbSet<OrderContent> OrderContents { get; set; }
     }
 }

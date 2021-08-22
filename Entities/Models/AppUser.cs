@@ -38,5 +38,7 @@ namespace Entities.Models
 
         public ICollection<Transaction> Transactions { get; set; }
 
+        public ICollection<Order> Orders { get; set; }
+
     }
 }

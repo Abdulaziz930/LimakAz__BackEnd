@@ -232,6 +232,15 @@ namespace LimakAz
             services.AddScoped<IBalanceModalContentService, BalanceModalContentManager>();
             services.AddScoped<IBalanceModalContentDal, EFBalanceModalContentDal>();
 
+            services.AddScoped<IOrderService, OrderManager>();
+            services.AddScoped<IOrderDal, EFOrderDal>();
+
+            services.AddScoped<IStatusService, StatusManager>();
+            services.AddScoped<IStatusDal, EFStatusDal>();
+
+            services.AddScoped<IOrderContentService, OrderContentManager>();
+            services.AddScoped<IOrderContentDal, EFOrderContentDal>();
+
             services.AddAutoMapper(typeof(AutoMapperProfile));
 
             Constants.EmailAdress = Configuration["Gmail:Address"];

@@ -86,5 +86,9 @@ namespace Entities.Models
         public ICollection<SettingContent> SettingContents { get; set; }
 
         public ICollection<BalanceModalContent> BalanceModalContents { get; set; }
+
+        public ICollection<Status> Statuses { get; set; }
+
+        public ICollection<OrderContent> OrderContents { get; set; }
     }
 }
