@@ -1,5 +1,7 @@
 ﻿using Buisness.Abstract;
+using DataAccess.Identity;
 using Entities.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,6 +13,7 @@ using Utils;
 
 namespace AdminPanel.Controllers
 {
+    [Authorize(Roles = RoleConstants.AdminRole)]
     public class HowItWorkCardController : Controller
     {
         private readonly IHowItWorkCardService _howItWorkCardService;

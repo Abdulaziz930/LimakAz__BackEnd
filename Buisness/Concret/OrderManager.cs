@@ -3,6 +3,7 @@ using DataAccess.Abstract;
 using Entities.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -41,9 +42,34 @@ namespace Buisness.Concret
             return await _orderDal.GetOrdersByCountAsync(skipCount, takeCount);
         }
 
+        public async Task<List<Order>> GetAllOrdersAsync(string userId, int skipCount, int takeCount)
+        {
+            return await _orderDal.GetOrdersByCountAsync(userId, skipCount, takeCount);
+        }
+
+        public async Task<List<Order>> GetAllOrdersAsync(string userId)
+        {
+            return await _orderDal.GetOrdersByUserAsync(userId);
+        }
+
+        public async Task<List<Order>> GetAllOrdersAsync(Expression<Func<Order, bool>> expression, int skipCount, int takeCount)
+        {
+            return await _orderDal.GetOrdersByFilter(expression, skipCount, takeCount);
+        }
+
         public async Task<Order> GetOrderAsync(int id)
         {
             return await _orderDal.GetAsync(x => x.Id == id);
+        }
+
+        public async Task<Order> GetOrderAsync(Expression<Func<Order, bool>> expression)
+        {
+            return await _orderDal.GetOrderByFilter(expression);
+        }
+
+        public async Task<Order> GetOrderWithIncludeAsync(int id)
+        {
+            return await _orderDal.GetOrderWithStatus(id);
         }
 
         public async Task<bool> UpdateAsync(Order order)

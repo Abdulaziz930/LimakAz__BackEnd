@@ -4,9 +4,12 @@ using DataAccess;
 using DataAccess.Abstract;
 using DataAccess.AutoMapper;
 using DataAccess.Concret;
+using DataAccess.Identity;
+using Entities.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,6 +37,23 @@ namespace AdminPanel
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<UserDbContext>(options =>
+            {
+                options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]);
+
+            });
+            services.AddIdentity<AppUser, IdentityRole>(options =>
+            {
+                options.Password.RequiredLength = 8;
+
+                options.User.RequireUniqueEmail = true;
+
+                options.Lockout.MaxFailedAccessAttempts = 3;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+                options.Lockout.AllowedForNewUsers = true;
+
+            }).AddEntityFrameworkStores<UserDbContext>().AddDefaultTokenProviders();
+
             services.AddAutoMapper(typeof(AutoMapperProfile));
 
             services.AddScoped<IAdvertisementService, AdvertisementManager>();
@@ -147,6 +167,24 @@ namespace AdminPanel
             services.AddScoped<IForgotPasswordContentService, ForgotPasswordContentManager>();
             services.AddScoped<IForgotPasswordContentDal, EFForgotPasswordContentDal>();
 
+            services.AddScoped<ISettingContentService, SettingContentManager>();
+            services.AddScoped<ISettingContentDal, EFSettingContentDal>();
+
+            services.AddScoped<ITransactionService, TransactionManager>();
+            services.AddScoped<ITransactionDal, EFTransactionDal>();
+
+            services.AddScoped<IBalanceModalContentService, BalanceModalContentManager>();
+            services.AddScoped<IBalanceModalContentDal, EFBalanceModalContentDal>();
+
+            services.AddScoped<IOrderService, OrderManager>();
+            services.AddScoped<IOrderDal, EFOrderDal>();
+
+            services.AddScoped<IStatusService, StatusManager>();
+            services.AddScoped<IStatusDal, EFStatusDal>();
+
+            services.AddScoped<IOrderContentService, OrderContentManager>();
+            services.AddScoped<IOrderContentDal, EFOrderContentDal>();
+
             services.AddControllersWithViews();
 
             Constants.ImageFolderPath = Path.Combine(_environment.WebRootPath, "img");
@@ -170,13 +208,15 @@ namespace AdminPanel
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Dashboard}/{action=Index}/{id?}");
+                    pattern: "{controller=User}/{action=Login}/{id?}");
             });
         }
     }

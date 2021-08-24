@@ -1,0 +1,48 @@
+﻿
+@{
+    ViewData["Title"] = "Delete";
+    Order order = Model;
+}
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Delete Advertisement</h4>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="detailItem d-flex mt-2">
+                        <h4>Code:</h4>
+                        <span class="ml-2">@order.Code</span>
+                    </div>
+                    <div class="detailItem d-flex mt-3">
+                        <h4>Price:</h4>
+                        <span class="ml-2">@order.Price</span>
+                    </div>
+                    <div class="detailItem d-flex mt-3">
+                        <h4>Count:</h4>
+                        <span class="ml-2">@order.Count</span>
+                    </div>
+                    <div class="detailItem d-flex mt-3">
+                        <h4>Note:</h4>
+                        <span class="ml-2">@order.Note</span>
+                    </div>
+                    <div class="detailItem d-flex mt-3">
+                        <h4>Url:</h4>
+                        <a class="ml-2" href="@order.Url" target="_blank">Link</a>
+                    </div>
+                    <div class="item d-flex mt-2">
+                        <h4>Status:</h4>
+                        <span class="ml-2">@order.Status.Title</span>
+                    </div>
+                </div>
+            </div>
+            <p class="text-danger mt-3">Do you want to delete?</p>
+            <hr />
+            <form method="post">
+                <a asp-action="Index" asp-route-id="@TempData["id"]" class="btn btn-primary">Go Back</a>
+                <button type="submit" class="btn btn-danger ml-2">Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+

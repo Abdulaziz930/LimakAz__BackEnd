@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Buisness.Abstract;
 using DataAccess;
+using DataAccess.Identity;
 using Entities.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,6 +15,7 @@ using Utils;
 
 namespace AdminPanel.Controllers
 {
+    [Authorize(Roles = RoleConstants.AdminRole + "," + RoleConstants.ModeratorRole)]
     public class AdvertisementsController : Controller
     {
         private readonly IAdvertisementService _advertisementService;

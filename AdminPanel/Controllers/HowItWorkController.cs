@@ -1,5 +1,7 @@
 ﻿using Buisness.Abstract;
+using DataAccess.Identity;
 using Entities.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace AdminPanel.Controllers
 {
+    [Authorize(Roles = RoleConstants.AdminRole)]
     public class HowItWorkController : Controller
     {
         private readonly IHowItWorkService _howItWorkService;

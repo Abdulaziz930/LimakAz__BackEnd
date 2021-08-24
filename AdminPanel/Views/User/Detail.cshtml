@@ -1,0 +1,77 @@
+﻿@{
+    ViewData["Title"] = "User Detail";
+    UserViewModel user = Model;
+}
+
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">User Detail</h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="detailItem d-flex mt-2">
+                            <h4>Full Name:</h4>
+                            <span class="ml-2">@user.Name @user.Surname</span>
+                        </div>
+                        <div class="detailItem d-flex mt-3">
+                            <h4>UserName:</h4>
+                            <span class="ml-2">@user.UserName</span>
+                        </div>
+                        <div class="detailItem d-flex mt-3">
+                            <h4>Email:</h4>
+                            <span class="ml-2">@user.Email</span>
+                        </div>
+                        <div class="detailItem d-flex mt-3">
+                            <h4>City:</h4>
+                            <span class="ml-2">@user.City</span>
+                        </div>
+                        <div class="detailItem d-flex mt-3">
+                            <h4>Phone Number:</h4>
+                            <span class="ml-2">@user.PhoneNumber</span>
+                        </div>
+                        <div class="detailItem d-flex mt-3">
+                            <h4>Serial Number:</h4>
+                            <span class="ml-2">@user.SerialNumber</span>
+                        </div>
+                        <div class="detailItem d-flex mt-3">
+                            <h4>Fin Code:</h4>
+                            <span class="ml-2">@user.FinCode</span>
+                        </div>
+                        <div class="detailItem d-flex mt-3">
+                            <h4>Birth Day:</h4>
+                            <span class="ml-2">@user.BirthDay</span>
+                        </div>
+                        <div class="detailItem d-flex mt-3">
+                            <h4>Gender:</h4>
+                            <span class="ml-2">@user.Gender</span>
+                        </div>
+                        <div class="detailItem d-flex mt-3">
+                            <h4>Address:</h4>
+                            <span class="ml-2">@user.Address</span>
+                        </div>
+                        <div class="detailItem d-flex mt-3">
+                            <h4>Balance:</h4>
+                            <span class="ml-2">@user.Balance &#8380;</span>
+                        </div>
+                        <div class="detailItem d-flex mt-3">
+                            <h4>IsActive:</h4>
+                            <span class="ml-2">@user.IsActive</span>
+                        </div>
+                        <div class="detailItem d-flex mt-3">
+                            <h4>Role:</h4>
+                            <span class="ml-2">@user.Role</span>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <a asp-action="Index" class="btn btn-info text-light my-button">
+                    <i class="mdi mdi-keyboard-backspace"></i> <span>Back</span>
+                </a>
+                <a asp-controller="Order" asp-action="Index" asp-route-id=@user.Id class="btn btn-secondary text-light my-button">
+                    <span>Orders</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
