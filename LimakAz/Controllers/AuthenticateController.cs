@@ -83,8 +83,9 @@ namespace LimakAz.Controllers
             var title = "Verify E-Mail Address";
             var description = $"Welcome to Limak.az, {user.UserName}! To complete your Limak.az sign up, we just need to verify your email address";
             var buttonName = "Verify";
+            var filePath = @"D:\Programming\CodeAcademy\FrontEnd\Templates\emailView2.html";
 
-            var message = ViewConstant.GetEmailView(link, title, description, buttonName);
+            var message = ViewConstant.GetEmailView(filePath, link, title, description, buttonName);
             await EmailUtil.SendEmailAsync(user.Email, message, "Limak.az - Verify Email Adress");
 
             return Ok(new ResponseDto { Status = "Success", Message = "Confirmation email sent" });
@@ -149,7 +150,9 @@ namespace LimakAz.Controllers
             var description = "Not to worry, we got you! Let’s get you a new password.";
             var buttonName = "Reset Password";
 
-            var message = ViewConstant.GetEmailView(link, title, description, buttonName);
+            var filePath = @"D:\Programming\CodeAcademy\FrontEnd\Templates\emailView2.html";
+
+            var message = ViewConstant.GetEmailView(filePath ,link, title, description, buttonName);
             await EmailUtil.SendEmailAsync(dbUser.Email, message, "Limak.az - Reset Password");
 
             return Ok(new ResponseDto { Status = "Success", Message = "Email sent successfully" });
@@ -229,7 +232,9 @@ namespace LimakAz.Controllers
                         var description = $"Welcome to Limak.az, {user.UserName}! To complete your Limak.az sign up, we just need to verify your email address";
                         var buttonName = "Verify";
 
-                        var message = ViewConstant.GetEmailView(link, title, description, buttonName);
+                        var filePath = @"D:\Programming\CodeAcademy\FrontEnd\Templates\emailView2.html";
+
+                        var message = ViewConstant.GetEmailView(filePath, link, title, description, buttonName);
                         await EmailUtil.SendEmailAsync(user.Email, message, "Limak.az - Verify Email Adress");
                     }
                     return StatusCode(StatusCodes.Status403Forbidden,

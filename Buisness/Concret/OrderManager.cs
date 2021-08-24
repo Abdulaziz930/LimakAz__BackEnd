@@ -57,6 +57,11 @@ namespace Buisness.Concret
             return await _orderDal.GetOrdersByFilter(expression, skipCount, takeCount);
         }
 
+        public async Task<List<Order>> GetAllOrdersAsync(Expression<Func<Order, bool>> expression)
+        {
+            return await _orderDal.GetOrdersByFilter(expression);
+        }
+
         public async Task<Order> GetOrderAsync(int id)
         {
             return await _orderDal.GetAsync(x => x.Id == id);

@@ -23,6 +23,8 @@ namespace Buisness.Abstract
 
         Task<List<Order>> GetAllOrdersAsync(Expression<Func<Order, bool>> expression ,int skipCount, int takeCount);
 
+        Task<List<Order>> GetAllOrdersAsync(Expression<Func<Order, bool>> expression);
+
         Task<List<Order>> GetAllOrdersAsync(string userId);
 
         Task<bool> AddAsync(Order order);

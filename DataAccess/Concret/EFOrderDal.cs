@@ -43,6 +43,12 @@ namespace DataAccess.Concret
                 .Skip(skipCount).Take(takeCount).ToListAsync();
         }
 
+        public async Task<List<Order>> GetOrdersByFilter(Expression<Func<Order, bool>> expression)
+        {
+            await using var context = new AppDbContext();
+            return await context.Orders.Include(x => x.AppUser).Include(x => x.Status).Where(expression).ToListAsync();
+        }
+
         public async Task<List<Order>> GetOrdersByUserAsync(string userId)
         {
             await using var context = new AppDbContext();
