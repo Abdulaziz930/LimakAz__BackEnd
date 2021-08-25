@@ -158,7 +158,7 @@ namespace AdminPanel.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Delete")]
-        public async Task<IActionResult> DeleteAdvertisements(int? id)
+        public async Task<IActionResult> DeleteRule(int? id)
         {
             if (id == null)
                 return BadRequest();

@@ -259,5 +259,63 @@ namespace AdminPanel.Test
 
             Assert.Equal(400, error.StatusCode);
         }
+
+        [Theory]
+        [InlineData(1)]
+        public async Task DeleteRule_ActionExecutes_ReturnRedirectToIndexAction(int? id)
+        {
+            _mockRuleService.Setup(service => service.GetRuleAsync(id.Value))
+                .ReturnsAsync(_rules.First());
+
+            var result = await _ruleController.DeleteRule(id);
+
+            var redirect = Assert.IsType<RedirectToActionResult>(result);
+
+            Assert.Equal("Index", redirect.ActionName);
+        }
+
+        [Fact]
+        public async Task DeleteRule_IdIsNull_ReturnBadRequest()
+        {
+            var result = await _ruleController.DeleteRule(null);
+
+            var error = Assert.IsType<BadRequestResult>(result);
+
+            Assert.Equal(400, error.StatusCode);
+        }
+
+        [Theory]
+        [InlineData(4)]
+        public async Task DeleteRule_InValidId_ReturnNotFound(int? id)
+        {
+            Rule rule = null;
+
+            _mockRuleService.Setup(service => service.GetRuleAsync(id.Value))
+                .ReturnsAsync(rule);
+
+            var result = await _ruleController.DeleteRule(id);
+
+            var error = Assert.IsType<NotFoundResult>(result);
+
+            Assert.Equal(404, error.StatusCode);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        public async Task DeleteRule_ActionExecutes_DeleteMethodExecute(int? id)
+        {
+            _mockRuleService.Setup(service => service.GetRuleAsync(id.Value))
+                .ReturnsAsync(_rules.First());
+
+            var rule = _rules.First(x => x.Id == id);
+
+            _mockRuleService.Setup(service => service.UpdateAsync(rule));
+
+            await _ruleController.DeleteRule(id);
+
+            Assert.True(rule.IsDeleted);
+
+            _mockRuleService.Verify(service => service.UpdateAsync(It.IsAny<Rule>()), Times.Once);
+        }
     }
 }
