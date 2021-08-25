@@ -28,8 +28,8 @@ namespace AdminPanel.Test
             _languages = new List<Language>()
             {
                 new Language { Id = 1, Name = "Azerbaijani", Code = "AZ", IsDeleted = false },
-                new Language { Id = 1, Name = "Russian", Code = "RU", IsDeleted = false },
-                new Language { Id = 1, Name = "English", Code = "EN", IsDeleted = false }
+                new Language { Id = 2, Name = "Russian", Code = "RU", IsDeleted = false },
+                new Language { Id = 3, Name = "English", Code = "EN", IsDeleted = false }
             };
             _rules = new List<Rule>()
             {
@@ -114,6 +114,57 @@ namespace AdminPanel.Test
             var resultRule = Assert.IsAssignableFrom<Rule>(viewResult.Model);
 
             Assert.Equal(rule.Id, resultRule.Id);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        public async Task CreatePOST_InValidModelState_ReturnView(int? languageId)
+        {
+            _ruleController.ModelState.AddModelError("Title", "Title is required");
+
+            var result = await _ruleController.Create(_rules.First(),languageId);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+
+            Assert.IsType<Rule>(viewResult.Model);
+        }
+
+        [Fact]
+        public async Task CreatePOST_ValidModelState_RedirectToIndexAction()
+        {
+            _mockLanguageService.Setup(service => service.GetAllLanguagesAsync(null)).ReturnsAsync(_languages);
+
+            var result = await _ruleController.Create(_rules.First(), 1);
+
+            var redirect = Assert.IsType<RedirectToActionResult>(result);
+
+            Assert.Equal("Index", redirect.ActionName);
+        }
+
+        [Fact]
+        public async Task CreatePOST_ValidModelState_CreateMethodExecutute()
+        {
+            Rule newRule = null;
+
+            _mockLanguageService.Setup(service => service.GetAllLanguagesAsync(null)).ReturnsAsync(_languages);
+            _mockRuleService.Setup(service => service.AddAsync(It.IsAny<Rule>())).Callback<Rule>(x => x = newRule);
+
+            var result = await _ruleController.Create(_rules.First(), 1);
+
+            _mockRuleService.Verify(service => service.AddAsync(It.IsAny<Rule>()), Times.Once);
+        }
+
+        [Theory]
+        [InlineData(4)]
+        public async Task CreatePOST_InvalidLanguageId_ReturnBadRequest(int? languageId)
+        {
+            _mockLanguageService.Setup(service => service.GetAllLanguagesAsync(null)).ReturnsAsync(_languages);
+
+            var result = await _ruleController.Create(_rules.First(), languageId.Value);
+
+            var error = Assert.IsType<BadRequestResult>(result);
+
+            Assert.Equal(400, error.StatusCode);
         }
     }
 }
