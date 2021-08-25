@@ -122,7 +122,7 @@ namespace AdminPanel.Test
         {
             _ruleController.ModelState.AddModelError("Title", "Title is required");
 
-            var result = await _ruleController.Create(_rules.First(),languageId);
+            var result = await _ruleController.Create(_rules.First(), languageId);
 
             var viewResult = Assert.IsType<ViewResult>(result);
 
@@ -161,6 +161,99 @@ namespace AdminPanel.Test
             _mockLanguageService.Setup(service => service.GetAllLanguagesAsync(null)).ReturnsAsync(_languages);
 
             var result = await _ruleController.Create(_rules.First(), languageId.Value);
+
+            var error = Assert.IsType<BadRequestResult>(result);
+
+            Assert.Equal(400, error.StatusCode);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        public async Task UpdatePOST_IdIsNotEqualRule_ReturnBadRequest(int? id)
+        {
+            var result = await _ruleController.Update(2, _rules.First(x => x.Id == id.Value), 1);
+
+            var error = Assert.IsType<BadRequestResult>(result);
+
+            Assert.Equal(400, error.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpdatePOST_IdIsNull_ReturnBadRequest()
+        {
+            var result = await _ruleController.Update(null, _rules.First(), 1);
+
+            var error = Assert.IsType<BadRequestResult>(result);
+
+            Assert.Equal(400, error.StatusCode);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        public async Task UpdatePOST_InValidModelState_ReturnView(int? id)
+        {
+            _ruleController.ModelState.AddModelError("Title", "");
+
+            _mockLanguageService.Setup(service => service.GetAllLanguagesAsync(null)).ReturnsAsync(_languages);
+            _mockRuleService.Setup(service => service.GetRuleWithLanguageAsync(1)).ReturnsAsync(_rules.First());
+
+            var result = await _ruleController.Update(id, _rules.First(x => x.Id == id), 1);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+
+            Assert.IsType<Rule>(viewResult.Model);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        public async Task UpdatePOST_ValidModelState_ReturnRedirectToIndexAction(int? id)
+        {
+            _mockLanguageService.Setup(service => service.GetAllLanguagesAsync(null)).ReturnsAsync(_languages);
+            _mockRuleService.Setup(service => service.GetRuleWithLanguageAsync(1)).ReturnsAsync(_rules.First());
+
+            var result = await _ruleController.Update(id.Value, _rules.First(x => x.Id == id), 1);
+
+            var redirect = Assert.IsType<RedirectToActionResult>(result);
+
+            Assert.Equal("Index", redirect.ActionName);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        public async Task UpdatePOST_ValidModelState_UpdateMethodExecute(int? id)
+        {
+            var rule = _rules.First(x => x.Id == id.Value);
+
+            _mockLanguageService.Setup(service => service.GetAllLanguagesAsync(null)).ReturnsAsync(_languages);
+            _mockRuleService.Setup(service => service.GetRuleWithLanguageAsync(1)).ReturnsAsync(_rules.First());
+            _mockRuleService.Setup(service => service.UpdateAsync(rule));
+
+            await _ruleController.Update(id, rule, 1);
+
+            _mockRuleService.Verify(service => service.UpdateAsync(It.IsAny<Rule>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task UpdatePOST_LanguageIdIsNull_ReturnView()
+        {
+            _mockLanguageService.Setup(service => service.GetAllLanguagesAsync(null)).ReturnsAsync(_languages);
+            _mockRuleService.Setup(service => service.GetRuleWithLanguageAsync(1)).ReturnsAsync(_rules.First());
+
+            var result = await _ruleController.Update(1, _rules.First(), null);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+
+            Assert.IsType<Rule>(viewResult.Model);
+        }
+
+        [Theory]
+        [InlineData(4)]
+        public async Task UpdatePOST_InvalidLanguageId_ReturnBadRequest(int? languageId)
+        {
+            _mockLanguageService.Setup(service => service.GetAllLanguagesAsync(null)).ReturnsAsync(_languages);
+            _mockRuleService.Setup(service => service.GetRuleWithLanguageAsync(1)).ReturnsAsync(_rules.First());
+
+            var result = await _ruleController.Update(1,_rules.First(), languageId.Value);
 
             var error = Assert.IsType<BadRequestResult>(result);
 

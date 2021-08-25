@@ -123,7 +123,7 @@ namespace AdminPanel.Controllers
             if (languageId == null)
             {
                 ModelState.AddModelError("", "Please select language.");
-                return View();
+                return View(dbRule);
             }
 
             if (languages.All(x => x.Id != languageId.Value))
