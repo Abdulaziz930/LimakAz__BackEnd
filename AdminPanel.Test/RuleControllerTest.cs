@@ -38,13 +38,13 @@ namespace AdminPanel.Test
                 new Rule { Id = 2, Title = "Правила пользователя", Content = "lorem 1 ru", IsDeleted = false
                             , CreationDate = DateTime.Now , LastModificationDate = DateTime.Now , LanguageId = 2 },
                 new Rule { Id = 3, Title = "User rules", Content = "lorem 1 en", IsDeleted = false
-                            , CreationDate = DateTime.Now , LastModificationDate = DateTime.Now , LanguageId = 1 },
+                            , CreationDate = DateTime.Now , LastModificationDate = DateTime.Now , LanguageId = 3 },
             };
         }
 
         [Theory]
         [InlineData(1, 5)]
-        public async Task Index_ActionExecutes_ReturnProductList(int? page, int takeCount)
+        public async Task Index_ActionExecutes_ReturnRuleList(int? page, int takeCount)
         {
             int skipCount = (page.Value - 1) * 5;
 
@@ -72,6 +72,48 @@ namespace AdminPanel.Test
             var error = Assert.IsType<NotFoundResult>(result);
 
             Assert.Equal<int>(404, error.StatusCode);
+        }
+
+        [Fact]
+        public async Task Detail_IdIsNull_ReturnNotFound()
+        {
+            var result = await _ruleController.Detail(null);
+
+            var error = Assert.IsType<BadRequestResult>(result);
+
+            Assert.Equal<int>(400, error.StatusCode);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        public async Task Detail_IdIsInvalid_ReturnNotFound(int? id)
+        {
+            Rule rule = null;
+
+            _mockRuleService.Setup(service => service.GetRuleWithLanguageAsync(id.Value)).ReturnsAsync(rule);
+
+            var result = await _ruleController.Detail(id.Value);
+
+            var error = Assert.IsType<NotFoundResult>(result);
+
+            Assert.Equal<int>(404, error.StatusCode);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        public async Task Detail_ValidId_ReturnRule(int? id)
+        {
+            var rule = _rules.FirstOrDefault(x => x.Id == id.Value);
+
+            _mockRuleService.Setup(service => service.GetRuleWithLanguageAsync(id.Value)).ReturnsAsync(rule);
+
+            var result = await _ruleController.Detail(id);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+
+            var resultRule = Assert.IsAssignableFrom<Rule>(viewResult.Model);
+
+            Assert.Equal(rule.Id, resultRule.Id);
         }
     }
 }
