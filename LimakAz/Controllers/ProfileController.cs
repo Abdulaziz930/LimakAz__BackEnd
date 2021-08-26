@@ -58,7 +58,7 @@ namespace LimakAz.Controllers
             return Ok(userDto);
         }
 
-        [HttpPost("updateUser")]
+        [HttpPut("updateUser")]
         public async Task<IActionResult> UpdateUser([FromBody] UserDto user)
         {
             if (string.IsNullOrEmpty(user.Id))
