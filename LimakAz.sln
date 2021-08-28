@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Buisness", "Buisness\Buisness.csproj", "{1BAD0DDE-1DA6-48B0-9410-6FECEE90B312}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminPanel.Test", "AdminPanel.Test\AdminPanel.Test.csproj", "{773D976E-5541-4B02-A57C-F9EFEB04E3C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminPanel.Test", "AdminPanel.Test\AdminPanel.Test.csproj", "{773D976E-5541-4B02-A57C-F9EFEB04E3C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

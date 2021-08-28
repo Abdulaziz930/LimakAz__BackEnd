@@ -1,8 +1,10 @@
 ﻿using Buisness.Abstract;
+using DataAccess;
 using DataAccess.Identity;
 using EduHome.Areas.AdminPanel.Utils;
 using Entities.Dto;
 using Entities.Models;
+using Google.Apis.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +32,7 @@ namespace LimakAz.Controllers
         public IConfiguration Configuration { get; }
         public AuthenticateController(UserManager<AppUser> userManager
             , IExpiredVerifyEmailTokenService expiredVerifyEmailTokenService
-            , IResetPasswordExpiredTokenService resetPasswordExpiredTokenService , IConfiguration configuration)
+            , IResetPasswordExpiredTokenService resetPasswordExpiredTokenService , IConfiguration configuration, AppDbContext db)
         {
             _userManager = userManager;
             _expiredVerifyEmailTokenService = expiredVerifyEmailTokenService;
@@ -273,6 +275,69 @@ namespace LimakAz.Controllers
             }
 
             return Ok(new ResponseDto { Status = "Success", Message = "Password has been successfully updated" });
+        }
+
+        [HttpPost("externalLogin")]
+        public async Task<IActionResult> ExternalLogin([FromBody] ExternalAuthDto externalAuth)
+        {
+            var payload = await VerifyGoogleToken.VerifyGoogleTokenAsync(externalAuth, Configuration["Authentication:Google:ClientId"]);
+            if (payload == null)
+                return BadRequest(new ResponseDto { Status = "Error", Message = "Invalid External Authentication." });
+
+            var info = new UserLoginInfo(externalAuth.Provider, payload.Subject, externalAuth.Provider);
+
+            var user = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
+            if(user == null)
+            {
+                user = await _userManager.FindByEmailAsync(payload.Email);
+                if(user == null)
+                {
+                    user = new AppUser 
+                    { 
+                        Email = payload.Email, 
+                        UserName = payload.Name, 
+                        Name = payload.GivenName, 
+                        Surname = payload.FamilyName
+                    };
+                    try
+                    {
+                        await _userManager.CreateAsync(user);
+                    }
+                    catch (Exception e)
+                    {
+                        return BadRequest(e);
+                    }
+
+                    await _userManager.AddToRoleAsync(user, RoleConstants.MemberRole);
+                    await _userManager.AddLoginAsync(user, info);
+                }
+                else
+                {
+                    await _userManager.AddLoginAsync(user, info);
+                }
+            }
+
+            if (user == null)
+                return BadRequest("Invalid External Authentication.");
+
+            var authClaims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name,user.UserName),
+                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
+            };
+
+            var signInKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Key"]));
+
+            var token = new JwtSecurityToken(
+                issuer: Configuration["JWT:Issuer"],
+                audience: Configuration["JWT:Audience"],
+                expires: DateTime.UtcNow.AddMinutes(60),
+                claims: authClaims,
+                signingCredentials: new SigningCredentials(signInKey, SecurityAlgorithms.HmacSha256)
+            );
+
+
+            return Ok(new AuthResponseDto { Token = new JwtSecurityTokenHandler().WriteToken(token), IsAuthSuccessful = true });
         }
     }
 }
