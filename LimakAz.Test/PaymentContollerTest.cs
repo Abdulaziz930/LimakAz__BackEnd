@@ -122,5 +122,65 @@ namespace LimakAz.Test
 
             Assert.Equal<int>(400, (int)error.StatusCode);
         }
+
+        [Fact]
+        public async Task DecreaseBalance_UserNameIsNull_ReturnsBadRequestObject()
+        {
+            var decreaseDto = new DecreaseBalanceDto
+            {
+                UserName = null,
+                ResultBalance = 0,
+                Amount = 0
+            };
+
+            var result = await _paymentContoller.DecreaseBalance(decreaseDto);
+
+            var error = Assert.IsType<BadRequestObjectResult>(result);
+
+            Assert.Equal<int>(400, (int)error.StatusCode);
+        }
+
+        [Theory]
+        [InlineData("test5")]
+        public async Task DecreaseBalance_UserNameIsInValid_ReturnsNotFound(string userName)
+        {
+            var decreaseDto = new DecreaseBalanceDto
+            {
+                UserName = userName,
+                ResultBalance = 0,
+                Amount = 0
+            };
+
+            AppUser user = null;
+
+            _mockUserManager.Setup(service => service.FindByNameAsync(decreaseDto.UserName))
+                .ReturnsAsync(user);
+
+            var result = await _paymentContoller.DecreaseBalance(decreaseDto);
+
+            var error = Assert.IsType<NotFoundResult>(result);
+
+            Assert.Equal<int>(404, (int)error.StatusCode);
+        }
+
+        [Theory]
+        [InlineData(5,10,"test1")]
+        public async Task DecreaseBalance_BalanceIsDecreased_ReurnsOkObject(double resultBalance, double amount
+            , string userName)
+        {
+            var decreaseDto = new DecreaseBalanceDto
+            {
+                UserName = userName,
+                ResultBalance = resultBalance,
+                Amount = amount
+            };
+
+            _mockUserManager.Setup(service => service.FindByNameAsync(decreaseDto.UserName))
+                .ReturnsAsync(_appUsers.First());
+
+            var result = await _paymentContoller.DecreaseBalance(decreaseDto);
+
+            var okResult = Assert.IsType<OkObjectResult>(result);
+        }
     }
 }
