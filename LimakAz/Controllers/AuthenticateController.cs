@@ -32,7 +32,7 @@ namespace LimakAz.Controllers
         public IConfiguration Configuration { get; }
         public AuthenticateController(UserManager<AppUser> userManager
             , IExpiredVerifyEmailTokenService expiredVerifyEmailTokenService
-            , IResetPasswordExpiredTokenService resetPasswordExpiredTokenService , IConfiguration configuration, AppDbContext db)
+            , IResetPasswordExpiredTokenService resetPasswordExpiredTokenService , IConfiguration configuration)
         {
             _userManager = userManager;
             _expiredVerifyEmailTokenService = expiredVerifyEmailTokenService;
@@ -183,7 +183,6 @@ namespace LimakAz.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest,
                     new ResponseDto { Status = "Bad Request", Message = "This link is expired" });
 
-            //await _userManager.UpdateSecurityStampAsync(dbUser);
             var result = await _userManager.ResetPasswordAsync(dbUser, resetPassword.Token, resetPassword.Password);
             if (!result.Succeeded)
             {
