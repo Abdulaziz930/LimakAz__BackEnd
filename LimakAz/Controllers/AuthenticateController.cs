@@ -40,6 +40,8 @@ namespace LimakAz.Controllers
             Configuration = configuration;
         }
 
+        #region Register
+
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto register)
         {
@@ -93,6 +95,10 @@ namespace LimakAz.Controllers
             return Ok(new ResponseDto { Status = "Success", Message = "Confirmation email sent" });
         }
 
+        #endregion
+
+        #region Login
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto login)
         {
@@ -132,6 +138,11 @@ namespace LimakAz.Controllers
             });
         }
 
+        #endregion
+
+        #region ForgotPassword
+
+        //Send Email Reset Password's Link
         [HttpPost("forgotPassword")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto forgotPassword)
         {
@@ -159,6 +170,10 @@ namespace LimakAz.Controllers
 
             return Ok(new ResponseDto { Status = "Success", Message = "Email sent successfully" });
         }
+
+        #endregion
+
+        #region ResetPassword
 
         [HttpPost("resetPassword")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto resetPassword)
@@ -202,6 +217,10 @@ namespace LimakAz.Controllers
 
             return Ok(new ResponseDto { Status = "Success", Message = "Password has been successfully updated" });
         }
+
+        #endregion
+
+        #region VerifyEmail
 
         [HttpPost("verifyEmail")]
         public async Task<IActionResult> VerifyEmail([FromBody] VerifyEmailDto verifyEmail)
@@ -253,6 +272,10 @@ namespace LimakAz.Controllers
             return Ok(new ResponseDto { Status = "Success", Message = "Email has been confirmed" });
         }
 
+        #endregion
+
+        #region ChangePassword
+
         [HttpPost("changePassword")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePassword)
         {
@@ -275,6 +298,10 @@ namespace LimakAz.Controllers
 
             return Ok(new ResponseDto { Status = "Success", Message = "Password has been successfully updated" });
         }
+
+        #endregion
+
+        #region GoogleAuth
 
         [HttpPost("externalLogin")]
         public async Task<IActionResult> ExternalLogin([FromBody] ExternalAuthDto externalAuth)
@@ -343,5 +370,7 @@ namespace LimakAz.Controllers
                 Expires = token.ValidTo,
             });
         }
+
+        #endregion
     }
 }
