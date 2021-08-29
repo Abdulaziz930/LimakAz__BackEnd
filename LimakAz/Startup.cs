@@ -291,7 +291,12 @@ namespace LimakAz
 
             #endregion
 
-            services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+            #region General
+
+            services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling 
+                                        = ReferenceLoopHandling.Ignore);
+
+            #endregion
 
             #region Swagger
 

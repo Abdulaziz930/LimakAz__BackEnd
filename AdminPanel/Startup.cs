@@ -37,6 +37,8 @@ namespace AdminPanel
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            #region Db
+
             services.AddDbContext<UserDbContext>(options =>
             {
                 options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]);
@@ -54,7 +56,15 @@ namespace AdminPanel
 
             }).AddEntityFrameworkStores<UserDbContext>().AddDefaultTokenProviders();
 
+            #endregion
+
+            #region AutoMapper
+
             services.AddAutoMapper(typeof(AutoMapperProfile));
+
+            #endregion
+
+            #region Scoped
 
             services.AddScoped<IAdvertisementService, AdvertisementManager>();
             services.AddScoped<IAdvertisementDal, EFAdvertisementDal>();
@@ -185,9 +195,19 @@ namespace AdminPanel
             services.AddScoped<IOrderContentService, OrderContentManager>();
             services.AddScoped<IOrderContentDal, EFOrderContentDal>();
 
+            #endregion
+
+            #region General
+
             services.AddControllersWithViews();
 
+            #endregion
+
+            #region Constants
+
             Constants.ImageFolderPath = Path.Combine(_environment.WebRootPath, "img");
+
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
