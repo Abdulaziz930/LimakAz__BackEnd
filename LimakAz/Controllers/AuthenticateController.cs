@@ -42,6 +42,7 @@ namespace LimakAz.Controllers
 
         #region Register
 
+        //POST: api/Authenticate/register
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto register)
         {
@@ -99,6 +100,7 @@ namespace LimakAz.Controllers
 
         #region Login
 
+        //POST: api/Authenticate/login
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto login)
         {
@@ -142,6 +144,7 @@ namespace LimakAz.Controllers
 
         #region ForgotPassword
 
+        //POST: api/Authenticate/forgotPassword
         //Send Email Reset Password's Link
         [HttpPost("forgotPassword")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto forgotPassword)
@@ -175,6 +178,7 @@ namespace LimakAz.Controllers
 
         #region ResetPassword
 
+        //POST: api/Authenticate/resetPassword
         [HttpPost("resetPassword")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto resetPassword)
         {
@@ -222,6 +226,7 @@ namespace LimakAz.Controllers
 
         #region VerifyEmail
 
+        //POST: api/Authenticate/verifyEmail
         [HttpPost("verifyEmail")]
         public async Task<IActionResult> VerifyEmail([FromBody] VerifyEmailDto verifyEmail)
         {
@@ -276,6 +281,7 @@ namespace LimakAz.Controllers
 
         #region ChangePassword
 
+        //POST: api/Authenticate/changePassword
         [HttpPost("changePassword")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto changePassword)
         {
@@ -303,6 +309,7 @@ namespace LimakAz.Controllers
 
         #region GoogleAuth
 
+        //POST: api/Authenticate/externalLogin
         [HttpPost("externalLogin")]
         public async Task<IActionResult> ExternalLogin([FromBody] ExternalAuthDto externalAuth)
         {
