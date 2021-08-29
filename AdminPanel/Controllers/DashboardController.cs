@@ -1,5 +1,4 @@
-﻿using AdminPanel.Models;
-using DataAccess.Identity;
+﻿using DataAccess.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
