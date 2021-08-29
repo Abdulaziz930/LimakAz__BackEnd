@@ -9,7 +9,8 @@ namespace Utils
 {
     public static class VerifyGoogleToken
     {
-        public static async Task<GoogleJsonWebSignature.Payload> VerifyGoogleTokenAsync(ExternalAuthDto externalAuth, string configuration)
+        public static async Task<GoogleJsonWebSignature.Payload> VerifyGoogleTokenAsync(ExternalAuthDto externalAuth
+            , string configuration)
         {
             try
             {

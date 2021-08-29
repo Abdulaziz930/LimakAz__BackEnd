@@ -10,6 +10,11 @@ namespace Utils
 {
     public static class MakePayment
     {
+        /// <summary>
+        /// Stripe payment api's pay method
+        /// </summary>
+        /// <param name="payment">PaymentDto: email,token,sum,amount</param>
+        /// <returns>Charge</returns>
         public static async Task<Charge> PayAsync(PaymentDto payment)
         {
             StripeConfiguration.ApiKey = Constants.PaymentSecretKey;

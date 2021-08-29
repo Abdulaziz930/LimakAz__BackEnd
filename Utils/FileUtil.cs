@@ -9,6 +9,12 @@ namespace Utils
 {
     public static class FileUtil
     {
+        /// <summary>
+        /// Creates a file and adds a path
+        /// </summary>
+        /// <param name="folderPath"></param>
+        /// <param name="formFile"></param>
+        /// <returns>string</returns>
         public static async Task<string> GenerateFileAsync(string folderPath, IFormFile formFile)
         {
             var fileName = $"{Guid.NewGuid()}-{formFile.FileName}";
@@ -22,6 +28,12 @@ namespace Utils
             return fileName;
         }
 
+        /// <summary>
+        /// Creates a file and adds pathes
+        /// </summary>
+        /// <param name="folderPaths"></param>
+        /// <param name="formFile"></param>
+        /// <returns>string</returns>
         public static async Task<string> GenerateFileAsync(List<string> folderPaths, IFormFile formFile)
         {
             var fileName = $"{Guid.NewGuid()}-{formFile.FileName}";
@@ -39,6 +51,13 @@ namespace Utils
             return fileName;
         }
 
+        /// <summary>
+        /// update files
+        /// </summary>
+        /// <param name="folderPaths"></param>
+        /// <param name="secondFolderPaths"></param>
+        /// <param name="photo"></param>
+        /// <returns>string</returns>
         public static async Task<string> UpdateFileAsync(List<string> folderPaths,List<string> secondFolderPaths,IFormFile photo)
         {
             string fileName = "";
@@ -61,6 +80,11 @@ namespace Utils
             return fileName;
         }
 
+        /// <summary>
+        /// Delete files
+        /// </summary>
+        /// <param name="folderPaths"></param>
+        /// <returns>bool</returns>
         public static bool DeleteFile(List<string> folderPaths)
         {
             foreach (var path in folderPaths)

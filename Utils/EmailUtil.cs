@@ -10,6 +10,13 @@ namespace EduHome.Areas.AdminPanel.Utils
 {
     public static class EmailUtil
     {
+        /// <summary>
+        /// Send email a email address
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="body"></param>
+        /// <param name="subject"></param>
+        /// <returns>Task</returns>
         public static async Task SendEmailAsync(string email, string body, string subject)
         {
             using (MailMessage mail = new MailMessage())
@@ -39,35 +46,6 @@ namespace EduHome.Areas.AdminPanel.Utils
                     }
 
                 }
-            }
-        }
-
-        public static async Task UserSendEmailAsync(string email, string body, string subject)
-        {
-
-
-            using (SmtpClient smtp = new SmtpClient())
-            {
-                smtp.Host = "smtp.gmail.com";
-                smtp.EnableSsl = true;
-                smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-                smtp.UseDefaultCredentials = false;
-                NetworkCredential network = new NetworkCredential(Constants.EmailAdress, Constants.EmailPassword);
-                smtp.Credentials = network;
-                smtp.Port = 587;
-                var mail = new MailMessage(email, Constants.EmailAdress);
-                mail.Subject = subject;
-                mail.Body = body;
-                mail.IsBodyHtml = true;
-                try
-                {
-                    await smtp.SendMailAsync(mail);
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-
             }
         }
     }
