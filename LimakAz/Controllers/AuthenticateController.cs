@@ -336,7 +336,12 @@ namespace LimakAz.Controllers
             );
 
 
-            return Ok(new AuthResponseDto { Token = new JwtSecurityTokenHandler().WriteToken(token), IsAuthSuccessful = true });
+            return Ok(new AuthResponseDto 
+            { 
+                Token = new JwtSecurityTokenHandler().WriteToken(token), 
+                IsAuthSuccessful = true,
+                Expires = token.ValidTo,
+            });
         }
     }
 }

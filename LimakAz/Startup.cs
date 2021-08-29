@@ -29,6 +29,8 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Utils;
+using AspNetCoreRateLimit;
+using Microsoft.AspNetCore.Http;
 
 namespace LimakAz
 {
@@ -45,6 +47,8 @@ namespace LimakAz
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            #region Db
+
             services.AddDbContext<UserDbContext>(options =>
             {
                 options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]);
@@ -62,8 +66,16 @@ namespace LimakAz
 
             }).AddEntityFrameworkStores<UserDbContext>().AddDefaultTokenProviders();
 
+            #endregion
+
+            #region TokenLifeSpan
+
             services.Configure<DataProtectionTokenProviderOptions>(options =>
                 options.TokenLifespan = TimeSpan.FromMinutes(5));
+
+            #endregion
+
+            #region Authentication
 
             services.AddAuthentication(options =>
             {
@@ -89,6 +101,10 @@ namespace LimakAz
                 o.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
             });
 
+            #endregion
+
+            #region Cors
+
             services.AddCors(options =>
             {
                 options.AddPolicy(name: "AllowOrigin",
@@ -99,6 +115,21 @@ namespace LimakAz
                                             .AllowAnyMethod();
                     });
             });
+
+            #endregion
+
+            #region Rate Limiting
+
+            services.AddOptions();
+            services.AddMemoryCache();
+            services.Configure<IpRateLimitOptions>(Configuration.GetSection("IpRateLimit"));
+            services.AddInMemoryRateLimiting();
+            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+            services.AddHttpContextAccessor();
+
+            #endregion
+
+            #region Scoped
 
             services.AddScoped<IAdvertisementService, AdvertisementManager>();
             services.AddScoped<IAdvertisementDal, EFAdvertisementDal>();
@@ -241,7 +272,15 @@ namespace LimakAz
             services.AddScoped<IOrderContentService, OrderContentManager>();
             services.AddScoped<IOrderContentDal, EFOrderContentDal>();
 
+            #endregion
+
+            #region AutoMapper
+
             services.AddAutoMapper(typeof(AutoMapperProfile));
+
+            #endregion
+
+            #region Constants
 
             Constants.EmailAdress = Configuration["Gmail:Address"];
             Constants.EmailPassword = Configuration["Gmail:Password"];
@@ -250,22 +289,37 @@ namespace LimakAz
 
             Constants.PaymentSecretKey = Configuration["StripePayment:SecretKey"];
 
+            #endregion
+
             services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+
+            #region Swagger
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "LimakAz", Version = "v1" });
             });
+
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+            app.UseIpRateLimiting();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LimakAz v1"));
             }
+            else
+            {
+                app.UseHsts();
+            }
+
 
             app.UseHttpsRedirection();
 
