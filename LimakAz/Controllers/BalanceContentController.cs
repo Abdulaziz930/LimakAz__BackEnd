@@ -32,6 +32,7 @@ namespace LimakAz.Controllers
             _mapper = mapper;
         }
 
+        //GET: api/Balance/getBalanceContent/az
         [HttpGet("getBalanceContent/{languageCode}")]
         public async Task<IActionResult> GetBalanceCotent([FromRoute] string languageCode)
         {
@@ -47,6 +48,7 @@ namespace LimakAz.Controllers
             return Ok(balanceContentDto);
         }
 
+        //GET: api/Balance/getBalance/test
         [HttpGet("getBalance/{userName}")]
         public async Task<IActionResult> GetBalance([FromRoute] string userName)
         {
@@ -65,6 +67,7 @@ namespace LimakAz.Controllers
             return Ok(balanceDto);
         }
 
+        //GET: api/Balance/getBalanceModalContent/az
         [HttpGet("getBalanceModalContent/{languageCode}")]
         public async Task<IActionResult> GetBalanceModalContent([FromRoute] string languageCode)
         {

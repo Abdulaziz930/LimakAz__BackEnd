@@ -31,6 +31,7 @@ namespace LimakAz.Controllers
             _mapper = mapper;
         }
 
+        //GET: api/RegisterContent/getRegisterContent/az
         [HttpGet("getRegisterContent/{languageCode}")]
         public async Task<IActionResult> GetRegisterContent([FromRoute] string languageCode)
         {
@@ -46,6 +47,7 @@ namespace LimakAz.Controllers
             return Ok(registerContentDto);
         }
 
+        //GET: api/RegisterContent/getRegisterInformation/az
         [HttpGet("getRegisterInformation/{languageCode}")]
         public async Task<IActionResult> GetRegisterInformation([FromRoute] string languageCode)
         {
@@ -61,6 +63,7 @@ namespace LimakAz.Controllers
             return Ok(registerInformationDto);
         }
 
+        //GET: api/RegisterContent/getGenders/az
         [HttpGet("getGenders/{langaugeCode}")]
         public async Task<IActionResult> GetGender([FromRoute] string langaugeCode)
         {
@@ -76,6 +79,7 @@ namespace LimakAz.Controllers
             return Ok(gendersDto);
         }
 
+        //GET: api/RegisterContent/getUserRule/az
         [HttpGet("getUserRule/{langaugeCode}")]
         public async Task<IActionResult> GetUserRule([FromRoute] string langaugeCode)
         {

@@ -30,6 +30,7 @@ namespace LimakAz.Controllers
             _mapper = mapper;
         }
 
+        //GET: api/Profile/getUserInfo/test
         [HttpGet("getUserInfo/{userName}")]
         public async Task<IActionResult> GetUser([FromRoute] string userName)
         {
@@ -58,6 +59,7 @@ namespace LimakAz.Controllers
             return Ok(userDto);
         }
 
+        //PUT: api/Profile/updateUser
         [HttpPut("updateUser")]
         public async Task<IActionResult> UpdateUser([FromBody] UserDto user)
         {
@@ -84,6 +86,7 @@ namespace LimakAz.Controllers
             return Ok(new ResponseDto { Status = "Success", Message = "User successfully updated" });
         }
 
+        //GET: api/Profile/getSettingContent/az
         [HttpGet("getSettingContent/{languageCode}")]
         public async Task<IActionResult> GetSettingContent([FromRoute] string languageCode)
         {

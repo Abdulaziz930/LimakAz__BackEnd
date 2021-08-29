@@ -28,6 +28,7 @@ namespace LimakAz.Controllers
             _mapper = mapper;
         }
 
+        //GET: api/CalculatorContent/getCalculatorInformationContent/az
         [HttpGet("getCalculatorInformationContent/{languageCode}")]
         public async Task<IActionResult> GetCalculatorInformationContent([FromRoute] string languageCode)
         {
@@ -43,6 +44,7 @@ namespace LimakAz.Controllers
             return Ok(contentsDto);
         }
 
+        //GET: api/CalculatorContent/getCurrency
         [HttpGet("getCurrency")]
         public async Task<IActionResult> GetCurrency()
         {
@@ -55,6 +57,7 @@ namespace LimakAz.Controllers
             return Ok(currencyDto);
         }
 
+        //GET: api/CalculatorContent/getCalculatorContent/az
         [HttpGet("getCalculatorContent/{languageCode}")]
         public async Task<IActionResult> GetCalculatorContent([FromRoute] string languageCode)
         {

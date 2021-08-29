@@ -25,6 +25,7 @@ namespace LimakAz.Controllers
             _mapper = mapper;
         }
 
+        //GET: api/Language
         [HttpGet]
         public async Task<IActionResult> Get()
         {

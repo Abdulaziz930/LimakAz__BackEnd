@@ -23,6 +23,7 @@ namespace LimakAz.Controllers
             _mapper = mapper;
         }
 
+        //GET: api/SocialMedia
         [HttpGet]
         public async Task<IActionResult> Get()
         {

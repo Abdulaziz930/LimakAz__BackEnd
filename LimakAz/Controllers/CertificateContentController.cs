@@ -24,6 +24,7 @@ namespace LimakAz.Controllers
             _mapper = mapper;
         }
 
+        //GET: api/CertificateContent
         [HttpGet]
         public async Task<IActionResult> Get()
         {

@@ -23,6 +23,7 @@ namespace LimakAz.Controllers
             _mapper = mapper;
         }
 
+        //GET: api/ForgotPasswordContent/getForgotPasswordContent/az
         [HttpGet("getForgotPasswordContent/{languageCode}")]
         public async Task<IActionResult> GetForgotPasswordContent([FromRoute] string languageCode)
         {

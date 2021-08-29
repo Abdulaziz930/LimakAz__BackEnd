@@ -25,6 +25,7 @@ namespace LimakAz.Controllers
             _mapper = mapper;
         }
 
+        //GET: api/ContactContent/getContactsContent/az
         [HttpGet("getContactsContent/{languageCode}")]
         public async Task<IActionResult> GetContactsContent([FromRoute] string languageCode)
         {
@@ -70,6 +71,7 @@ namespace LimakAz.Controllers
             return Ok(contactsDto);
         }
 
+        //GET: api/ContactContent/getContactContent/az
         [HttpGet("getContactContent/{languageCode}")]
         public async Task<IActionResult> GetContactContent([FromRoute] string languageCode)
         {

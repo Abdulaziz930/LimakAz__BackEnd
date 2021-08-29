@@ -20,6 +20,7 @@ namespace LimakAz.Controllers
             _shopService = shopService;
         }
 
+        //GET: api/Shop/getAllShops/1/5/5
         [HttpGet("getAllShops/{id}/{skipCount}/{takeCount}")]
         public async Task<IActionResult> GetAllShops([FromRoute] int? id, int skipCount = 0, int takeCount = 10)
         {
@@ -47,6 +48,7 @@ namespace LimakAz.Controllers
             return Ok(shopsDto);
         }
 
+        //GET: api/Shop/getShopsCount/1
         [HttpGet("getShopsCount/{id}")]
         public async Task<IActionResult> GetShopsCount([FromRoute] int? id)
         {
@@ -62,6 +64,7 @@ namespace LimakAz.Controllers
             return Ok(count);
         }
 
+        //GET: api/Shop
         [HttpGet]
         public async Task<IActionResult> GetRecommendedShops()
         {

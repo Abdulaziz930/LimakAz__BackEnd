@@ -56,6 +56,7 @@ namespace LimakAz.Controllers
             _mapper = mapper;
         }
 
+        //GET: api/Content/getCalculatorContent/az
         [HttpGet("getCalculatorContent/{languageCode}")]
         public async Task<IActionResult> GetCalculatorContent([FromRoute] string languageCode)
         {
@@ -71,6 +72,7 @@ namespace LimakAz.Controllers
             return Ok(calculatorDto);
         }
 
+        //GET: api/Content/getContriesContent/az
         [HttpGet("getContriesContent/{languageCode}")]
         public async Task<IActionResult> GetCountriesContnent([FromRoute] string languageCode)
         {
@@ -86,6 +88,7 @@ namespace LimakAz.Controllers
             return Ok(countriesDto);
         }
 
+        //GET: api/Content/getCitiesContent/az
         [HttpGet("getCitiesContent/{languageCode}")]
         public async Task<IActionResult> GetCitiesContnent([FromRoute] string languageCode)
         {
@@ -101,6 +104,7 @@ namespace LimakAz.Controllers
             return Ok(citiesDto);
         }
 
+        //GET: api/Content/getWeightContent/az
         [HttpGet("getWeightContent/{languageCode}")]
         public async Task<IActionResult> GetWeightsContnent([FromRoute] string languageCode)
         {
@@ -116,6 +120,7 @@ namespace LimakAz.Controllers
             return Ok(weightsDto);
         }
 
+        //GET: api/Content/getUnitsOfLengthContent/az
         [HttpGet("getUnitsOfLengthContent/{languageCode}")]
         public async Task<IActionResult> GetUnitsOfLengthsContnent([FromRoute] string languageCode)
         {
@@ -131,6 +136,7 @@ namespace LimakAz.Controllers
             return Ok(unitsOfLengthsDto);
         }
 
+        //GET: api/Content/getProductTypesContent/az
         [HttpGet("getProductTypesContent/{languageCode}")]
         public async Task<IActionResult> GetProductTypesContnent([FromRoute] string languageCode)
         {
@@ -146,6 +152,7 @@ namespace LimakAz.Controllers
             return Ok(productTypesDto);
         }
 
+        //GET: api/Content/getHowItWorkContent/az
         [HttpGet("getHowItWorkContent/{languageCode}")]
         public async Task<IActionResult> GetHowItWorkContnent([FromRoute] string languageCode)
         {
@@ -161,6 +168,7 @@ namespace LimakAz.Controllers
             return Ok(howItWorkDto);
         }
 
+        //GET: api/Content/getHowItWorkCardContent/az
         [HttpGet("getHowItWorkCardContent/{languageCode}")]
         public async Task<IActionResult> GetHowItWorkCardContnent([FromRoute] string languageCode)
         {
@@ -176,6 +184,7 @@ namespace LimakAz.Controllers
             return Ok(howItWorkCardsDto);
         }
 
+        //GET: api/Content/getCertificateContent/az
         [HttpGet("getCertificateContent/{languageCode}")]
         public async Task<IActionResult> GetCertificateContent([FromRoute] string languageCode)
         {
@@ -191,6 +200,7 @@ namespace LimakAz.Controllers
             return Ok(certificateDto);
         }
 
+        //GET: api/Content/GetAdvertisimentTitleContent/az
         [HttpGet("GetAdvertisimentTitleContent/{languageCode}")]
         public async Task<IActionResult> GetAdvertisimentTitleContent([FromRoute] string languageCode)
         {
@@ -206,6 +216,7 @@ namespace LimakAz.Controllers
             return Ok(advertisimentTitleDto);
         }
 
+        //GET: api/Content/getAdvertisimentContent/az
         [HttpGet("getAdvertisimentContent/{languageCode}/{count}")]
         public async Task<IActionResult> GetAdvertisementContent([FromRoute] string languageCode, int? count = 10)
         {
@@ -224,6 +235,7 @@ namespace LimakAz.Controllers
             return Ok(advertisementsDto);
         }
 
+        //GET: api/Content/getTariffContent/az
         [HttpGet("getTariffContent/{languageCode}")]
         public async Task<IActionResult> GetTariffContent([FromRoute] string languageCode)
         {
@@ -274,6 +286,7 @@ namespace LimakAz.Controllers
             return Ok(tariffContentsDto);
         }
 
+        //GET: api/Content/getTariffHeaderContent/az
         [HttpGet("getTariffHeaderContent/{languageCode}")]
         public async Task<IActionResult> GetTariffHeaderContent([FromRoute] string languageCode)
         {
@@ -289,6 +302,7 @@ namespace LimakAz.Controllers
             return Ok(tariffHeaderDto);
         }
 
+        //GET: api/Content/getContactContent/az
         [HttpGet("getContactContent/{languageCode}")]
         public async Task<IActionResult> GetContactContent([FromRoute] string languageCode)
         {

@@ -25,6 +25,7 @@ namespace LimakAz.Controllers
             _mapper = mapper;
         }
 
+        //GET: api/Rule/getRules/az
         [HttpGet("getRules/{languageCode}")]
         public async Task<IActionResult> GetRules([FromRoute] string languageCode)
         {
@@ -40,6 +41,7 @@ namespace LimakAz.Controllers
             return Ok(rulesDto);
         }
 
+        //GET: api/Rule/getRuleContent/az
         [HttpGet("getRuleContent/{languageCode}")]
         public async Task<IActionResult> GetRuleContent([FromRoute] string languageCode)
         {

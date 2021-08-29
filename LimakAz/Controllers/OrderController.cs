@@ -36,6 +36,7 @@ namespace LimakAz.Controllers
             _userManager = userManager;
         }
 
+        //POST: api/Order/makeOrder
         [HttpPost("makeOrder")]
         public async Task<IActionResult> PostOrder([FromBody] List<MakeOrderDto> makeOrders)
         {
@@ -67,6 +68,7 @@ namespace LimakAz.Controllers
             return Ok(new ResponseDto { Status = "Success", Message = "Order succeffuly added" });
         }
 
+        //GET: api/Order/getOrders/az/test
         [HttpGet("getOrders/{languageCode}/{userName}")]
         public async Task<IActionResult> GetOrders([FromRoute] string languageCode, string userName)
         {
@@ -110,6 +112,7 @@ namespace LimakAz.Controllers
             return Ok(statusesDto);
         }
 
+        //GET: api/Order/getOrderContent/az
         [HttpGet("getOrderContent/{languageCode}")]
         public async Task<IActionResult> GetOrderContent([FromRoute] string languageCode)
         {

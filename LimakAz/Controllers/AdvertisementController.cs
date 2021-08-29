@@ -26,6 +26,7 @@ namespace LimakAz.Controllers
             _mapper = mapper;
         }
 
+        //GET: api/Advertisement/getAdvertisementDetail/1/az
         [HttpGet("getAdvertisementDetail/{id}/{languageCode}")]
         public async Task<IActionResult> GetAdvertisementDetail([FromRoute] int? id,string languageCode)
         {
@@ -51,6 +52,7 @@ namespace LimakAz.Controllers
             return Ok(advertisementDetailDto);
         }
 
+        //GET: api/Advertisement/getAdvertisementHeader/az
         [HttpGet("getAdvertisementHeader/{languageCode}")]
         public async Task<IActionResult> GetAdvertisementHeader([FromRoute] string languageCode)
         {

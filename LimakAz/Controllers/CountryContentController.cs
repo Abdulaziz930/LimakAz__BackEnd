@@ -23,6 +23,7 @@ namespace LimakAz.Controllers
             _mapper = mapper;
         }
 
+        //GET: api/CountryContent/getCountryCountent/az
         [HttpGet("getCountryCountent/{languageCode}")]
         public async Task<IActionResult> GetCountryContent([FromRoute] string languageCode)
         {

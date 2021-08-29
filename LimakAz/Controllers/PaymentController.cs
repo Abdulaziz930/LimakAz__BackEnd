@@ -34,6 +34,7 @@ namespace LimakAz.Controllers
             _mapper = mapper;
         }
 
+        //POST: api/Payment/increaseBalance
         [HttpPost("increaseBalance")]
         public async Task<IActionResult> IncreaseBalance([FromBody] PaymentDto payment)
         {
@@ -82,6 +83,7 @@ namespace LimakAz.Controllers
             }
         }
 
+        //POST: api/Payment/decreaseBalance
         [HttpPost("decreaseBalance")]
         public async Task<IActionResult> DecreaseBalance([FromBody] DecreaseBalanceDto payment)
         {
@@ -110,6 +112,7 @@ namespace LimakAz.Controllers
             return Ok(new ResponseDto { Status = "Success", Message = "Payment is successful " });
         }
 
+        //GET: api/Payment/getTransactions/test
         [HttpGet("getTransactions/{userName}")]
         public async Task<IActionResult> GetTransactions([FromRoute] string userName, [FromQuery] int? page = 1)
         {
@@ -141,6 +144,7 @@ namespace LimakAz.Controllers
             return Ok(transactionDto);
         }
 
+        //GET: api/Payment/getTransactionsCount/test
         [HttpGet("getTransactionsCount/{userName}")]
         public async Task<IActionResult> GetTransactionsCount([FromRoute] string userName)
         {
@@ -160,6 +164,7 @@ namespace LimakAz.Controllers
             return Ok(result);
         }
 
+        //GET: api/Payment/getTransactionDetail/test/1
         [HttpGet("getTransactionDetail/{userName}/{id}")]
         public async Task<IActionResult> GetTransactionDetail([FromRoute] string userName, int? id)
         {
@@ -188,6 +193,7 @@ namespace LimakAz.Controllers
             return Ok(transactionDto);
         }
 
+        //GET: api/Payment/getAllTransactions/test
         [HttpGet("getAllTransactions/{userName}")]
         public async Task<IActionResult> GetAllTransactions([FromRoute] string userName)
         {

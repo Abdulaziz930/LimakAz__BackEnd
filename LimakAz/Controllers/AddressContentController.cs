@@ -25,6 +25,7 @@ namespace LimakAz.Controllers
             _mapper = mapper;
         }
 
+        //GET: api/AddressContent/getAddressContent/az
         [HttpGet("getAddressContent/{languageCode}")]
         public async Task<IActionResult> GetAddressContent([FromRoute] string languageCode)
         {

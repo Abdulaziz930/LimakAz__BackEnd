@@ -23,6 +23,7 @@ namespace LimakAz.Controllers
             _mapper = mapper;
         }
 
+        //GET: api/ShopContent/getShopContent/az
         [HttpGet("getShopContent/{languageCode}")]
         public async Task<IActionResult> GetShopContent([FromRoute] string languageCode)
         {
