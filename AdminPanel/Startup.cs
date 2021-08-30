@@ -39,7 +39,7 @@ namespace AdminPanel
         {
             #region Db
 
-            services.AddDbContext<UserDbContext>(options =>
+            services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]);
 
@@ -54,7 +54,7 @@ namespace AdminPanel
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
                 options.Lockout.AllowedForNewUsers = true;
 
-            }).AddEntityFrameworkStores<UserDbContext>().AddDefaultTokenProviders();
+            }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
             #endregion
 
