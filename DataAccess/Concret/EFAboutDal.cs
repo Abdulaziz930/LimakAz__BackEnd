@@ -15,7 +15,6 @@ namespace DataAccess.Concret
 
         public EFAboutDal(AppDbContext context) : base(context)
         {
-
         }
 
         public async Task<About> GetAboutAsync(string languageCode)
