@@ -1,4 +1,5 @@
 ﻿using Buisness.Abstract;
+using DataAccess;
 using Entities.Dto;
 using Entities.Models;
 using LimakAz.Controllers;
@@ -20,6 +21,7 @@ namespace LimakAz.Test
         private readonly Mock<FakeUserManager> _mockUserManager;
         private readonly Mock<IExpiredVerifyEmailTokenService> _mockExpiredVerifyEmailTokenService;
         private readonly Mock<IResetPasswordExpiredTokenService> _mockResetPasswordExpiredTokenService;
+        private readonly Mock<AppDbContext> _mockDbContext;
         public Mock<IConfiguration> mockConfiguration { get; }
         private readonly AuthenticateController _authenticateController;
         private List<AppUser> _appUsers;
@@ -29,9 +31,10 @@ namespace LimakAz.Test
             _mockUserManager = new Mock<FakeUserManager>();
             _mockExpiredVerifyEmailTokenService = new Mock<IExpiredVerifyEmailTokenService>();
             _mockResetPasswordExpiredTokenService = new Mock<IResetPasswordExpiredTokenService>();
+            _mockDbContext = new Mock<AppDbContext>();
             mockConfiguration = new Mock<IConfiguration>();
             _authenticateController = new AuthenticateController(_mockUserManager.Object, _mockExpiredVerifyEmailTokenService.Object
-                , _mockResetPasswordExpiredTokenService.Object, mockConfiguration.Object);
+                , _mockResetPasswordExpiredTokenService.Object, mockConfiguration.Object, _mockDbContext.Object);
             _appUsers = new List<AppUser>()
             {
                 new AppUser { Id = "as-12", Name = "test", Surname = "test" , UserName = "test1" , Email = "test1@email.com"
