@@ -29,17 +29,17 @@ namespace LimakAz.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly IExpiredVerifyEmailTokenService _expiredVerifyEmailTokenService;
         private readonly IResetPasswordExpiredTokenService _resetPasswordExpiredTokenService;
-        //private readonly AppDbContext _dbContext;
+        private readonly AppDbContext _dbContext;
         public IConfiguration Configuration { get; }
         public AuthenticateController(UserManager<AppUser> userManager
             , IExpiredVerifyEmailTokenService expiredVerifyEmailTokenService
             , IResetPasswordExpiredTokenService resetPasswordExpiredTokenService 
-            , IConfiguration configuration /*AppDbContext dbContext*/)
+            , IConfiguration configuration, AppDbContext dbContext)
         {
             _userManager = userManager;
             _expiredVerifyEmailTokenService = expiredVerifyEmailTokenService;
             _resetPasswordExpiredTokenService = resetPasswordExpiredTokenService;
-            //_dbContext = dbContext;
+            _dbContext = dbContext;
             Configuration = configuration;
         }
 
@@ -333,13 +333,20 @@ namespace LimakAz.Controllers
                         Email = payload.Email, 
                         UserName = payload.Name, 
                         Name = payload.GivenName, 
-                        Surname = payload.FamilyName
+                        Surname = payload.FamilyName,
+                        City = "",
+                        Address = "",
+                        BirthDay = DateTime.Now,
+                        FinCode = "1234567",
+                        SerialNumber = 12345678,
+                        PhoneNumber = "",
+                        EmailConfirmed = true
                     };
                     try
                     {
-                        await _userManager.CreateAsync(user);
-                        //await _dbContext.Users.AddAsync(user);
-                        //await _dbContext.SaveChangesAsync();
+                        //await _userManager.CreateAsync(user);
+                        await _dbContext.Users.AddAsync(user);
+                        await _dbContext.SaveChangesAsync();
                     }
                     catch (Exception e)
                     {
