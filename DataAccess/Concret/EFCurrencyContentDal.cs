@@ -12,10 +12,13 @@ namespace DataAccess.Concret
 {
     public class EFCurrencyContentDal : EFRepositoryBase<CurrencyContent, AppDbContext>, ICurrencyContentDal
     {
+        public EFCurrencyContentDal(AppDbContext context) : base(context)
+        {
+        }
+
         public async Task<List<CurrencyContent>> GetCurrencyContentsByCountAsync(int skipCount, int takeCount)
         {
-            await using var context = new AppDbContext();
-            return await context.CurrencyContents
+            return await Context.CurrencyContents
                 .Where(x => x.IsDeleted == false).OrderByDescending(x => x.Id)
                 .Skip(skipCount).Take(takeCount).ToListAsync();
         }

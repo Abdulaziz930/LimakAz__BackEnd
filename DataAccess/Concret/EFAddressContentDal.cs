@@ -12,10 +12,13 @@ namespace DataAccess.Concret
 {
     public class EFAddressContentDal : EFRepositoryBase<AddressContent, AppDbContext>, IAddressContentDal
     {
+        public EFAddressContentDal(AppDbContext context) : base(context)
+        {
+        }
+
         public async Task<List<Country>> GetAddressContentsAsync(string languageCode)
         {
-            await using var context = new AppDbContext();
-            return await context.Countries.Include(x => x.Language)
+            return await Context.Countries.Include(x => x.Language)
                 .Include(x => x.AddressContents)
                 .Where(x => x.IsDeleted == false 
                 && x.Language.Code == languageCode 
@@ -25,8 +28,7 @@ namespace DataAccess.Concret
 
         public async Task<List<AddressContent>> GetAddressContentsByCountAsync(int skipCount, int takeCount)
         {
-            await using var context = new AppDbContext();
-            return await context.AddressContents
+            return await Context.AddressContents
                 .OrderByDescending(x => x.Id)
                 .Skip(skipCount).Take(takeCount).ToListAsync();
         }

@@ -12,17 +12,19 @@ namespace DataAccess.Concret
 {
     public class EFLoginContentDal : EFRepositoryBase<LoginContent, AppDbContext>, ILoginContentDal
     {
+        public EFLoginContentDal(AppDbContext context) : base(context)
+        {
+        }
+
         public async Task<LoginContent> GetLoginContentAsync(string languageCode)
         {
-            await using var context = new AppDbContext();
-            return await context.LoginContents.Include(x => x.Language)
+            return await Context.LoginContents.Include(x => x.Language)
                 .FirstOrDefaultAsync(x => x.Language.IsDeleted == false && x.Language.Code == languageCode);
         }
 
         public async Task<List<LoginContent>> GetLoginContentsByCountAsync(int skipCount, int takeCount)
         {
-            await using var context = new AppDbContext();
-            return await context.LoginContents
+            return await Context.LoginContents
                 .OrderByDescending(x => x.Id)
                 .Skip(skipCount).Take(takeCount).ToListAsync();
         }

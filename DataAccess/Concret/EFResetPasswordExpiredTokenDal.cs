@@ -11,10 +11,13 @@ namespace DataAccess.Concret
 {
     public class EFResetPasswordExpiredTokenDal : EFRepositoryBase<ResetPasswordExpiredToken, AppDbContext>, IResetPasswordExpiredTokenDal
     {
+        public EFResetPasswordExpiredTokenDal(AppDbContext context) : base(context)
+        {
+        }
+
         public async Task<bool> CheckTokenIsExistAsync(string token)
         {
-            await using var context = new AppDbContext();
-            return await context.ResetPasswordExpiredTokens.AnyAsync(x => x.Token == token);
+            return await Context.ResetPasswordExpiredTokens.AnyAsync(x => x.Token == token);
         }
     }
 }

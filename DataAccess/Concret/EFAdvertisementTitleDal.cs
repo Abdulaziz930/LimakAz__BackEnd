@@ -12,18 +12,19 @@ namespace DataAccess.Concret
 {
     public class EFAdvertisementTitleDal : EFRepositoryBase<AdvertisimentTitle, AppDbContext>, IAdvertisementTitleDal
     {
+        public EFAdvertisementTitleDal(AppDbContext context) : base(context)
+        {
+        }
 
         public async Task<AdvertisimentTitle> GetMultiLanguageAdvertisementTitleAsync(string languageCode)
         {
-            await using var context = new AppDbContext();
-            return await context.AdvertisimentTitles.Include(x => x.Language)
+            return await Context.AdvertisimentTitles.Include(x => x.Language)
                 .FirstOrDefaultAsync(x => x.Language.Code == languageCode && x.IsDeleted == false && x.Language.IsDeleted == false);
         }
 
         public async Task<List<AdvertisimentTitle>> GetAllAdvertisementTitlesByCountAsync(int skipCount, int takeCount)
         {
-            await using var context = new AppDbContext();
-            return await context.AdvertisimentTitles.Where(x => x.IsDeleted == false)
+            return await Context.AdvertisimentTitles.Where(x => x.IsDeleted == false)
                 .OrderByDescending(x => x.Id).Skip(skipCount).Take(takeCount).ToListAsync();
         }
     }

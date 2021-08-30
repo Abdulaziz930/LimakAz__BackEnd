@@ -12,31 +12,31 @@ namespace DataAccess.Concret
 {
     public class EFCityDal : EFRepositoryBase<City, AppDbContext>, ICityDal
     {
+        public EFCityDal(AppDbContext context) : base(context)
+        {
+        }
+
         public async Task<List<City>> GetAllMultiLanguageCitiesAsync(string languageCode)
         {
-            await using var context = new AppDbContext();
-            return await context.Cities.Include(x => x.Language)
+            return await Context.Cities.Include(x => x.Language)
                 .Where(x => x.Language.Code == languageCode && x.IsDeleted == false && x.Language.IsDeleted == false).ToListAsync();
         }
 
         public async Task<List<City>> GetCitiesByCountAsync(int skipCount, int takeCount)
         {
-            await using var context = new AppDbContext();
-            return await context.Cities.Where(x => x.IsDeleted == false)
+            return await Context.Cities.Where(x => x.IsDeleted == false)
                 .OrderByDescending(x => x.Id).Skip(skipCount).Take(takeCount).ToListAsync();
         }
 
         public async Task<City> GetCityWithIncludeAsync(int id)
         {
-            await using var context = new AppDbContext();
-            return await context.Cities.Include(x => x.Language)
+            return await Context.Cities.Include(x => x.Language)
                 .FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false && x.Language.IsDeleted == false);
         }
 
         public async Task<City> GetMultiLanguageCityAsync(int id, string languageCode)
         {
-            await using var context = new AppDbContext();
-            return await context.Cities.Include(x => x.Language)
+            return await Context.Cities.Include(x => x.Language)
                 .FirstOrDefaultAsync(x => x.Language.Code == languageCode && x.IsDeleted == false && x.Language.IsDeleted == false);
         }
     }

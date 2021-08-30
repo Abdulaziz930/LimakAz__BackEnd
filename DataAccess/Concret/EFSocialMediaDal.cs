@@ -12,10 +12,13 @@ namespace DataAccess.Concret
 {
     public class EFSocialMediaDal : EFRepositoryBase<SocialMedia, AppDbContext>, ISocialMediaDal
     {
+        public EFSocialMediaDal(AppDbContext context) : base(context)
+        {
+        }
+
         public async Task<List<SocialMedia>> GetSocialMediasByCountAsync(int skipCount, int takeCount)
         {
-            await using var context = new AppDbContext();
-            return await context.SocialMedias.Where(x => x.IsDeleted == false)
+            return await Context.SocialMedias.Where(x => x.IsDeleted == false)
                 .OrderByDescending(x => x.Id).Skip(skipCount).Take(takeCount).ToListAsync();
         }
     }

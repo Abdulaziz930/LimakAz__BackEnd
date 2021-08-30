@@ -9,90 +9,82 @@ using System.Threading.Tasks;
 
 namespace Core.Repository.EFRepository
 {
-    public class EFRepositoryBase<TEntity,IContext> : IRepository<TEntity> where TEntity : class,IEntity,new()
+    public class EFRepositoryBase<TEntity, IContext> : IRepository<TEntity> where TEntity : class, IEntity, new()
                                                                            where IContext : DbContext, new()
     {
+        protected readonly IContext Context;
+
+        public EFRepositoryBase(IContext context)
+        {
+            Context = context;
+        }
+
         public async Task<bool> AddAsync(TEntity entity)
         {
-            await using (var context = new IContext())
+            await using var dbContextTransaction = await Context.Database.BeginTransactionAsync();
+            try
             {
-                await using var dbContextTransaction = await context.Database.BeginTransactionAsync();
-                try
-                {
-                    await context.Set<TEntity>().AddAsync(entity);
-                    await context.SaveChangesAsync();
-                    await dbContextTransaction.CommitAsync();
+                await Context.Set<TEntity>().AddAsync(entity);
+                await Context.SaveChangesAsync();
+                await dbContextTransaction.CommitAsync();
 
-                    return true;
-                }
-                catch (Exception)
-                {
-                    await dbContextTransaction.RollbackAsync();
-                    throw;
-                }
+                return true;
+            }
+            catch (Exception)
+            {
+                await dbContextTransaction.RollbackAsync();
+                throw;
             }
         }
         public async Task<bool> DeleteAsync(TEntity entity)
         {
-            await using (var context = new IContext())
+            await using var dbContextTransaction = await Context.Database.BeginTransactionAsync();
+            try
             {
-                await using var dbContextTransaction = await context.Database.BeginTransactionAsync();
-                try
-                {
-                    context.Set<TEntity>().Remove(entity);
-                    await context.SaveChangesAsync();
-                    await dbContextTransaction.CommitAsync();
+                Context.Set<TEntity>().Remove(entity);
+                await Context.SaveChangesAsync();
+                await dbContextTransaction.CommitAsync();
 
-                    return true;
-                }
-                catch (Exception)
-                {
-                    await dbContextTransaction.RollbackAsync();
-                    throw;
-                }
+                return true;
+            }
+            catch (Exception)
+            {
+                await dbContextTransaction.RollbackAsync();
+                throw;
             }
         }
 
         public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> filter = null)
         {
-            await using (var context = new IContext())
+            if (filter == null)
             {
-                if(filter == null)
-                {
-                    return await context.Set<TEntity>().AsNoTracking().ToListAsync();
-                }
-                
-                return await context.Set<TEntity>().AsNoTracking().Where(filter).ToListAsync();
+                return await Context.Set<TEntity>().AsNoTracking().ToListAsync();
             }
+
+            return await Context.Set<TEntity>().AsNoTracking().Where(filter).ToListAsync();
         }
 
         public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> filter = null)
         {
-            await using (var context = new IContext())
-            {
-                return filter == null ? await context.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync()
-                                      : await context.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(filter);
-            }
+            return filter == null ? await Context.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync()
+                                  : await Context.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(filter);
         }
 
         public async Task<bool> UpdateAsync(TEntity entity)
         {
-            await using (var context = new IContext())
+            await using var dbContextTransaction = await Context.Database.BeginTransactionAsync();
+            try
             {
-                await using var dbContextTransaction = await context.Database.BeginTransactionAsync();
-                try
-                {
-                    context.Set<TEntity>().Update(entity);
-                    await context.SaveChangesAsync();
-                    await dbContextTransaction.CommitAsync();
+                Context.Set<TEntity>().Update(entity);
+                await Context.SaveChangesAsync();
+                await dbContextTransaction.CommitAsync();
 
-                    return true;
-                }
-                catch (Exception)
-                {
-                    await dbContextTransaction.RollbackAsync();
-                    throw;
-                }
+                return true;
+            }
+            catch (Exception)
+            {
+                await dbContextTransaction.RollbackAsync();
+                throw;
             }
         }
     }

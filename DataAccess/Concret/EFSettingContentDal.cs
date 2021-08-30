@@ -11,10 +11,13 @@ namespace DataAccess.Concret
 {
     public class EFSettingContentDal : EFRepositoryBase<SettingContent, AppDbContext>, ISettingContentDal
     {
+        public EFSettingContentDal(AppDbContext context) : base(context)
+        {
+        }
+
         public async Task<SettingContent> GetSettingContentAsync(string languageCode)
         {
-            await using var context = new AppDbContext();
-            return await context.SettingContents.Include(x => x.Language)
+            return await Context.SettingContents.Include(x => x.Language)
                 .FirstOrDefaultAsync(x => x.Language.IsDeleted == false && x.Language.Code == languageCode);
         }
     }

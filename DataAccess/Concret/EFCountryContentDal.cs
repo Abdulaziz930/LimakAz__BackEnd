@@ -12,17 +12,19 @@ namespace DataAccess.Concret
 {
     public class EFCountryContentDal : EFRepositoryBase<CountryContent, AppDbContext>, ICountryContentDal
     {
+        public EFCountryContentDal(AppDbContext context) : base(context)
+        {
+        }
+
         public async Task<CountryContent> GetCountryContentAsync(string languageCode)
         {
-            await using var context = new AppDbContext();
-            return await context.CountryContents.Include(x => x.Language)
+            return await Context.CountryContents.Include(x => x.Language)
                 .FirstOrDefaultAsync(x => x.IsDeleted == false && x.Language.IsDeleted == false && x.Language.Code == languageCode);
         }
 
         public async Task<List<CountryContent>> GetCountryContentsByCountAsync(int skipCount, int takeCount)
         {
-            await using var context = new AppDbContext();
-            return await context.CountryContents
+            return await Context.CountryContents
                 .Where(x => x.IsDeleted == false).OrderByDescending(x => x.Id)
                 .Skip(skipCount).Take(takeCount).ToListAsync();
         }

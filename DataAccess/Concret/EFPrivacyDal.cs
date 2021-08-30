@@ -12,25 +12,26 @@ namespace DataAccess.Concret
 {
     public class EFPrivacyDal : EFRepositoryBase<Privacy, AppDbContext>, IPrivacyDal
     {
+        public EFPrivacyDal(AppDbContext context) : base(context)
+        {
+        }
+
         public async Task<List<Privacy>> GetPrivaciesByCountAsync(int skipCount, int takeCount)
         {
-            await using var context = new AppDbContext();
-            return await context.Privacies
+            return await Context.Privacies
                 .Where(x => x.IsDeleted == false).OrderByDescending(x => x.Id)
                 .Skip(skipCount).Take(takeCount).ToListAsync();
         }
 
         public async Task<Privacy> GetPrivacyAsync(string languageCode)
         {
-            await using var context = new AppDbContext();
-            return await context.Privacies.Include(x => x.Language)
+            return await Context.Privacies.Include(x => x.Language)
                 .FirstOrDefaultAsync(x => x.IsDeleted == false && x.Language.IsDeleted == false && x.Language.Code == languageCode);
         }
 
         public async Task<Privacy> GetPrivacyWithInclude(int id)
         {
-            await using var context = new AppDbContext();
-            return await context.Privacies.Include(x => x.Language)
+            return await Context.Privacies.Include(x => x.Language)
                 .FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false && x.Language.IsDeleted == false);
         }
     }

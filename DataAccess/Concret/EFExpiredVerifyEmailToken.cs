@@ -11,10 +11,13 @@ namespace DataAccess.Concret
 {
     public class EFExpiredVerifyEmailToken : EFRepositoryBase<ExpiredVerifyEmailToken, AppDbContext>, IExpiredVerifyEmailTokenDal
     {
+        public EFExpiredVerifyEmailToken(AppDbContext context) : base(context)
+        {
+        }
+
         public async Task<bool> GetExpiredEmailTokenByTokenAsync(string token)
         {
-            await using var context = new AppDbContext();
-            return await context.ExpiredVerifyEmailTokens.AnyAsync(x => x.Token == token);
+            return await Context.ExpiredVerifyEmailTokens.AnyAsync(x => x.Token == token);
         }
     }
 }

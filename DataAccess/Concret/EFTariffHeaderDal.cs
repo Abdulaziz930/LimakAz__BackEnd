@@ -12,17 +12,19 @@ namespace DataAccess.Concret
 {
     public class EFTariffHeaderDal : EFRepositoryBase<TariffHeader, AppDbContext>, ITariffHeaderDal
     {
+        public EFTariffHeaderDal(AppDbContext context) : base(context)
+        {
+        }
+
         public async Task<TariffHeader> GetTariffHeaderAsync(string languageCode)
         {
-            await using var context = new AppDbContext();
-            return await context.TariffHeaders.Include(x => x.Language)
+            return await Context.TariffHeaders.Include(x => x.Language)
                 .FirstOrDefaultAsync(x => x.IsDeleted == false && x.Language.IsDeleted == false && x.Language.Code == languageCode);
         }
 
         public async Task<List<TariffHeader>> GetTariffHeadersByCountAsync(int skipCount, int takeCount)
         {
-            await using var context = new AppDbContext();
-            return await context.TariffHeaders
+            return await Context.TariffHeaders
                 .Where(x => x.IsDeleted == false).OrderByDescending(x => x.Id)
                 .Skip(skipCount).Take(takeCount).ToListAsync();
         }

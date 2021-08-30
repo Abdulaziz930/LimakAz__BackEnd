@@ -12,17 +12,19 @@ namespace DataAccess.Concret
 {
     public class EFCalculatorContentDal : EFRepositoryBase<CalculatorContent, AppDbContext>, ICalculatorContentDal
     {
+        public EFCalculatorContentDal(AppDbContext context) : base(context)
+        {
+        }
+
         public async Task<CalculatorContent> GetCalculatorContentAsync(string languageCode)
         {
-            await using var context = new AppDbContext();
-            return await context.CalculatorContents.Include(x => x.Language)
+            return await Context.CalculatorContents.Include(x => x.Language)
                 .FirstOrDefaultAsync(x => x.IsDeleted == false && x.Language.IsDeleted == false && x.Language.Code == languageCode);
         }
 
         public async Task<List<CalculatorContent>> GetCalculatorContentsByCountAsync(int skipCount, int takeCount)
         {
-            await using var context = new AppDbContext();
-            return await context.CalculatorContents
+            return await Context.CalculatorContents
                 .Where(x => x.IsDeleted == false).OrderByDescending(x => x.Id)
                 .Skip(skipCount).Take(takeCount).ToListAsync();
         }

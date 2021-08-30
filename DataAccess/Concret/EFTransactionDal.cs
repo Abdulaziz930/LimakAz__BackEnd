@@ -12,23 +12,24 @@ namespace DataAccess.Concret
 {
     public class EFTransactionDal : EFRepositoryBase<Transaction, AppDbContext>, ITransactionDal
     {
+        public EFTransactionDal(AppDbContext context) : base(context)
+        {
+        }
+
         public async Task<Transaction> GetTransactionByUserIdAsync(string userId, int id)
         {
-            await using var context = new AppDbContext();
-            return await context.Transactions.FirstOrDefaultAsync(x => x.AppUserId == userId && x.Id == id);
+            return await Context.Transactions.FirstOrDefaultAsync(x => x.AppUserId == userId && x.Id == id);
         }
 
         public async Task<List<Transaction>> GetTransactionsByUserIdAsync(string userId,int page = 1)
         {
-            await using var context = new AppDbContext();
-            return await context.Transactions.Where(x => x.AppUserId == userId)
+            return await Context.Transactions.Where(x => x.AppUserId == userId)
                 .OrderByDescending(x => x.DateTime).Skip((page - 1) * 5).Take(5).ToListAsync();
         }
 
         public async Task<List<Transaction>> GetTransactionsByUserIdAsync(string userId)
         {
-            await using var context = new AppDbContext();
-            return await context.Transactions.Where(x => x.AppUserId == userId).ToListAsync();
+            return await Context.Transactions.Where(x => x.AppUserId == userId).ToListAsync();
         }
     }
 }

@@ -12,18 +12,20 @@ namespace DataAccess.Concret
 {
     public class EFGenderDal : EFRepositoryBase<Gender, AppDbContext>, IGenderDal
     {
+        public EFGenderDal(AppDbContext context) : base(context) 
+        {
+        }
+
         public async Task<List<Gender>> GetGendersByCountAsync(int skipCount, int takeCount)
         {
-            await using var context = new AppDbContext();
-            return await context.Genders
+            return await Context.Genders
                 .OrderByDescending(x => x.Id)
                 .Skip(skipCount).Take(takeCount).ToListAsync();
         }
 
         public async Task<List<Gender>> GetMultiLanguageGendersAsync(string languageCode)
         {
-            await using var context = new AppDbContext();
-            return await context.Genders.Include(x => x.Language)
+            return await Context.Genders.Include(x => x.Language)
                 .Where(x => x.Language.IsDeleted == false && x.Language.Code == languageCode).ToListAsync();
         }
     }

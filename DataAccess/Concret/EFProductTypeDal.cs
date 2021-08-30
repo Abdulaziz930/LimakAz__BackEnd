@@ -12,31 +12,31 @@ namespace DataAccess.Concret
 {
     public class EFProductTypeDal : EFRepositoryBase<ProductType, AppDbContext>, IProductTypeDal
     {
+        public EFProductTypeDal(AppDbContext context) : base(context)
+        {
+        }
+
         public async Task<List<ProductType>> GetAllMultiLanguageProductTypeAsync(string languageCode)
         {
-            await using var context = new AppDbContext();
-            return await context.ProductTypes.Include(x => x.Language)
+            return await Context.ProductTypes.Include(x => x.Language)
                 .Where(x => x.Language.Code == languageCode && x.Language.IsDeleted == false && x.IsDeleted == false).ToListAsync();
         }
 
         public async Task<List<ProductType>> GetAllMultiLanguageProductTypeWhithIncludeAsync(string languageCode)
         {
-            await using var context = new AppDbContext();
-            return await context.ProductTypes.Include(x => x.Language).Include(x => x.Tariffs)
+            return await Context.ProductTypes.Include(x => x.Language).Include(x => x.Tariffs)
                 .Where(x => x.Language.Code == languageCode && x.Language.IsDeleted == false && x.IsDeleted == false).ToListAsync();
         }
 
         public async Task<List<ProductType>> GetProductTypesByCountAsync(int skipCount, int takeCount)
         {
-            await using var context = new AppDbContext();
-            return await context.ProductTypes.Where(x => x.IsDeleted == false)
+            return await Context.ProductTypes.Where(x => x.IsDeleted == false)
                 .OrderByDescending(x => x.Id).Skip(skipCount).Take(takeCount).ToListAsync();
         }
 
         public async Task<ProductType> GetProductTypeWithIncludeAsync(int id)
         {
-            await using var context = new AppDbContext();
-            return await context.ProductTypes.Include(x => x.Language)
+            return await Context.ProductTypes.Include(x => x.Language)
                 .FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false && x.Language.IsDeleted == false);
         }
     }

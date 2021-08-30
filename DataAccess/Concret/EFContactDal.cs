@@ -12,10 +12,13 @@ namespace DataAccess.Concret
 {
     public class EFContactDal : EFRepositoryBase<Contact, AppDbContext>, IContactDal
     {
+        public EFContactDal(AppDbContext context) : base(context) 
+        {
+        }
+
         public async Task<City> GetContact(string languageCode)
         {
-            await using var context = new AppDbContext();
-            return await context.Cities.Include(x => x.Language)
+            return await Context.Cities.Include(x => x.Language)
                 .Include(x => x.Contacts).FirstOrDefaultAsync(x => x.Language.Code == languageCode 
                 && x.IsDeleted == false && x.Language.IsDeleted == false
                 && x.Contacts.Any(x => x.IsDeleted == false));
@@ -23,8 +26,7 @@ namespace DataAccess.Concret
 
         public async Task<List<City>> GetContacts(string languageCode)
         {
-            await using var context = new AppDbContext();
-            return await context.Cities.Include(x => x.Language)
+            return await Context.Cities.Include(x => x.Language)
                 .Include(x => x.Contacts).ThenInclude(x => x.Services)
                 .Where(x => x.Language.Code == languageCode && x.IsDeleted == false && x.Language.IsDeleted == false
                 && x.Contacts.Any(x => x.IsDeleted == false && x.Services.Any(x => x.IsDeleted == false))).ToListAsync();
@@ -32,8 +34,7 @@ namespace DataAccess.Concret
 
         public async Task<List<Contact>> GetContactsByCountAsync(int skipCount, int takeCount)
         {
-            await using var context = new AppDbContext();
-            return await context.Contacts.Where(x => x.IsDeleted == false).OrderByDescending(x => x.Id)
+            return await Context.Contacts.Where(x => x.IsDeleted == false).OrderByDescending(x => x.Id)
                 .Skip(skipCount).Take(takeCount).ToListAsync();
         }
     }

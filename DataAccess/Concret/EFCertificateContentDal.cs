@@ -12,10 +12,13 @@ namespace DataAccess.Concret
 {
     public class EFCertificateContentDal : EFRepositoryBase<CertifcateContent, AppDbContext>, ICertificateContentDal
     {
+        public EFCertificateContentDal(AppDbContext context) : base(context)
+        {
+        }
+
         public async Task<List<CertifcateContent>> GetAllCertificateContentsByCountAsync(int skipCount, int takeCount)
         {
-            await using var context = new AppDbContext();
-            return await context.CertifcateContents.Where(x => x.IsDeleted == false)
+            return await Context.CertifcateContents.Where(x => x.IsDeleted == false)
                 .OrderByDescending(x => x.Id).Skip(skipCount).Take(takeCount).ToListAsync();
         }
     }

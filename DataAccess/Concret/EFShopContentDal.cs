@@ -12,17 +12,19 @@ namespace DataAccess.Concret
 {
     public class EFShopContentDal : EFRepositoryBase<ShopContent, AppDbContext>, IShopContentDal
     {
+        public EFShopContentDal(AppDbContext context) : base(context)
+        {
+        }
+
         public async Task<ShopContent> GetShopContentAsync(string languageCode)
         {
-            await using var context = new AppDbContext();
-            return await context.ShopContents.Include(x => x.Language)
+            return await Context.ShopContents.Include(x => x.Language)
                 .FirstOrDefaultAsync(x => x.IsDeleted == false && x.Language.IsDeleted == false && x.Language.Code == languageCode);
         }
 
         public async Task<List<ShopContent>> GetShopContentsByCountAsync(int skipCount, int takeCount)
         {
-            await using var context = new AppDbContext();
-            return await context.ShopContents
+            return await Context.ShopContents
                 .Where(x => x.IsDeleted == false).OrderByDescending(x => x.Id)
                 .Skip(skipCount).Take(takeCount).ToListAsync();
         }

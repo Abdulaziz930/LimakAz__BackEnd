@@ -12,17 +12,19 @@ namespace DataAccess.Concret
 {
     public class EFRuleContentDal : EFRepositoryBase<RuleContent, AppDbContext>, IRuleContentDal
     {
+        public EFRuleContentDal(AppDbContext context) : base(context)
+        {
+        }
+
         public async Task<RuleContent> GetRuleContentAsync(string languageCode)
         {
-            await using var context = new AppDbContext();
-            return await context.RuleContents.Include(x => x.Language)
+            return await Context.RuleContents.Include(x => x.Language)
                 .FirstOrDefaultAsync(x => x.IsDeleted == false && x.Language.IsDeleted == false && x.Language.Code == languageCode);
         }
 
         public async Task<List<RuleContent>> GetRuleContentsByCountAsync(int skipCount, int takeCount)
         {
-            await using var context = new AppDbContext();
-            return await context.RuleContents
+            return await Context.RuleContents
                 .Where(x => x.IsDeleted == false).OrderByDescending(x => x.Id)
                 .Skip(skipCount).Take(takeCount).ToListAsync();
         }

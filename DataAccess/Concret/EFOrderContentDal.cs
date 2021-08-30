@@ -11,10 +11,13 @@ namespace DataAccess.Concret
 {
     public class EFOrderContentDal : EFRepositoryBase<OrderContent, AppDbContext>, IOrderContentDal
     {
+        public EFOrderContentDal(AppDbContext context) : base(context)
+        {
+        }
+
         public async Task<OrderContent> GetOrderContentAsync(string languageCode)
         {
-            await using var context = new AppDbContext();
-            return await context.OrderContents.Include(x => x.Language)
+            return await Context.OrderContents.Include(x => x.Language)
                 .FirstOrDefaultAsync(x => x.Language.IsDeleted == false && x.Language.Code == languageCode);
         }
     }

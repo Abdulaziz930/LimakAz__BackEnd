@@ -12,17 +12,19 @@ namespace DataAccess.Concret
 {
     public class EFContactContentDal : EFRepositoryBase<ContactContent, AppDbContext>, IContactContentDal
     {
+        public EFContactContentDal(AppDbContext context) : base(context)
+        {
+        }
+
         public async Task<ContactContent> GetContactContentAsync(string languageCode)
         {
-            await using var context = new AppDbContext();
-            return await context.ContactContents.Include(x => x.Language)
+            return await Context.ContactContents.Include(x => x.Language)
                 .FirstOrDefaultAsync(x => x.IsDeleted == false && x.Language.IsDeleted == false && x.Language.Code == languageCode);
         }
 
         public async Task<List<ContactContent>> GetContactContentsByCountAsync(int skipCount, int takeCount)
         {
-            await using var context = new AppDbContext();
-            return await context.ContactContents
+            return await Context.ContactContents
                 .Where(x => x.IsDeleted == false).OrderByDescending(x => x.Id).Skip(skipCount).Take(takeCount).ToListAsync();
         }
     }

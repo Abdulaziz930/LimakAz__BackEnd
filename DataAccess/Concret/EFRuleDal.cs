@@ -12,10 +12,13 @@ namespace DataAccess.Concret
 {
     public class EFRuleDal : EFRepositoryBase<Rule, AppDbContext>, IRuleDal
     {
+        public EFRuleDal(AppDbContext context) : base(context)
+        {
+        }
+
         public async Task<List<Rule>> GetAllMultiLanguageRulesAsync(string languageCode)
         {
-            await using var context = new AppDbContext();
-            return await context.Rules
+            return await Context.Rules
                 .Include(x => x.Language)
                 .Where(x => x.IsDeleted == false && x.Language.IsDeleted == false && x.Language.Code == languageCode)
                 .OrderByDescending(x => x.LastModificationDate).ToListAsync();
@@ -24,15 +27,13 @@ namespace DataAccess.Concret
 
         public async Task<List<Rule>> GetRulesByCountAsync(int skipCount, int takeCount)
         {
-            await using var context = new AppDbContext();
-            return await context.Rules.Where(x => x.IsDeleted == false)
+            return await Context.Rules.Where(x => x.IsDeleted == false)
                 .OrderByDescending(x => x.LastModificationDate).Skip(skipCount).Take(takeCount).ToListAsync();
         }
 
         public async Task<Rule> GetRuleWithInclude(int id)
         {
-            await using var context = new AppDbContext();
-            return await context.Rules.Include(x => x.Language)
+            return await Context.Rules.Include(x => x.Language)
                 .FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false && x.Language.IsDeleted == false);
         }
     }

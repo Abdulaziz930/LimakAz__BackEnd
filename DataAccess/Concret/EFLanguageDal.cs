@@ -13,17 +13,19 @@ namespace DataAccess.Concret
 {
     public class EFLanguageDal : EFRepositoryBase<Language, AppDbContext>, ILangaugeDal
     {
+        public EFLanguageDal(AppDbContext context) : base(context)
+        {
+        }
+
         public async Task<List<Language>> GetLanguagesByCountAsync(int skipCount, int takeCount)
         {
-            await using var context = new AppDbContext();
-            return await context.Languages.Where(x => x.IsDeleted == false)
+            return await Context.Languages.Where(x => x.IsDeleted == false)
                 .OrderByDescending(x => x.Id).Skip(skipCount).Take(takeCount).ToListAsync();
         }
 
         public async Task<bool> CheckLanguagesAsync(Expression<Func<Language, bool>> filter)
         {
-            await using var context = new AppDbContext();
-            return await context.Languages.AnyAsync(filter);
+            return await Context.Languages.AnyAsync(filter);
         }
     }
 }
