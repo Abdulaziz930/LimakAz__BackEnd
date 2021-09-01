@@ -21,6 +21,8 @@ namespace LimakAz.Test
         private readonly Mock<IMapper> _mockMapper;
         private readonly PaymentController _paymentContoller;
         private List<AppUser> _appUsers;
+        private PaymentDto _paymentDto;
+        private DecreaseBalanceDto _decreaseBalance;
 
         public PaymentContollerTest()
         {
@@ -38,40 +40,30 @@ namespace LimakAz.Test
                 , City = "Baku" , Address = "adres1", SerialNumber = 12345678, FinCode = "1234567" , EmailConfirmed = true
                 , BirthDay = DateTime.Now}
             };
+            _paymentDto = new PaymentDto
+            {
+                Amount = 0,
+                Token = "",
+                Sum = 0,
+                Email = ""
+            };
+            _decreaseBalance = new DecreaseBalanceDto
+            {
+                Amount = 0,
+                ResultBalance = 0,
+                UserName = ""
+            };
         }
 
         [Theory]
-        [InlineData(51)]
-        [InlineData(-1)]
-        public async Task IncreaseBalance_WrongAmount_ReturnsBadRequestObject(double amount)
+        [InlineData(51, "example@gmail.com")]
+        [InlineData(-1, "example@gmail.com")]
+        public async Task IncreaseBalance_WrongAmount_ReturnsBadRequestObject(double amount, string email)
         {
-            var paymentDto = new PaymentDto
-            {
-                Amount = amount,
-                Token = "",
-                Sum = 0,
-                Email = "example@gmail.com"
-            };
+            _paymentDto.Amount = amount;
+            _paymentDto.Email = email;
 
-            var result = await _paymentContoller.IncreaseBalance(paymentDto);
-
-            var error = Assert.IsType<BadRequestObjectResult>(result);
-
-            Assert.Equal<int>(400, (int)error.StatusCode);
-        }
-
-        [Fact]
-        public async Task IncreaseBalance_EmailIsNull_ReturnsBadRequestObject()
-        {
-            var paymentDto = new PaymentDto
-            {
-                Amount = 20,
-                Token = "",
-                Sum = 0,
-                Email = null
-            };
-
-            var result = await _paymentContoller.IncreaseBalance(paymentDto);
+            var result = await _paymentContoller.IncreaseBalance(_paymentDto);
 
             var error = Assert.IsType<BadRequestObjectResult>(result);
 
@@ -79,44 +71,49 @@ namespace LimakAz.Test
         }
 
         [Theory]
-        [InlineData("example@gmail.com")]
-        public async Task IncreaseBalance_EmailIsInvalid_ReturnsNotFound(string email)
+        [InlineData(20)]
+        public async Task IncreaseBalance_EmailIsNull_ReturnsBadRequestObject(double amount)
         {
-            var paymentDto = new PaymentDto
-            {
-                Amount = 20,
-                Token = "",
-                Sum = 0,
-                Email = email
-            };
+            _paymentDto.Email = null;
+            _paymentDto.Amount = amount;
+
+            var result = await _paymentContoller.IncreaseBalance(_paymentDto);
+
+            var error = Assert.IsType<BadRequestObjectResult>(result);
+
+            Assert.Equal<int>(400, (int)error.StatusCode);
+        }
+
+        [Theory]
+        [InlineData("example@gmail.com",20)]
+        public async Task IncreaseBalance_EmailIsInvalid_ReturnsNotFound(string email, double amount)
+        {
+            _paymentDto.Email = email;
+            _paymentDto.Amount = amount;
 
             AppUser user = null;
 
-            _mockUserManager.Setup(service => service.FindByEmailAsync(paymentDto.Email))
+            _mockUserManager.Setup(service => service.FindByEmailAsync(_paymentDto.Email))
                 .ReturnsAsync(user);
 
-            var result = await _paymentContoller.IncreaseBalance(paymentDto);
+            var result = await _paymentContoller.IncreaseBalance(_paymentDto);
 
             var error = Assert.IsType<NotFoundResult>(result);
 
             Assert.Equal<int>(404, (int)error.StatusCode);
         }
 
-        [Fact]
-        public async Task IncreaseBalance_TokenIsInvalid_ReturnsBadRequestObject()
+        [Theory]
+        [InlineData(20, "test1@email.com")]
+        public async Task IncreaseBalance_TokenIsInvalid_ReturnsBadRequestObject(double amount, string email)
         {
-            var paymentDto = new PaymentDto
-            {
-                Amount = 20,
-                Token = "",
-                Sum = 0,
-                Email = "test1@email.com"
-            };
+            _paymentDto.Email = email;
+            _paymentDto.Amount = amount;
 
-            _mockUserManager.Setup(service => service.FindByEmailAsync(paymentDto.Email))
+            _mockUserManager.Setup(service => service.FindByEmailAsync(_paymentDto.Email))
                 .ReturnsAsync(_appUsers.First());
 
-            var result = await _paymentContoller.IncreaseBalance(paymentDto);
+            var result = await _paymentContoller.IncreaseBalance(_paymentDto);
 
             var error = Assert.IsType<BadRequestObjectResult>(result);
 
@@ -126,14 +123,9 @@ namespace LimakAz.Test
         [Fact]
         public async Task DecreaseBalance_UserNameIsNull_ReturnsBadRequestObject()
         {
-            var decreaseDto = new DecreaseBalanceDto
-            {
-                UserName = null,
-                ResultBalance = 0,
-                Amount = 0
-            };
+            _decreaseBalance.UserName = null;
 
-            var result = await _paymentContoller.DecreaseBalance(decreaseDto);
+            var result = await _paymentContoller.DecreaseBalance(_decreaseBalance);
 
             var error = Assert.IsType<BadRequestObjectResult>(result);
 
@@ -144,19 +136,14 @@ namespace LimakAz.Test
         [InlineData("test5")]
         public async Task DecreaseBalance_UserNameIsInValid_ReturnsNotFound(string userName)
         {
-            var decreaseDto = new DecreaseBalanceDto
-            {
-                UserName = userName,
-                ResultBalance = 0,
-                Amount = 0
-            };
+            _decreaseBalance.UserName = userName;
 
             AppUser user = null;
 
-            _mockUserManager.Setup(service => service.FindByNameAsync(decreaseDto.UserName))
+            _mockUserManager.Setup(service => service.FindByNameAsync(_decreaseBalance.UserName))
                 .ReturnsAsync(user);
 
-            var result = await _paymentContoller.DecreaseBalance(decreaseDto);
+            var result = await _paymentContoller.DecreaseBalance(_decreaseBalance);
 
             var error = Assert.IsType<NotFoundResult>(result);
 
@@ -168,17 +155,14 @@ namespace LimakAz.Test
         public async Task DecreaseBalance_BalanceIsDecreased_ReurnsOkObject(double resultBalance, double amount
             , string userName)
         {
-            var decreaseDto = new DecreaseBalanceDto
-            {
-                UserName = userName,
-                ResultBalance = resultBalance,
-                Amount = amount
-            };
+            _decreaseBalance.UserName = userName;
+            _decreaseBalance.ResultBalance = resultBalance;
+            _decreaseBalance.Amount = amount;
 
-            _mockUserManager.Setup(service => service.FindByNameAsync(decreaseDto.UserName))
+            _mockUserManager.Setup(service => service.FindByNameAsync(_decreaseBalance.UserName))
                 .ReturnsAsync(_appUsers.First());
 
-            var result = await _paymentContoller.DecreaseBalance(decreaseDto);
+            var result = await _paymentContoller.DecreaseBalance(_decreaseBalance);
 
             var okResult = Assert.IsType<OkObjectResult>(result);
         }
