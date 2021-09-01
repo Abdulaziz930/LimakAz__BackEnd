@@ -325,14 +325,14 @@ namespace LimakAz.Controllers
             var user = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
             if(user == null)
             {
-                user = await _userManager.FindByEmailAsync(payload.Email);
-                if(user == null)
+                user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == payload.Email);
+                if (user == null)
                 {
-                    user = new AppUser 
-                    { 
-                        Email = payload.Email, 
-                        UserName = payload.Name, 
-                        Name = payload.GivenName, 
+                    user = new AppUser
+                    {
+                        Email = payload.Email,
+                        UserName = payload.Name,
+                        Name = payload.GivenName,
                         Surname = payload.FamilyName,
                         City = "",
                         Address = "",
@@ -340,11 +340,12 @@ namespace LimakAz.Controllers
                         FinCode = "1234567",
                         SerialNumber = 12345678,
                         PhoneNumber = "",
-                        EmailConfirmed = true
+                        EmailConfirmed = true,
+                        NormalizedEmail = payload.Email.ToUpper(),
+                        NormalizedUserName = payload.GivenName.ToUpper()
                     };
                     try
                     {
-                        //await _userManager.CreateAsync(user);
                         await _dbContext.Users.AddAsync(user);
                         await _dbContext.SaveChangesAsync();
                     }
@@ -371,6 +372,12 @@ namespace LimakAz.Controllers
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
             };
 
+            var userRoles = await _userManager.GetRolesAsync(user);
+            foreach (var role in userRoles)
+            {
+                authClaims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
             var signInKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Key"]));
 
             var token = new JwtSecurityToken(
@@ -387,6 +394,7 @@ namespace LimakAz.Controllers
                 Token = new JwtSecurityTokenHandler().WriteToken(token), 
                 IsAuthSuccessful = true,
                 Expires = token.ValidTo,
+                UserName = user.UserName
             });
         }
 
