@@ -1,4 +1,5 @@
-﻿using Entities.Dto;
+﻿using AutoMapper.Configuration;
+using Entities.Dto;
 using Entities.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ namespace DataAccess
 {
     public class AppDbContext : IdentityDbContext<AppUser>
     {
+
         public AppDbContext()
         {
 
@@ -18,12 +20,6 @@ namespace DataAccess
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
 
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer(@"Server=DESKTOP-1QPG03B;Database=LimakAzDb;Trusted_Connection=True;MultipleActiveResultSets=true");
         }
 
         public DbSet<Advertisement> Advertisements { get; set; }
