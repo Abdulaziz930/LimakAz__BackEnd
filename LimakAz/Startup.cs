@@ -96,7 +96,8 @@ namespace LimakAz
                     ValidAudience = Configuration["JWT:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Key"]))
                 };
-            }).AddGoogle(o => {
+            }).AddGoogle(o =>
+            {
                 o.ClientId = Configuration["Authentication:Google:ClientId"];
                 o.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
             });
@@ -181,7 +182,7 @@ namespace LimakAz
 
             services.AddScoped<IContactService, ContactManager>();
             services.AddScoped<IContactDal, EFContactDal>();
-            
+
             services.AddScoped<IContactContentService, ContactContentManager>();
             services.AddScoped<IContactContentDal, EFContactContentDal>();
 
@@ -293,7 +294,7 @@ namespace LimakAz
 
             #region General
 
-            services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling 
+            services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling
                                         = ReferenceLoopHandling.Ignore);
 
             #endregion
@@ -322,9 +323,38 @@ namespace LimakAz
             }
             else
             {
-                app.UseHsts();
+                #region Security Headers
+
+                app.UseHsts(hsts => hsts.MaxAge(365).IncludeSubdomains());
+                app.UseXContentTypeOptions();
+                app.UseReferrerPolicy(opts => opts.NoReferrer());
+                app.UseXXssProtection(options => options.EnabledWithBlockMode());
+                app.UseXfo(options => options.Deny());
+                app.UseCsp(opts => opts
+                    .BlockAllMixedContent()
+                    .StyleSources(s => s.Self())
+                    .StyleSources(s => s.UnsafeInline())
+                    .FontSources(s => s.Self())
+                    .FormActions(s => s.Self())
+                    .FrameAncestors(s => s.Self())
+                    .ImageSources(imageSrc => imageSrc.Self())
+                    .ImageSources(imageSrc => imageSrc.CustomSources("data:"))
+                    .ScriptSources(s => s.Self())
+                );
+                app.UseRedirectValidation();
+                app.Use(async (context, next) =>
+                {
+                    if (!context.Response.Headers.ContainsKey("Feature-Policy"))
+                    {
+                        context.Response.Headers.Add("Feature-Policy", "accelerometer 'none'; camera 'none'; microphone 'none';");
+                    }
+                    await next();
+                });
+
+                #endregion
             }
 
+            #region Middleware
 
             app.UseHttpsRedirection();
 
@@ -335,6 +365,8 @@ namespace LimakAz
             app.UseAuthorization();
 
             app.UseCors("AllowOrigin");
+
+            #endregion
 
             app.UseEndpoints(endpoints =>
             {
