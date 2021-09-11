@@ -41,6 +41,7 @@ namespace AdminPanel.Controllers
 
             ViewBag.PageCount = Decimal.Ceiling((decimal)allOrders.Count / 5);
             ViewBag.Page = page;
+            ViewBag.UserId = id;
 
             TempData["id"] = id;
 
@@ -49,7 +50,8 @@ namespace AdminPanel.Controllers
 
             int skipCount = (page - 1) * 5;
 
-            var orders = await _orderService.GetAllOrdersAsync(x => x.StatusId != 4 ,skipCount, 5);
+            var orders = await _orderService.GetAllOrdersAsync(x => x.StatusId != 4 && x.AppUserId == id 
+                                        && x.IsDeleted == false, skipCount, 5);
             if (orders == null)
                 return NotFound();
 
@@ -166,7 +168,9 @@ namespace AdminPanel.Controllers
             if (order == null)
                 return NotFound();
 
-            await _orderService.DeleteAsync(id.Value);
+            order.IsDeleted = true;
+
+            await _orderService.UpdateAsync(order);
 
             var user = await _userManager.FindByIdAsync(order.AppUserId);
             if (user == null)
@@ -194,6 +198,7 @@ namespace AdminPanel.Controllers
 
             ViewBag.PageCount = Decimal.Ceiling((decimal)allOrders.Count / 5);
             ViewBag.Page = page;
+            ViewBag.UserId = id;
 
             if (ViewBag.PageCount < page || page <= 0)
                 return NotFound();

@@ -25,6 +25,8 @@ namespace Entities.Models
         [Required]
         public string Code { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public string AppUserId { get; set; }
 
         public AppUser AppUser { get; set; }

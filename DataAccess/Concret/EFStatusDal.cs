@@ -18,7 +18,8 @@ namespace DataAccess.Concret
 
         public async Task<List<Status>> GetStatusesWithOrders(string languageCode,string userId)
         {
-            return await Context.Statuses.Include(x => x.Orders.Where(x => x.StatusId == x.Status.Key && x.AppUserId == userId).OrderByDescending(x => x.Id))
+            return await Context.Statuses.Include(x => x.Orders.Where(x => x.StatusId == x.Status.Key 
+                && x.AppUserId == userId && x.IsDeleted == false).OrderByDescending(x => x.Id))
                 .Include(x => x.Language)
                 .Where(x => x.Language.Code == languageCode).ToListAsync();
         }
