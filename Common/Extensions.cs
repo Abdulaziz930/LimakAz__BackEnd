@@ -1,7 +1,4 @@
-﻿using Buisness.Abstract;
-using DataAccess;
-using DataAccess.Abstract;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +33,7 @@ namespace Common
                 {
                     services.AddScoped(type.Service, type.Implementation);
                 }
-                else if(serviceLifetime == ServiceLifetime.Singleton)
+                else if (serviceLifetime == ServiceLifetime.Singleton)
                 {
                     services.AddSingleton(type.Service, type.Implementation);
                 }

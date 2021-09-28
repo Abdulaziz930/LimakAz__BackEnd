@@ -30,11 +30,17 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Buisness\Buisness.csproj" />
-    <ProjectReference Include="..\Commonn\Common.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
     <ProjectReference Include="..\Entities\Entities.csproj" />
     <ProjectReference Include="..\Utils\Utils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Common">
+      <HintPath>..\Common\bin\Debug\net5.0\Common.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

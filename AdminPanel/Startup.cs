@@ -1,5 +1,6 @@
 using Buisness.Abstract;
 using Buisness.Concret;
+using Common;
 using DataAccess;
 using DataAccess.Abstract;
 using DataAccess.AutoMapper;
@@ -66,134 +67,8 @@ namespace AdminPanel
 
             #region Scoped
 
-            services.AddScoped<IAdvertisementService, AdvertisementManager>();
-            services.AddScoped<IAdvertisementDal, EFAdvertisementDal>();
-
-            services.AddScoped<ILanguageService, LanguageManager>();
-            services.AddScoped<ILangaugeDal, EFLanguageDal>();
-
-            services.AddScoped<ICertificateContentService, CertificateContentManager>();
-            services.AddScoped<ICertificateContentDal, EFCertificateContentDal>();
-
-            services.AddScoped<IAdvertisementTitleService, AdvertisementTitleManger>();
-            services.AddScoped<IAdvertisementTitleDal, EFAdvertisementTitleDal>();
-
-            services.AddScoped<ICalculatorService, CalculatorManger>();
-            services.AddScoped<ICalculatorDal, EFCalculatorDal>();
-
-            services.AddScoped<ICertificateService, CertificateManager>();
-            services.AddScoped<ICertificateDal, EFCertificateDal>();
-
-            services.AddScoped<ICityService, CityManager>();
-            services.AddScoped<ICityDal, EFCityDal>();
-
-            services.AddScoped<ICountryService, CountryManager>();
-            services.AddScoped<ICountryDal, EFCountryDal>();
-
-            services.AddScoped<IHowItWorkService, HowItWorkManager>();
-            services.AddScoped<IHowItWorkDal, EFHowItWorkDal>();
-
-            services.AddScoped<IHowItWorkCardService, HowItWorkCardManager>();
-            services.AddScoped<IHowItWorkCardDal, EFHowItWorkCardDal>();
-
-            services.AddScoped<IProductTypeService, ProductTypeManager>();
-            services.AddScoped<IProductTypeDal, EFProductTypeDal>();
-
-            services.AddScoped<IUnitsOfLengthService, UnitsOfLengthManager>();
-            services.AddScoped<IUnitsOfLengthDal, EFUnitsOfLengthDal>();
-
-            services.AddScoped<IWeightService, WeightManager>();
-            services.AddScoped<IWeightDal, EFWeightDal>();
-
-            services.AddScoped<ITariffService, TariffManager>();
-            services.AddScoped<ITariffDal, EFTariffDal>();
-
-            services.AddScoped<IShopService, ShopManager>();
-            services.AddScoped<IShopDal, EFShopDal>();
-
-            services.AddScoped<ISocialMediaService, SocialMediaManager>();
-            services.AddScoped<ISocialMediaDal, EFSocialMediaDal>();
-
-            services.AddScoped<IContactService, ContactManager>();
-            services.AddScoped<IContactDal, EFContactDal>();
-
-            services.AddScoped<IContactContentService, ContactContentManager>();
-            services.AddScoped<IContactContentDal, EFContactContentDal>();
-
-            services.AddScoped<IShopContentService, ShopContentManager>();
-            services.AddScoped<IShopContentDal, EFShopContentDal>();
-
-            services.AddScoped<ICountryContentService, CountryContentManager>();
-            services.AddScoped<ICountryContentDal, EFCountryContentDal>();
-
-            services.AddScoped<ICalculatorInformationContentService, CalculatorInformationContentManager>();
-            services.AddScoped<ICalculatorInformationContentDal, EFCalculatorInformationContentDal>();
-
-            services.AddScoped<ICurrencyContentService, CurrencyContentManager>();
-            services.AddScoped<ICurrencyContentDal, EFCurrencyContentDal>();
-
-            services.AddScoped<ICalculatorContentService, CalculatorContentManager>();
-            services.AddScoped<ICalculatorContentDal, EFCalculatorContentDal>();
-
-            services.AddScoped<IRuleService, RuleManager>();
-            services.AddScoped<IRuleDal, EFRuleDal>();
-
-            services.AddScoped<IRuleContentService, RuleContentManager>();
-            services.AddScoped<IRuleContentDal, EFRuleContentDal>();
-
-            services.AddScoped<IQuestionService, QuestionManager>();
-            services.AddScoped<IQuestionDal, EFQuestionDal>();
-
-            services.AddScoped<IQuestionContentService, QuestionContentManager>();
-            services.AddScoped<IQuestionContentDal, EFQuestionContentDal>();
-
-            services.AddScoped<IAboutService, AboutManager>();
-            services.AddScoped<IAboutDal, EFAboutDal>();
-
-            services.AddScoped<IPrivacyService, PrivacyManager>();
-            services.AddScoped<IPrivacyDal, EFPrivacyDal>();
-
-            services.AddScoped<ITariffHeaderService, TariffHeaderManager>();
-            services.AddScoped<ITariffHeaderDal, EFTariffHeaderDal>();
-
-            services.AddScoped<IAdvertisementHeaderService, AdvertisementHeaderManager>();
-            services.AddScoped<IAdvertisementHeaderDal, EFAdvertisementHeaderDal>();
-
-            services.AddScoped<IUserRuleService, UserRuleManager>();
-            services.AddScoped<IUserRuleDal, EFUserRuleDal>();
-
-            services.AddScoped<IRegisterContentService, RegisterContentManager>();
-            services.AddScoped<IRegisterContentDal, EFRegisterContentDal>();
-
-            services.AddScoped<IRegisterInformationService, RegisterInformationManager>();
-            services.AddScoped<IRegisterInformationDal, EFRegisterInformationDal>();
-
-            services.AddScoped<IGenderService, GenderManager>();
-            services.AddScoped<IGenderDal, EFGenderDal>();
-
-            services.AddScoped<ILoginContentService, LoginContentManager>();
-            services.AddScoped<ILoginContentDal, EFLoginContentDal>();
-
-            services.AddScoped<IForgotPasswordContentService, ForgotPasswordContentManager>();
-            services.AddScoped<IForgotPasswordContentDal, EFForgotPasswordContentDal>();
-
-            services.AddScoped<ISettingContentService, SettingContentManager>();
-            services.AddScoped<ISettingContentDal, EFSettingContentDal>();
-
-            services.AddScoped<ITransactionService, TransactionManager>();
-            services.AddScoped<ITransactionDal, EFTransactionDal>();
-
-            services.AddScoped<IBalanceModalContentService, BalanceModalContentManager>();
-            services.AddScoped<IBalanceModalContentDal, EFBalanceModalContentDal>();
-
-            services.AddScoped<IOrderService, OrderManager>();
-            services.AddScoped<IOrderDal, EFOrderDal>();
-
-            services.AddScoped<IStatusService, StatusManager>();
-            services.AddScoped<IStatusDal, EFStatusDal>();
-
-            services.AddScoped<IOrderContentService, OrderContentManager>();
-            services.AddScoped<IOrderContentDal, EFOrderContentDal>();
+            services.RegisterAllTypes(ServiceLifetime.Scoped, typeof(IAboutDal));
+            services.RegisterAllTypes(ServiceLifetime.Scoped, typeof(IAboutService));
 
             #endregion
 
