@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Buisness", "Buisness\Buisne
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminPanel.Test", "AdminPanel.Test\AdminPanel.Test.csproj", "{773D976E-5541-4B02-A57C-F9EFEB04E3C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LimakAz.Test", "LimakAz.Test\LimakAz.Test.csproj", "{DE9AC527-FBC6-4943-A6F2-045BE889F170}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LimakAz.Test", "LimakAz.Test\LimakAz.Test.csproj", "{DE9AC527-FBC6-4943-A6F2-045BE889F170}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Commonn\Common.csproj", "{B218A930-0723-4216-A2B1-DE0A0E018973}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{DE9AC527-FBC6-4943-A6F2-045BE889F170}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE9AC527-FBC6-4943-A6F2-045BE889F170}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE9AC527-FBC6-4943-A6F2-045BE889F170}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B218A930-0723-4216-A2B1-DE0A0E018973}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B218A930-0723-4216-A2B1-DE0A0E018973}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B218A930-0723-4216-A2B1-DE0A0E018973}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B218A930-0723-4216-A2B1-DE0A0E018973}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

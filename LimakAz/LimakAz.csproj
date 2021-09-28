@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Buisness\Buisness.csproj" />
+    <ProjectReference Include="..\Commonn\Common.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
     <ProjectReference Include="..\Entities\Entities.csproj" />
